@@ -1,0 +1,25 @@
+{
+  "name": "dvi_backend",
+  "version": "1.0.0",
+  "description": "Digital vehicle inspection",
+  "main": "app.js",
+  "scripts": {
+    "test": "run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dielawn/digital_vehicle_inspection.git"
+  },
+  "author": "dielawn",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dielawn/digital_vehicle_inspection/issues"
+  },
+  "homepage": "https://github.com/dielawn/digital_vehicle_inspection#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "mongoose": "^8.4.4",
+    "nodemon": "^3.1.4"
+  }
+}
