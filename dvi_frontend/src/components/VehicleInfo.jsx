@@ -7,8 +7,9 @@ const partnerToken = import.meta.env.VITE_APP_CAR_MD_PARTNER_TOKEN
 
 import StateSelector from './StateSelect';
 
-export const VehicleInfo = ({ vin, setVin, license, setLicense, state, setState, vehicle, setVehicle }) => {
+export const VehicleInfo = ({ vin, setVin, license, setLicense, state, setState, vehicle, setVehicle, mileage, setMileage }) => {
     const [message, setMessage] = useState('')
+    const [isVin, setIsVin] = useState(false)
     // if license and state, decode license and state to vehicle
     // check database for existing vin if no match add vehicle to database
     // decode vin setVehicle
@@ -90,33 +91,48 @@ export const VehicleInfo = ({ vin, setVin, license, setLicense, state, setState,
     return (
         <div className='flexCol'>
             <h3>{message}</h3>
-           
-            <label htmlFor="licenseInput">License plate #</label>
-            <input 
-                type="text"
-                id='licenseInput'
-                value={license}
-                onChange={(e) => setLicense(e.target.value)}    
-            />
-            <StateSelector 
-                state={state}
-                setState={setState}    
-            />
-            <button type='button' onClick={() => plateToVin()}>Decode License Plate</button>
-            <label htmlFor="vinInput">Vin: </label>
+            <label htmlFor='mileageInput'>Mileage: </label>
             <input 
                 type='text'
-                id='vinInput'
-                value={vin || ''}
-                onChange={(e) => setVin(e.target.value)}
+                value={mileage}
+                onChange={(e) => setMileage(e.target.value)}
             />
-             <button type='button' onClick={() => decodeVin()}>Decode VIN</button>
-            {vehicle && vehicle.vin &&
-                <div>
-                    <p>{vehicle.vin}</p>
-                    <p>{vehicle.year} {vehicle.make} {vehicle.model} </p>
-                </div>
+           <fieldset>
+            <legend>Decode with</legend>
+            <input type='radio' checked={!isVin} onChange={() => setIsVin(false)}/>
+            <label>License Plate</label>
+            <input type='radio' checked={isVin} onChange={() => setIsVin(true)} />
+            <label>VIN</label>
+           </fieldset>
+            {isVin ? 
+            <>
+                <label htmlFor="vinInput">Vin: </label>
+                <input 
+                    type='text'
+                    id='vinInput'
+                    value={vin || ''}
+                    onChange={(e) => setVin(e.target.value)}
+                />
+                <button type='button' onClick={() => decodeVin()}>Decode VIN</button>
+            </>
+            :
+            <>
+                <label htmlFor="licenseInput">License plate #</label>
+                <input 
+                    type="text"
+                    id='licenseInput'
+                    value={license}
+                    onChange={(e) => setLicense(e.target.value)}    
+                />
+                <StateSelector 
+                    state={state}
+                    setState={setState}    
+                />
+                <button type='button' onClick={() => plateToVin()}>Decode License Plate</button>
+                
+            </>
             }
+            
         </div>
     )
 }

@@ -24,7 +24,6 @@ const StateSelector = ({ state, setState}) => {
           </option>
         ))}
       </select>
-      <p>Selected State: {state}</p>
     </div>
   );
 };
