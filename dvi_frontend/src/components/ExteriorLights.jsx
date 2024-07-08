@@ -25,6 +25,8 @@ export const ExteriorLights = ({ addToConcerns }) => {
         { name: 'Brakelights', state: isBrakelight, setState: setIsBrakelight, locations: ['LR', 'CHIMSL', 'RR'], notes: brakelightNotes, setNotes: setBrakelightNotes},
     ];
 
+    const recommendationOptions = ['Diagnostic recommended', 'Replace', 'Repair', 'Perform procedure']
+
     const handleResults = () => {
         const results = lightOptions.filter((option) => option.state)
         console.log(results)

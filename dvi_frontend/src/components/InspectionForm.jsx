@@ -5,6 +5,7 @@ import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons
 
 import { WarningLights } from './WarningLights';
 import { ExteriorLights } from './ExteriorLights';
+import { UnderHood } from './UnderHood';
 
 export const InspectionForm = () => {
 
@@ -57,7 +58,8 @@ export const InspectionForm = () => {
 
     const steps = [
         <WarningLights addToConcerns={addToConcerns} />,
-        <ExteriorLights addToConcerns={addToConcerns}/>
+        <ExteriorLights addToConcerns={addToConcerns}/>,
+        <UnderHood addToConcerns={addToConcerns} />
     ]   
 
 
