@@ -9,6 +9,9 @@
   display: flex;
   flex-direction: column;
 }
+.hide {
+  display: none;
+}
 
 .logo {
   height: 6em;

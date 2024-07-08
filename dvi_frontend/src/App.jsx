@@ -5,6 +5,7 @@ import axios from 'axios';
 import { VehicleInfo } from './components/VehicleInfo';
 import { OwnerInfo } from './components/OwnerInfo';
 import { TechSelector } from './components/TechSelect';
+import { InspectionForm } from './components/InspectionForm';
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -27,25 +28,7 @@ function App() {
 
   const [isInsp, setIsInsp] = useState(false);
 
-  // Inspection data
-  const [warningLights, setWarningLights] = useState(''); // const condition = ['Good', 'Needs Attention', 'Safety Concern']
-  const [exteriorLights, setExteriorLights] = useState('');
-  const [wiperWasher, setWiperWasher] = useState('');
-    // under hood
-  const [airFilter, setAirFilter] = useState('');
-  const [battery, setBattery] = useState('');
-  const [belts, setBelts] = useState('');
-  const [hoses, setHoses] = useState('');
-  const [underHoodFluids, setUnderHoodFluids] = useState('');
-  const [underHoodNotes, setUnderHoodNotes] = useState('');
-    // under car
-  const [tires, setTires] = useState('');
-  const [brakes, setBrakes] = useState('');
-  const [suspension, setSuspension] = useState('');
-  const [underCarFluids, setUnderCarFluids] = useState('');
-  const [underCarNotes, setUnderCarNotes] = useState('');
-    // maintenance
-  const [maintenance, setMaintenance] = useState('');
+ 
 
   const startInsp = () => {
     let errorMsgs = []
@@ -68,10 +51,6 @@ function App() {
       setIsInsp(true)
       setMessage('Inspection has begun')
     }
-
-  }
-
-  const inspectionResults = {
 
   }
 
@@ -110,6 +89,7 @@ function App() {
         <p>{vehicle.year} {vehicle.make} {vehicle.model} </p>
         <p>Mileage: {mileage}</p>
         <p>Inspecting Technician: {tech}</p>
+        <InspectionForm />
       </>
       :
       <>
@@ -117,8 +97,7 @@ function App() {
           <OwnerInfo 
             owner={owner}
             setOwner={setOwner}
-          />
-       
+          />       
           <TechSelector 
             tech={tech}
             setTech={setTech}
