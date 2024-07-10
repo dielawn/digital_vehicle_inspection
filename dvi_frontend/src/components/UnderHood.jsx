@@ -5,6 +5,7 @@ export const UnderHood = ({ addToConcerns }) => {
     const [batteryNotes, setBatteryNotes] = useState('');
     const [beltsNotes, setBeltsNotes] = useState('');
     const [hosesNotes, setHosesNotes] = useState('');
+    const [timingBeltNotes, setTimingBeltNotes] = useState('');
     const [otherNotes, setOtherNotes] = useState('');
 
     // Concern level 1 = low, 3 = high
@@ -12,6 +13,7 @@ export const UnderHood = ({ addToConcerns }) => {
     const [batteryLevel, setBatteryLevel] = useState(1);
     const [beltsLevel, setBeltsLevel] = useState(1);
     const [hosesLevel, setHosesLevel] = useState(1);
+    const [timingBeltLevel, setTimingBeltLevel] = useState(1);
     const [otherLevel, setOtherLevel] = useState(1);
 
     const underHoodInspItems = [
@@ -41,7 +43,14 @@ export const UnderHood = ({ addToConcerns }) => {
             level: hosesLevel,
             setLevel: setHosesLevel,
             notes: hosesNotes,
-            setNotes: setHosesLevel,
+            setNotes: setHosesNotes,
+        },
+        {
+            name: 'Timing Belt',
+            level: timingBeltLevel,
+            setLevel: setTimingBeltLevel,
+            notes: timingBeltNotes,
+            setNotes: setTimingBeltNotes
         },
         {
             name: 'Other',
@@ -52,8 +61,19 @@ export const UnderHood = ({ addToConcerns }) => {
         },
     ];
     const handleResults = () => {
-        const results = underHoodInspItems.map((item) => console.log(item))
-        console.log('results', results)
+        underHoodInspItems.map((item) => {
+            if (item.level === 1) {
+                if (item.name !== 'Other') {
+                    addToConcerns(1, `✅ ${item.name}`)
+                }
+            } else if (item.level === 2) {
+                const someConcernMsg = `${item.name}: ${item.notes}`
+                addToConcerns(2, someConcernMsg)
+            } else {
+                const safetyConcernMsg = `❌ ${item.name}: ${item.notes}`
+                addToConcerns(3, safetyConcernMsg)
+            }
+        })        
     }
 
     return (
@@ -91,7 +111,7 @@ export const UnderHood = ({ addToConcerns }) => {
                     checked={item.level === 3} 
                     onChange={() => item.setLevel(3)} 
                 />
-                Fail
+                Safety concern
             </label>
             {item.level > 1 &&  
                 <>
