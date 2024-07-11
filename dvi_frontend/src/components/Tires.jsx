@@ -62,25 +62,34 @@ export const Tires = ({ addToConcerns }) => {
         },
     ];
 
+ 
     const handleResults = () => {
+
+        const now = new Date();
+        const twoDigitYear = now.getFullYear() - 2000;        
+
+        const expiredTire = twoDigitYear > 7
+        const marginalTire = twoDigitYear === 6      
         
-        const twoDigitYear = new Date().getFullYear() - 2000;        
         const getTireAge = (date) => twoDigitYear - (date % 100);
 
         tireInfo.map((item) => {
-            console.log(item.tread)
-            const tireAge = getTireAge(item.date);
-            const msg = `${item.name}: ${item.tread}/32, ${tireAge} years old, ${item.isUneven ? 'Uneven wear' : '' }`
-           
+            const tireAge = getTireAge(item.date);            
+            let msg = `${item.name}: ${item.tread}/32, ${expiredTire || marginalTire ? tireAge + ' years old,' : ''} ${item.isUneven ? 'Uneven wear' : '' }`
+            // No date code info
+            if (item.date === '') {
+                msg = `${item.name}: ${item.tread}/32, ${item.isUneven ? 'Uneven wear' : '' }`
+            }            
+           // Sort by tire age, tread, and uneven wear
             if (tireAge >= 7 || item.tread < 3) {
                 addToConcerns(3, `❌ ${msg}`)
-            } else if ((item.tread <= 5 && item.tread >= 3) || (tireAge > 5 && tireAge < 7) || item.isUneven) {
+            } else if ((item.tread <= 5 && item.tread >= 3) || (marginalTire) || item.isUneven) {
                 addToConcerns(2, msg)
             } else {                    
                 addToConcerns(1, `✅ ${msg}`)               
             } 
         })
-    }
+    };
 
 
 
@@ -100,8 +109,11 @@ export const Tires = ({ addToConcerns }) => {
                     onChange={(e) => setTireNotes(e.target.value)}
                 />
             </label>
-            <label>AWD
+            <h4>AWD</h4>
+            <label>True
                 <input type='radio' name='awdRadio' value={true} checked={isAWD} onChange={() => setIsAWD(true)}/>
+            </label>
+            <label>False   
                 <input type='radio' name='awdRadio' value={false} checked={!isAWD} onChange={() => setIsAWD(false)}/>
             </label>
            

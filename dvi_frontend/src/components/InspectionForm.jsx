@@ -8,6 +8,7 @@ import { ExteriorLights } from './ExteriorLights';
 import { UnderHood } from './UnderHood';
 import { UnderHoodFluids } from './UnderhoodFluids';
 import { Tires } from './Tires';
+import { Suspension } from './Suspension';
 
 export const InspectionForm = () => {
 
@@ -63,7 +64,8 @@ export const InspectionForm = () => {
         <ExteriorLights addToConcerns={addToConcerns}/>,
         <UnderHood addToConcerns={addToConcerns} />,
         <UnderHoodFluids addToConcerns={addToConcerns} />,
-        <Tires addToConcerns={addToConcerns} />
+        <Tires addToConcerns={addToConcerns} />,
+        <Suspension addToConcerns={addToConcerns} />
     ]   
 
 
