@@ -11,11 +11,6 @@ export const Steering = ({ addToConcerns }) => {
     const [outerTieRodRF, setOuterTieRodRF] = useState(false);
     const [innerTieRodLF, setInnerTieRodLF] = useState(false);
     const [innerTieRodRF, setInnerTieRodRF] = useState(false);
-
-    const [upperBallJointLF, setUpperBallJointLF] = useState(false);
-    const [upperBallJointRF, setUpperBallJointRF] = useState(false);
-    const [lowerBallJointLF, setLowerBallJointLF] = useState(false);
-    const [lowerBallJointRF, setLowerBallJointRF] = useState(false);
    
     const [dragLink, setDragLink] = useState(false);
     const [centerLink, setCenterLink] = useState(false);
@@ -23,12 +18,6 @@ export const Steering = ({ addToConcerns }) => {
     const [tieRodRF, setTieRodRF] = useState(false);
     const [idler, setIdler] = useState(false);
     const [pitman, setPitman] = useState(false);
-
-    // Play in wheel bearing?
-    const [wheelBearingLF, setWheelBearingLF] = useState(false);
-    const [wheelBearingRF, setWheelBearingRF] = useState(false);
-    const [wheelBearingRR, setWheelBearingRR] = useState(false);
-    const [wheelBearingLR, setWheelBearingLR] = useState(false);
 
     const [notes, setNotes] = useState('');
 
@@ -50,47 +39,6 @@ export const Steering = ({ addToConcerns }) => {
             setInner: setInnerTieRodRF,
         }
     ];
-  
-    const ballJoints = [
-        {
-            name: 'LF Ball Joints',
-            upper: upperBallJointLF,
-            setUpper: setUpperBallJointLF,
-            lower: lowerBallJointLF,
-            setLower: setLowerBallJointLF
-        },
-        {
-            name: 'RF Ball Joints',
-            upper: upperBallJointRF,
-            setUpper: setUpperBallJointRF,
-            lower: lowerBallJointRF,
-            setLower: setLowerBallJointRF
-        },
-
-    ];
-
-    const wheelBearings = [
-        {
-            name: 'LF wheel bearing',
-            bearing: wheelBearingLF,
-            setBearing: setWheelBearingLF 
-        },
-        {
-            name: 'RF wheel bearing',
-            bearing: wheelBearingRF,
-            setBearing: setWheelBearingRF     
-        },
-        {
-            name: 'RR wheel bearing',
-            bearing: wheelBearingRR,
-            setBearing: setWheelBearingRR,
-        },
-        {
-            name: 'LR wheel bearing',
-            bearing: wheelBearingLR,
-            setBearing: setWheelBearingLR,
-        },
-    ];
 
     const relaySteering = [
         {
@@ -109,7 +57,79 @@ export const Steering = ({ addToConcerns }) => {
             tieRodRF,
             setTieRodRF
         },
-    ]
+    ];
+
+    const handleResults = () => {
+        isRack ?
+        rackSteering.map((item) => {
+            let msg = '';
+            console.log(item)
+            if (item.outer && item.inner) {
+                // Both inner and outer have play
+                msg = `❌ ${item.name} inner & outer tie rods have play.`;
+                addToConcerns(3, msg);
+            } else if (item.inner || item.outer) {
+                // Either inner or outer has play
+                msg = `🟡 ${item.name} ${item.inner ? 'inner' : 'outer'} tie rod has play.`;
+                addToConcerns(2, msg);
+            } 
+                // Both inner and outer pass
+                const passingParts = [];
+                console.log(item.name)
+                if (item.name == 'Left front') {
+                    if (!item.inner) passingParts.push('Left front inner');
+                    if (!item.outer) passingParts.push('Left front outer');
+                } else {
+                    if (!item.inner) passingParts.push('Right front inner');
+                    if (!item.outer) passingParts.push('Right front outer');
+                }
+               
+                console.log('pp', passingParts)
+                msg = `✅ ${passingParts.join(' & ')} tie rod`;
+                if (passingParts.length) {
+                    addToConcerns(1, msg);
+                }                                                     
+        })        
+        :
+        relaySteering.map((item) => {
+            let msg = '';
+            // Tie rods
+            if (item.tieRodLF && item.tieRodRF) {
+                // Both inner and outer have play
+                msg = `❌ All tie rods have play.`;
+                addToConcerns(3, msg);
+            } else if (item.tieRodLF || item.tieRodRF) {
+                // Either upper or lower has play
+                msg = `🟡 ${item.tieRodLF ? 'Left front ' : 'Right front '} tie rod has play.`;
+                addToConcerns(2, msg);
+            } else {
+                // Both upper and lower pass
+                msg = `✅ Tie rods`;
+                addToConcerns(1, msg);
+            }
+            // Idler & Pitman
+            if (item.idler && item.pitman) {
+                msg = `❌ Idler & pitman have play`
+                addToConcerns(3, msg);
+            } else if (item.idler || item.pitman) {
+                msg = `🟡 ${item.idler ? 'Idler ' : 'Pitman '} play.`
+            } else {
+                msg = `✅ Pitman & idler`
+            }
+            // Drag link & center link
+            if (item.dragLink && item.centerLink) {
+                msg = `❌ Drag link & center link have play`
+                addToConcerns(3, msg)
+            } else if (item.dragLink || item.centerLink) {
+                msg = `🟡 ${item.dragLink ? 'Drag link ' : 'Center link '} has play.`
+                addToConcerns(2, msg)
+            } else {
+                msg = `✅ Drag link & center link`
+                addToConcerns(1, msg)
+            }
+
+        })
+    };
 
     return (
         <fieldset>
@@ -117,32 +137,33 @@ export const Steering = ({ addToConcerns }) => {
             <label>Rack & Pinion Steering
                 <input type='radio' name='isRackRadio' value={true} checked={isRack} onChange={() => setIsRack(true)}/>
             </label>
-            <label>Relay Rod Steering   
+            <label>Drag Link Steering   
                 <input type='radio' name='isRackRadio' value={false} checked={!isRack} onChange={() => setIsRack(false)}/>
             </label>
-            <h4>Leaking?</h4>
+            <p>{isRack ? 'Rack and pinion ' : 'Gearbox '} Leaking?</p>
             <label>True
                 <input type='radio' name='isLeakingRadio' value={true} checked={isLeak} onChange={() => setIsLeak(true)}/>
             </label>
             <label>False  
                 <input type='radio' name='isLeakingRadio' value={false} checked={!isLeak} onChange={() => setIsLeak(false)}/>
             </label>
-            <hr></hr>
             <label>Notes: 
                 <textarea value={notes} onChange={(e) => setNotes(e.target.value)}/>
             </label>
+            <hr></hr>
             {isRack ?
                 rackSteering.map((item) => (
-                    <fieldset key={item.id}>
-                        <legend>{item.name}</legend>
-                        <h4>Outer tie rod play?</h4>
+                    <div key={item.id}>
+                        <h3>{item.name}</h3>
+                        <p>Outer tie rod play?</p>
                         <label>True
                             <input type='radio' name={`${item.id}OuterRadio`} value={true} checked={item.outer} onChange={() => item.setOuter(true)}/>
                         </label>
                         <label>False  
                             <input type='radio' name={`${item.id}OuterRadio`} value={false} checked={!item.outer} onChange={() => item.setOuter(false)}/>
                         </label>
-                        <h4>Inner tie rod play?</h4>
+                        
+                        <p>Inner tie rod play?</p>
                         <label>True
                             <input type='radio' name={`${item.id}InnerTRRadio`} value={true} checked={item.inner} onChange={() => item.setInner(true)}/>
                         </label>
@@ -150,56 +171,63 @@ export const Steering = ({ addToConcerns }) => {
                             <input type='radio' name={`${item.id}innerTRRadio`} value={false} checked={!item.inner} onChange={() => item.setInner(false)}/>
                         </label>
                        
-                        <h4>Wheel bearing play?</h4>
-                        <label>True
-                            <input type='radio' name={`${item.id}WBRadio`} value={true} checked={item.bearing} onChange={() => item.setBearing(true)}/>
-                        </label>
-                        <label>False  
-                            <input type='radio' name={`${item.id}WBRadio`} value={false} checked={!item.bearing} onChange={() => item.setBearing(false)}/>
-                        </label>
-                    </fieldset>
+                      
+                        <hr />
+                    </div>
                 ))
             :
                 relaySteering.map((item) => (
-                    <fieldset key={item.id}>
-                        <legend>{item.name}</legend>
-                        <h4>Outer tie rod play?</h4>
+                    <div key={item.id}>
+                        <h3>{item.name} Steering</h3>
+                        <p>Outer tie rod play?</p>
+                        <p>LF</p>
                         <label>True
-                            <input type='radio' name={`${item.id}OuterRadio`} value={true} checked={item.outer} onChange={() => item.setOuter(true)}/>
+                            <input type='radio' name={`${item.id}OuterRadio`} value={true} checked={item.tieRodLF} onChange={() => item.setTieRodLF(true)}/>
                         </label>
                         <label>False  
-                            <input type='radio' name={`${item.id}OuterRadio`} value={false} checked={!item.outer} onChange={() => item.setOuter(false)}/>
+                            <input type='radio' name={`${item.id}OuterRadio`} value={false} checked={!item.tieRodLF} onChange={() => item.setTieRodLF(false)}/>
                         </label>
-                        <h4>Wheel bearing play?</h4>
+                        <p>RF</p>
                         <label>True
-                            <input type='radio' name={`${item.id}WBRadio`} value={true} checked={item.bearing} onChange={() => item.setBearing(true)}/>
+                            <input type='radio' name={`${item.id}OuterRadio`} value={true} checked={item.tieRodRF} onChange={() => item.setTieRodRF(true)}/>
                         </label>
                         <label>False  
-                            <input type='radio' name={`${item.id}WBRadio`} value={false} checked={!item.bearing} onChange={() => item.setBearing(false)}/>
+                            <input type='radio' name={`${item.id}OuterRadio`} value={false} checked={!item.tieRodRF} onChange={() => item.setTieRodRF(false)}/>
                         </label>
-                       
-                    </fieldset>
+                        <hr />
+                        <p>Pitman play?</p>
+                        <label>True
+                            <input type='radio' name={`${item.id}PitmanRadio`} value={true} checked={item.pitman} onChange={() => item.setPitman(true)}/>
+                        </label>
+                        <label>False  
+                            <input type='radio' name={`${item.id}PitmanRadio`} value={false} checked={!item.pitman} onChange={() => item.setPitman(false)}/>
+                        </label>
+                        <p>Idler play?</p>
+                        <label>True
+                            <input type='radio' name={`${item.id}IdlerRadio`} value={true} checked={item.idler} onChange={() => item.setIdler(true)}/>
+                        </label>
+                        <label>False  
+                            <input type='radio' name={`${item.id}IdlerRadio`} value={false} checked={!item.idler} onChange={() => item.setIdler(false)}/>
+                        </label>
+                        <hr />
+                        <p>Drag link play?</p>
+                        <label>True
+                            <input type='radio' name={`${item.id}DragLinkRadio`} value={true} checked={item.dragLink} onChange={() => item.setDragLink(true)}/>
+                        </label>
+                        <label>False  
+                            <input type='radio' name={`${item.id}DragLinkRadio`} value={false} checked={!item.dragLink} onChange={() => item.setDragLink(false)}/>
+                        </label>
+                        <p>Center link play?</p>
+                        <label>True
+                            <input type='radio' name={`${item.id}CenterLinkRadio`} value={true} checked={item.centerLink} onChange={() => item.setCenterLink(true)}/>
+                        </label>
+                        <label>False  
+                            <input type='radio' name={`${item.id}CenterLinkrRadio`} value={false} checked={!item.centerLink} onChange={() => item.setCenterLink(false)}/>
+                        </label>
+                    </div>
                 ))
             }
-            {/* {ballJoints.map((item) => (
-                <fieldset key={item.id}>
-                    <legend>{item.name}</legend>
-                   <h4>Upper ball joint</h4>
-                        <label>True
-                            <input type='radio' name={`${item.id}UpBJRadio`} value={true} checked={item.ballJoint_upper} onChange={() => item.setUpperBJ(true)}/>
-                        </label>
-                        <label>False  
-                            <input type='radio' name={`${item.id}UpBJRadio`} value={false} checked={!item.ballJoint_upper} onChange={() => item.setUpperBJ(false)}/>
-                        </label>
-                        <h4>Lower ball joint</h4>
-                        <label>True
-                            <input type='radio' name={`${item.id}LwrBJRadio`} value={true} checked={item.ballJoint_lower} onChange={() => item.setLowerBJ(true)}/>
-                        </label>
-                        <label>False  
-                            <input type='radio' name={`${item.id}LwrBJRadio`} value={false} checked={!item.ballJoint_lower} onChange={() => item.setLowerBJ(false)}/>
-                        </label>
-                </fieldset>
-            ))} */}
+           <button type='button' onClick={handleResults}>Test Result</button>
         </fieldset>
     )
 }

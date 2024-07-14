@@ -10,6 +10,8 @@ import { UnderHoodFluids } from './UnderhoodFluids';
 import { Tires } from './Tires';
 import { Suspension } from './Suspension';
 import { Steering } from './Steering';
+import { BallJoints } from './BallJoints';
+import { WheelBearings } from './WheelBearings';
 
 export const InspectionForm = () => {
 
@@ -19,30 +21,8 @@ export const InspectionForm = () => {
     const [safetyConcern, setSafetyConcern] = useState([]);
 
     const [currentStep, setCurrentStep] = useState(0);
-
-    
-    // Inspection data
-    const [warningLights, setWarningLights] = useState(''); 
-    const [exteriorLights, setExteriorLights] = useState('');
-    const [wiperWasher, setWiperWasher] = useState('');
-    // under hood
-    const [airFilter, setAirFilter] = useState('');
-    const [battery, setBattery] = useState('');
-    const [belts, setBelts] = useState('');
-    const [hoses, setHoses] = useState('');
-    const [underHoodFluids, setUnderHoodFluids] = useState('');
-    const [underHoodNotes, setUnderHoodNotes] = useState('');
-    // under car
-    const [tires, setTires] = useState('');
-    const [brakes, setBrakes] = useState('');
-    const [suspension, setSuspension] = useState('');
-    const [underCarFluids, setUnderCarFluids] = useState('');
-    const [underCarNotes, setUnderCarNotes] = useState('');
     // maintenance
     const [maintenance, setMaintenance] = useState('');
-
-    const condition = ['Good', 'Needs Attention', 'Safety Concern']
-    const recommendation = ['Diagnose', 'Repair', 'Replace', '']
 
     const addToConcerns = (level, note) => {
         switch (level) {
@@ -60,6 +40,7 @@ export const InspectionForm = () => {
         }
     }
 
+    // Set order of inspection
     const steps = [
         <WarningLights addToConcerns={addToConcerns} />,
         <ExteriorLights addToConcerns={addToConcerns}/>,
@@ -67,14 +48,14 @@ export const InspectionForm = () => {
         <UnderHoodFluids addToConcerns={addToConcerns} />,
         <Tires addToConcerns={addToConcerns} />,
         <Suspension addToConcerns={addToConcerns} />,
-        <Steering addToConcerns={addToConcerns} />
-    ]   
+        <Steering addToConcerns={addToConcerns} />,
+        <BallJoints addToConcerns={addToConcerns} />,
+        <WheelBearings addToConcerns={addToConcerns} />
+    ];
 
-
+    // Scroll through inspection components
     const scrollBack = () => setCurrentStep((prevStep) => Math.max(prevStep - 1, 0));
     const scrollNext = () => setCurrentStep((prevStep) => Math.min(prevStep + 1, steps.length - 1));
-
-  
 
     return (
         <div>

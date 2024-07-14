@@ -67,7 +67,7 @@ export const UnderHood = ({ addToConcerns }) => {
                     addToConcerns(1, `✅ ${item.name}`)
                 }
             } else if (item.level === 2) {
-                const someConcernMsg = `${item.name}: ${item.notes}`
+                const someConcernMsg = `🟡 ${item.name}: ${item.notes}`
                 addToConcerns(2, someConcernMsg)
             } else {
                 const safetyConcernMsg = `❌ ${item.name}: ${item.notes}`

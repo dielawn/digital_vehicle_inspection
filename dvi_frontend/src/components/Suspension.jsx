@@ -50,7 +50,7 @@ export const Suspension = ({ addToConcerns }) => {
             const msg = `${item.name} ${leakMsg} ${bounceMsg} ${item.isSwayOk ? '' : swayMsg} ${notesMsg}`         
             addToConcerns(3, `❌ ${msg}`)
         } else if (item.isLeak || item.isBouncy || !item.isSwayOk || item.notes !== '' ) {
-            const msg = `${item.name} ${item.isLeak ? leakMsg : ''} ${item.isBouncy ? bounceMsg : ''} ${item.isSwayOk ? '' : swayMsg} ${notesMsg}`
+            const msg = `🟡 ${item.name} ${item.isLeak ? leakMsg : ''} ${item.isBouncy ? bounceMsg : ''} ${item.isSwayOk ? '' : swayMsg} ${notesMsg}`
             addToConcerns(2, msg)
         } else {    
             const msg = `Found no issues or concerns with ${item.name.toLowerCase()} suspension! ${notesMsg}`                
@@ -72,7 +72,8 @@ export const Suspension = ({ addToConcerns }) => {
             <label>False   
                 <input type='radio' name={`${item.name}LeakingRadio`} value={false} checked={!item.isLeak} onChange={() => item.setIsLeak(false)}/>
             </label>
-            <h4>Bounce test</h4>
+           
+            <h4>{item.name} Bounce test</h4>
             <label>Pass   
                 <input type='radio' name={`${item.name}BounceRadio`} value={false} checked={!item.isBouncy} onChange={() => item.setIsBouncy(false)}/>
             </label>
@@ -94,6 +95,7 @@ export const Suspension = ({ addToConcerns }) => {
                     onChange={(e) => item.setNotes(e.target.value)}
                 />
             </label>
+            <hr></hr>
             </div>
             ))}
         <button type='button' onClick={handleResults}>Test Result</button>

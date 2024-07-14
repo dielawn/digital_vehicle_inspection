@@ -70,7 +70,7 @@ export const UnderHoodFluids = ({ addToConcerns }) => {
                     addToConcerns(1, `✅ ${item.name} ${item.frz_tmp ? ', Freeze point: ' + item.frz_tmp + '°F' : ''}`)
                 }
             } else if (item.level === 2) {
-                const someConcernMsg = `${item.name} Ok ${item.notes} ${item.frz_tmp ? ', Freeze point: ' + item.frz_tmp + '°F' : ''}`
+                const someConcernMsg = `🟡 ${item.name} Ok ${item.notes} ${item.frz_tmp ? ', Freeze point: ' + item.frz_tmp + '°F' : ''}`
                 addToConcerns(2, someConcernMsg)
             } else {
                 const safetyConcernMsg = `❌ Recommend Change/Flush ${item.name}: ${item.notes} ${item.frz_tmp ? ', Freeze point: ' + item.frz_tmp + '°F' : ''}`
