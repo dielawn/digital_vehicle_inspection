@@ -12,6 +12,7 @@ import { Suspension } from './Suspension';
 import { Steering } from './Steering';
 import { BallJoints } from './BallJoints';
 import { WheelBearings } from './WheelBearings';
+import { Brakes } from './Brakes';
 
 export const InspectionForm = () => {
 
@@ -50,7 +51,8 @@ export const InspectionForm = () => {
         <Suspension addToConcerns={addToConcerns} />,
         <Steering addToConcerns={addToConcerns} />,
         <BallJoints addToConcerns={addToConcerns} />,
-        <WheelBearings addToConcerns={addToConcerns} />
+        <WheelBearings addToConcerns={addToConcerns} />,
+        <Brakes addToConcerns={addToConcerns} />
     ];
 
     // Scroll through inspection components
