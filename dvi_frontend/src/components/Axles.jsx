@@ -6,12 +6,14 @@ export const Axles = ({ addToConcerns }) => {
     const [axleRF, setAxleRF] = useState(false);
     const [axleRR, setAxleRR] = useState(false);
     const [axleLR, setAxleLR] = useState(false);
+    const [selectedAxles, setSelectedAxles] = useState([]);
 
     const [notes, setNotes] = useState('');
 
     const [driveType, setDriveType] = useState(null);
 
-    const axles = [
+
+    const aLLAxles = [
         {
             name: 'Left front ',
             id: 'lfAxle',
@@ -37,6 +39,20 @@ export const Axles = ({ addToConcerns }) => {
             setAxle: setAxleLR,
         },
     ];
+
+ 
+    useEffect(() => {
+        if (driveType === 'fwd') {
+            setSelectedAxles([aLLAxles[0], aLLAxles[1]])
+        } else if (driveType === 'rwd') {
+            setSelectedAxles([aLLAxles[2], aLLAxles[3]])
+        } else {
+            setSelectedAxles([...aLLAxles])
+        }
+
+    }, [driveType])
+
+  
 
     const resetDriveType = () => setDriveType(null);
 
@@ -65,14 +81,26 @@ export const Axles = ({ addToConcerns }) => {
                     <h3>{driveType}</h3>
                     <button type="button" onClick={resetDriveType}>Edit drive type</button>
                     <hr />
-                    {axles.map((item) => (
+                    {selectedAxles.map((item) => (
                         <div key={item.id}>
                             <h4>{item.name} axle concern?</h4>
                             <label>True
-                                <input />
+                                <input 
+                                    type='radio'
+                                    name={`${item.id}AxleConcern`}
+                                    value={true}
+                                    checked={item.axle}
+                                    onChange={() => item.setAxle(true)}
+                                />
                             </label>
                             <label>False
-                                <input />
+                                <input 
+                                    type='radio'
+                                    name={`${item.id}AxleConcern`}
+                                    value={false}
+                                    checked={!item.axle}
+                                    onChange={() => item.setAxle(false)}
+                                />
                             </label>
 
                         </div>
