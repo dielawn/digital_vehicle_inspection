@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-export const Axles = ({ addToConcerns }) => {
-    const [driveType, setDriveType] = useState(null);
+export const Axles = ({ addToConcerns, driveType, setDriveType }) => {
+    
     const [selectedAxles, setSelectedAxles] = useState([]);
 
     const initialAxles = [
@@ -15,13 +15,13 @@ export const Axles = ({ addToConcerns }) => {
 
     useEffect(() => {
         let tempArray = [];
-        if (driveType === 'fwd') {
+        if (driveType === 'FWD') {
             tempArray = initialAxles.slice(0, 2);
-        } else if (driveType === 'rwd') {
+        } else if (driveType === 'RWD') {
             tempArray = [initialAxles[2], initialAxles[3], initialAxles[5]];
-        } else if (driveType === '4wd') {
+        } else if (driveType === '4WD') {
             tempArray = initialAxles;
-        } else if (driveType === 'awd') {
+        } else if (driveType === 'AWD') {
             tempArray = [initialAxles[0], initialAxles[1], initialAxles[2], initialAxles[3], initialAxles[5]];
         }
         setSelectedAxles(tempArray);

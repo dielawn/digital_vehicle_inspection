@@ -41,7 +41,7 @@ export const VehicleInfo = ({ vin, setVin, license, setLicense, state, setState,
                         model: res.data.vin.model,
                         engine: res.data.vin.engine,
                         transmission: res.data.vin.transmission,
-
+                        driveType: res.data.vin.driveType
                     }
                     setVehicle(currentVehicle);
                     setMessage('Vehicle data set')
@@ -76,6 +76,7 @@ export const VehicleInfo = ({ vin, setVin, license, setLicense, state, setState,
                     model: res.data.data.model,
                     engine: res.data.data.engine,
                     transmission: res.data.data.transmission,
+                    driveType: res.data.data.driveType
                 }
                 setVehicle(currentVehicle)
             } else {
@@ -135,4 +136,4 @@ export const VehicleInfo = ({ vin, setVin, license, setLicense, state, setState,
             
         </div>
     )
-}
+};

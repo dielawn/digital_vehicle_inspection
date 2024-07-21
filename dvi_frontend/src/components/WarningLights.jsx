@@ -29,7 +29,7 @@ export const WarningLights = ({ addToConcerns }) => {
             addToConcerns(1, '✅ No Warning Lights')
         } else {
             const someConcernMsg = 
-            `❌ Warning lights: ${results.map((result) => result.name + ' ').join(', ')} ${isOther ? otherNote : ''} ${techNote ? `Tech notes: ${techNote}` : ''}\n Recommend scan tool diagnostics.`;        
+            `🟡 Warning lights: ${results.map((result) => result.name + ' ').join(', ')} ${isOther ? otherNote : ''} ${techNote ? `Tech notes: ${techNote}` : ''}\n Recommend scan tool diagnostics.`;        
             addToConcerns(2, someConcernMsg)
         }       
     }

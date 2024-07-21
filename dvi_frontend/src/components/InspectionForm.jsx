@@ -14,9 +14,10 @@ import { BallJoints } from './BallJoints';
 import { WheelBearings } from './WheelBearings';
 import { Brakes } from './Brakes';
 import { Axles } from './Axles';
+import { UnderCarFluids } from './UnderCarFluids';
 import { Maintenance } from './Maintenance';
 
-export const InspectionForm = () => {
+export const InspectionForm = ({ driveType, setDriveType }) => {
 
     // Levels of concern
     const [lowConcern, setLowConcern] = useState([]);
@@ -26,6 +27,8 @@ export const InspectionForm = () => {
     const [currentStep, setCurrentStep] = useState(0);
     // maintenance
     const [maintenance, setMaintenance] = useState('');
+
+    const [serviceNotes, setServiceNotes] = useState([]);
 
     const addToConcerns = (level, note) => {
         switch (level) {
@@ -49,14 +52,15 @@ export const InspectionForm = () => {
         <ExteriorLights addToConcerns={addToConcerns}/>,
         <UnderHood addToConcerns={addToConcerns} />,
         <UnderHoodFluids addToConcerns={addToConcerns} />,
-        <Tires addToConcerns={addToConcerns} />,
+        <Tires addToConcerns={addToConcerns} driveType={driveType} />,
         <Suspension addToConcerns={addToConcerns} />,
         <Steering addToConcerns={addToConcerns} />,
         <BallJoints addToConcerns={addToConcerns} />,
         <WheelBearings addToConcerns={addToConcerns} />,
         <Brakes addToConcerns={addToConcerns} />,
-        <Axles addToConcerns={addToConcerns} />,
-        <Maintenance addToConcerns={addToConcerns} />
+        <Axles addToConcerns={addToConcerns} driveType={driveType} setDriveType={setDriveType}/>,
+        <UnderCarFluids addToConcerns={addToConcerns} driveType={driveType} />,
+        <Maintenance setMaintenance={setMaintenance} />
     ];
 
     // Scroll through inspection components
@@ -91,6 +95,12 @@ export const InspectionForm = () => {
                 {safetyConcern && safetyConcern.map((concern, index) => (
                     <li key={index}>{concern}</li>
                 ))}
+                {maintenance && 
+                    <>
+                    <h3>Maintenance</h3>
+                    <p>{maintenance}</p>
+                    </>
+                }
                 </ul>
             </div>
 

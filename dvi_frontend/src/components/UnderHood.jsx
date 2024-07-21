@@ -5,7 +5,6 @@ export const UnderHood = ({ addToConcerns }) => {
     const [batteryNotes, setBatteryNotes] = useState('');
     const [beltsNotes, setBeltsNotes] = useState('');
     const [hosesNotes, setHosesNotes] = useState('');
-    const [timingBeltNotes, setTimingBeltNotes] = useState('');
     const [otherNotes, setOtherNotes] = useState('');
 
     // Concern level 1 = low, 3 = high
@@ -13,7 +12,6 @@ export const UnderHood = ({ addToConcerns }) => {
     const [batteryLevel, setBatteryLevel] = useState(1);
     const [beltsLevel, setBeltsLevel] = useState(1);
     const [hosesLevel, setHosesLevel] = useState(1);
-    const [timingBeltLevel, setTimingBeltLevel] = useState(1);
     const [otherLevel, setOtherLevel] = useState(1);
 
     const underHoodInspItems = [
@@ -44,13 +42,6 @@ export const UnderHood = ({ addToConcerns }) => {
             setLevel: setHosesLevel,
             notes: hosesNotes,
             setNotes: setHosesNotes,
-        },
-        {
-            name: 'Timing Belt',
-            level: timingBeltLevel,
-            setLevel: setTimingBeltLevel,
-            notes: timingBeltNotes,
-            setNotes: setTimingBeltNotes
         },
         {
             name: 'Other',

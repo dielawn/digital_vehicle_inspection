@@ -42,19 +42,21 @@ export const Suspension = ({ addToConcerns }) => {
     const handleResults = () => {
         
       suspension.map((item) => {
-        const leakMsg = `Leaking ${item.name} shocks/struts. ` 
-        const bounceMsg = `${item.name} suspension is weak/bouncy. `
-        const swayMsg = `Recommend ${item.name} stabalizer links & bushings. `
+        const leakMsg = `leaking shocks/struts. ` 
+        const bounceMsg = `shocks/struts are weak/bouncy. `
+        const swayMsg = `${item.name} stabalizer links & bushings. `
         const notesMsg = `${item.notes ? item.notes : ''}`
+        
+        let msg = ``
         if (item.isLeak && item.isBouncy || (item.isLeak && item.notes !== '') || item.isBouncy && item.notes !== '') {   
-            const msg = `${item.name} ${leakMsg} ${bounceMsg} ${item.isSwayOk ? '' : swayMsg} ${notesMsg}`         
+            msg = `${item.name} ${leakMsg} ${bounceMsg} ${item.isSwayOk ? '' : swayMsg} ${notesMsg}`         
             addToConcerns(3, `❌ ${msg}`)
         } else if (item.isLeak || item.isBouncy || !item.isSwayOk || item.notes !== '' ) {
-            const msg = `🟡 ${item.name} ${item.isLeak ? leakMsg : ''} ${item.isBouncy ? bounceMsg : ''} ${item.isSwayOk ? '' : swayMsg} ${notesMsg}`
+            msg = `🟡 ${item.name} ${item.isLeak ? leakMsg : ''} ${item.isBouncy ? bounceMsg : ''} ${item.isSwayOk ? '' : swayMsg} ${notesMsg}`
             addToConcerns(2, msg)
         } else {    
-            const msg = `Found no issues or concerns with ${item.name.toLowerCase()} suspension! ${notesMsg}`                
-            addToConcerns(1, `✅ ${msg}`)               
+            msg = `✅ ${item.name} suspension! ${notesMsg}`              
+            addToConcerns(1, passMsg)               
         } 
       })
        

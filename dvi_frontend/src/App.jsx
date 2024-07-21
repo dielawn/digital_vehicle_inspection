@@ -15,6 +15,7 @@ function App() {
 
   // Vehicle Info
   const [vin, setVin] = useState('');
+  const [driveType, setDriveType] = useState('');
   const [license, setLicense] = useState('');
   const [state, setState] = useState('MT');
   const [vehicle, setVehicle] = useState(null);
@@ -57,6 +58,7 @@ function App() {
   useEffect(() => {
     if (vehicle) {
       setVin(vehicle.vin)
+      setDriveType(vehicle.driveType)
     }    
   }, [vehicle])
 
@@ -89,7 +91,8 @@ function App() {
         <p>{vehicle.year} {vehicle.make} {vehicle.model} </p>
         <p>Mileage: {mileage}</p>
         <p>Inspecting Technician: {tech}</p>
-        <InspectionForm />
+        <p>Drive Type: {driveType}</p>
+        <InspectionForm driveType={driveType} setDriveType={setDriveType} />
       </>
       :
       <>

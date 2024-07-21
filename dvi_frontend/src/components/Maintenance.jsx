@@ -1,20 +1,19 @@
 import { useEffect, useState } from 'react'
 
-export const Maintenance = ({ addToConcerns }) => {
+export const Maintenance = ({ setMaintenance }) => {
 
     const [servicesDue, setServicesDue] = useState('');
     const [servicesPastDue, setServicesPastDue] = useState('');
-    const [nexServices, setNextServices] = useState('');
+    const [nextServices, setNextServices] = useState('');
 
     const handleResults = () => {
-        addToConcerns(1, nexServices)
-        addToConcerns(2, servicesDue)
-        addToConcerns(3, servicesPastDue)
-    }
+        const msg = `Were these services performed? ${servicesPastDue}, Services due: ${servicesDue}, Next Services: ${nextServices}`
+        setMaintenance(msg)
+    };
 
     return (
         <fieldset>
-            <legend>Schedualed Maintenance</legend>
+            <legend>Scheduled Maintenance</legend>
             <label>Last Services
                 <textarea 
                     value={servicesPastDue}
@@ -29,7 +28,7 @@ export const Maintenance = ({ addToConcerns }) => {
             </label>
             <label>Next Services
                 <textarea 
-                    value={nexServices}
+                    value={nextServices}
                     onChange={(e) => setNextServices(e.target.value)}
                 />
             </label>

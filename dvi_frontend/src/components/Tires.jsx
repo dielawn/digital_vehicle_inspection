@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 
-export const Tires = ({ addToConcerns }) => {
+export const Tires = ({ addToConcerns, driveType }) => {
     const [tireSize, setTireSize] = useState('');
+    const [loadRange, setLoadRange] = useState('P')
     const [tireNotes, setTireNotes] = useState('');
     const [isAWD, setIsAWD] = useState(false);
     // LF
@@ -62,6 +63,29 @@ export const Tires = ({ addToConcerns }) => {
         },
     ];
 
+    const loadRangeOptions = ['P', 'C', 'D', 'E']
+
+    const formatTireSize = () => {
+        const regex = /^(\d{3})(\d{2})(\d{2})$/;
+        const match = tireSize.match(regex)
+        if (match) {
+            return `${match[1]}/${match[2]}/${match[3]}`
+        } else {
+            return tireSize
+        }
+    };
+
+    const handleDriveType = () => {
+        console.log(driveType)
+        if (driveType === 'AWD') {
+            setIsAWD(true)
+        } else {
+            setIsAWD(false)
+        }
+    }
+
+
+
  
     const handleResults = () => {
 
@@ -73,6 +97,7 @@ export const Tires = ({ addToConcerns }) => {
 
         tireInfo.map((item) => {
             const tireAge = getTireAge(item.date);            
+            const formattedTireSize = formatTireSize();
             let msg = `${item.name}: ${item.tread}/32, ${tireAge} years old, ${item.isUneven ? 'Uneven wear' : '' }`
             // No date code info
             if (item.date === '') {
@@ -80,11 +105,11 @@ export const Tires = ({ addToConcerns }) => {
             }            
            // Sort by tire age, tread, and uneven wear
             if (tireAge >= 7 || item.tread < 3) {
-                addToConcerns(3, `❌ ${msg}`)
+                addToConcerns(3, `❌ ${loadRange} ${formattedTireSize} ${msg}`)
             } else if ((item.tread <= 5 && item.tread >= 3) || tireAge === 6 || item.isUneven) {
-                addToConcerns(2, `🟡 ${msg}`)
+                addToConcerns(2, `🟡 ${loadRange} ${formattedTireSize} ${msg}`)
             } else {                    
-                addToConcerns(1, `✅ ${msg}`)               
+                addToConcerns(1, `✅ ${loadRange} ${formattedTireSize} ${msg}`)               
             } 
         })
     };
@@ -101,20 +126,33 @@ export const Tires = ({ addToConcerns }) => {
                     onChange={(e) => setTireSize(e.target.value)}
                 />
             </label>
+            <h3>Select Load Range</h3>
+            {loadRangeOptions.map((option) => (
+                <label key={option}>
+                    <input 
+                        type='radio'
+                        name='loadRangeRadio'
+                        value={option}
+                        checked={option === loadRange}
+                        onChange={() => setLoadRange(option)}
+                    />{option}
+                </label>
+            ))}
+            <hr></hr>
             <label> Tire Notes:
                 <textarea 
                     value={tireNotes}
                     onChange={(e) => setTireNotes(e.target.value)}
                 />
             </label>
-            <h4>AWD</h4>
+            {/* <h4>AWD</h4>
             <label>True
                 <input type='radio' name='awdRadio' value={true} checked={isAWD} onChange={() => setIsAWD(true)}/>
             </label>
             <label>False   
                 <input type='radio' name='awdRadio' value={false} checked={!isAWD} onChange={() => setIsAWD(false)}/>
             </label>
-            <hr></hr>
+            <hr></hr> */}
             {tireInfo.map((item, index) => (
                 <div key={index} className='flexCol'>
                     
