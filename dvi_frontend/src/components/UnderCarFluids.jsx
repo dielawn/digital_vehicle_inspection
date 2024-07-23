@@ -6,7 +6,78 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
     const [rearDiffFluid, setRearDiffFluid] = useState(1);
     const [tCaseFluid, setTCaseFluid] = useState(1);
 
-    const [notes, setNotes] = useState('');
+    const [frontDiffNotes, setFrontDiffNotes] = useState('');
+    const [rearDiffNotes, setRearDiffNotes] = useState('');
+    const [tCaseNotes, setTCaseNotes] = useState('');
+
+    const fluids = [
+        {
+            fluid: frontDiffFluid, 
+            setFluid: setFrontDiffFluid, 
+            text: 'Front diff fluid', 
+            note: frontDiffNotes, 
+            setNote: setFrontDiffNotes,
+            id: 'fDFluid'
+        },
+        {
+            fluid: rearDiffFluid, 
+            setFluid: setRearDiffFluid, 
+            text: 'Rear diff fluid', 
+            note: rearDiffNotes, 
+            setNote: setRearDiffNotes,
+            id: 'rDFluid'},
+        {
+            fluid: tCaseFluid, 
+            setFluid: setTCaseFluid, 
+            text: 'Transfer case fluid', 
+            note: tCaseNotes, 
+            setNote: setTCaseNotes,
+            id: 'tCaseFluid'},
+    ];
+
+
+    const Fluids = () => {
+        return (
+            fluids.map((item) => (
+                <div key={item.id}>
+                <h3>{item.text}</h3>
+                <label>
+                    <input 
+                        type='radio'
+                        name={`${item.id}Radio`}
+                        value={1}
+                        onChange={() => setFluid(1)}
+                        checked={item.fluid === 1}
+                    />✅
+                </label>
+                <label>
+                    <input 
+                        type='radio'
+                        name={`${item.id}Radio`}
+                        value={2}
+                        onChange={() => setFluid(2)}
+                        checked={item.fluid === 2}
+                    />🟡
+                </label>
+                <label>
+                    <input 
+                        type='radio'
+                        name={`${item.id}Radio`}
+                        value={3}
+                        onChange={() => setFluid(3)}
+                        checked={item.fluid === 3}
+                    />❌
+                </label>
+                <label>{item.text} Notes
+                <textarea 
+                    value={item.note}
+                    onChange={(e) => item.setNote(e.target.value)}
+                />
+            </label>
+            </div>
+            ))
+        )
+    }
 
     const FrontDiff = () => {
         return (
@@ -19,7 +90,7 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
                         value={1}
                         onChange={() => setFrontDiffFluid(1)}
                         checked={frontDiffFluid === 1}
-                    />Good
+                    />✅
                 </label>
                 <label>
                     <input 
@@ -28,7 +99,7 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
                         value={2}
                         onChange={() => setFrontDiffFluid(2)}
                         checked={frontDiffFluid === 2}
-                    />Needs attention
+                    />🟡
                 </label>
                 <label>
                     <input 
@@ -37,8 +108,14 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
                         value={3}
                         onChange={() => setFrontDiffFluid(3)}
                         checked={frontDiffFluid === 3}
-                    />Needs immediate attention
+                    />❌
                 </label>
+                <label>Notes
+                <textarea 
+                    value={frontDiffNotes}
+                    onChange={(e) => setFrontDiffNotes(e.target.value)}
+                />
+            </label>
             </div>
         )
     }
@@ -54,7 +131,7 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
                         value={1}
                         onChange={() => setRearDiffFluid(1)}
                         checked={rearDiffFluid === 1}
-                    />Good
+                    />✅
                 </label>
                 <label>
                     <input 
@@ -63,7 +140,7 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
                         value={2}
                         onChange={() => setRearDiffFluid(2)}
                         checked={rearDiffFluid === 2}
-                    />Needs attention
+                    />🟡
                 </label>
                 <label>
                     <input 
@@ -72,8 +149,14 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
                         value={3}
                         onChange={() => setRearDiffFluid(3)}
                         checked={rearDiffFluid === 3}
-                    />Needs immediate attention
+                    />❌
                 </label>
+                <label>Notes
+                <textarea 
+                    value={rearDiffNotes}
+                    onChange={(e) => setRearDiffNotes(e.target.value)}
+                />
+            </label>
             </div>
         )
     }
@@ -89,7 +172,7 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
                         value={1}
                         onChange={() => setTCaseFluid(1)}
                         checked={tCaseFluid === 1}
-                    />Good
+                    />✅
                 </label>
                 <label>
                     <input 
@@ -98,7 +181,7 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
                         value={2}
                         onChange={() => setTCaseFluid(2)}
                         checked={tCaseFluid === 2}
-                    />Needs attention
+                    />🟡
                 </label>
                 <label>
                     <input 
@@ -107,8 +190,14 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
                         value={3}
                         onChange={() => setTCaseFluid(3)}
                         checked={tCaseFluid === 3}
-                    />Needs immediate attention
+                    />❌
                 </label>
+                <label>Notes
+                <textarea 
+                    value={tCaseNotes}
+                    onChange={(e) => setTCaseNotes(e.target.value)}
+                />
+            </label>
             </div>
         )
     }
@@ -125,20 +214,18 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
     }
 
     const handleResults = () => {
-        let msg = ''
-        const fDiffTxt = 'Front diff fluid'
-        const rDiffTxt = 'Rear diff fluid'
-        const tCaseTxt = 'Transfer case fluid'
-        if (frontDiffFluid === 3 || rearDiffFluid === 3 || tCaseFluid === 3) {
-            msg = `${frontDiffFluid === 3 ? `❌ ${fDiffTxt}` : ''} ${rearDiffFluid === 3 ? `❌ ${rDiffTxt}` : ''} ${tCaseFluid === 3 ? `❌ ${tCaseTxt}` : ''} ${notes}`
-            addToConcerns(3, msg)
-        } else if (frontDiffFluid === 2 || rearDiffFluid === 2 || tCaseFluid === 2) {
-            msg = `${frontDiffFluid === 2 ? `🟡  ${fDiffTxt}` : ''} ${rearDiffFluid === 2 ? `🟡 ${rDiffTxt}` : ''} ${tCaseFluid === 2 ? `🟡 ${tCaseTxt}` : ''} ${notes}`
-            addToConcerns(2, msg)
-        } else if (frontDiffFluid === 1 || rearDiffFluid === 1 || tCaseFluid === 1) {
-            msg = `${frontDiffFluid === 1 ? `✅ ${fDiffTxt}` : ''} ${rearDiffFluid === 1 ? `✅ ${rDiffTxt}` : ''} ${tCaseFluid === 1 ? `✅ ${tCaseTxt}` : ''} ${notes}`
-            addToConcerns(1, msg)
+      
+        const statusIcon = {
+            1: '✅',
+            2: '🟡',
+            3: '❌'
         }
+        fluids.forEach(({ fluid, text, note }) => {
+            if (statusIcon[fluid]) {
+                const msg = `${statusIcon[fluid]} ${text}. ${note}`
+                addToConcerns(fluid, msg)
+            }
+        })
     }
 
     return (
