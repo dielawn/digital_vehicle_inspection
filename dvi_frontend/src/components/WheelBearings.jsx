@@ -58,33 +58,33 @@ export const WheelBearings = ({ addToConcerns }) => {
             <legend>Wheel Bearings</legend>
             {wheelBearings.map((item) => (
                 <div key={item.id}>
-                <h3>{item.name} play?</h3>
-                <label>Pass
+                <p>{item.name}</p>
+                <label>
                         <input 
                             type='radio' 
                             name={`${item.id}Radio`} 
                             value={1} 
                             checked={item.bearing === 1} 
                             onChange={() => item.setBearing(1)} 
-                        />
+                        />No Concern
                     </label>
-                    <label>Some concern
+                    <label>
                         <input 
                             type='radio' 
                             name={`${item.id}Radio`} 
                             value={2} 
                             checked={item.bearing === 2} 
                             onChange={() => item.setBearing(2)} 
-                        />
+                        />Some concern
                     </label>
-                    <label>Safety Concern
+                    <label>
                         <input 
                             type='radio' 
                             name={`${item.id}Radio`} 
                             value={3} 
                             checked={item.bearing === 3} 
                             onChange={() => item.setBearing(3)} 
-                        />
+                        />Safety Concern
                     </label>
                 </div>
             ))}

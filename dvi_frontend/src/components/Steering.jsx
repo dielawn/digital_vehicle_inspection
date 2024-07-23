@@ -134,20 +134,25 @@ export const Steering = ({ addToConcerns }) => {
     return (
         <fieldset>
             <legend>Steering & Alignment</legend>
-            <label>Rack & Pinion Steering
+            <label>
                 <input type='radio' name='isRackRadio' value={true} checked={isRack} onChange={() => setIsRack(true)}/>
+                Rack & Pinion Steering
             </label>
-            <label>Drag Link Steering   
+            <label>   
                 <input type='radio' name='isRackRadio' value={false} checked={!isRack} onChange={() => setIsRack(false)}/>
+                Drag Link Steering
             </label>
             <p>{isRack ? 'Rack and pinion ' : 'Gearbox '} Leaking?</p>
-            <label>True
+            <label>
                 <input type='radio' name='isLeakingRadio' value={true} checked={isLeak} onChange={() => setIsLeak(true)}/>
+                True
             </label>
-            <label>False  
+            <label> 
                 <input type='radio' name='isLeakingRadio' value={false} checked={!isLeak} onChange={() => setIsLeak(false)}/>
+                False 
             </label>
-            <label>Notes: 
+            <hr />
+            <label> Notes: 
                 <textarea value={notes} onChange={(e) => setNotes(e.target.value)}/>
             </label>
             <hr></hr>
@@ -156,19 +161,23 @@ export const Steering = ({ addToConcerns }) => {
                     <div key={item.id}>
                         <h3>{item.name}</h3>
                         <p>Outer tie rod play?</p>
-                        <label>True
+                        <label>
                             <input type='radio' name={`${item.id}OuterRadio`} value={true} checked={item.outer} onChange={() => item.setOuter(true)}/>
+                            True
                         </label>
-                        <label>False  
+                        <label> 
                             <input type='radio' name={`${item.id}OuterRadio`} value={false} checked={!item.outer} onChange={() => item.setOuter(false)}/>
+                            False 
                         </label>
                         
                         <p>Inner tie rod play?</p>
-                        <label>True
+                        <label>
                             <input type='radio' name={`${item.id}InnerTRRadio`} value={true} checked={item.inner} onChange={() => item.setInner(true)}/>
+                            True
                         </label>
-                        <label>False  
+                        <label> 
                             <input type='radio' name={`${item.id}innerTRRadio`} value={false} checked={!item.inner} onChange={() => item.setInner(false)}/>
+                            False 
                         </label>
                        
                       

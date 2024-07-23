@@ -77,11 +77,13 @@ export const Brakes = ({ addToConcerns }) => {
                 <div key={item.id}>
                     <h4>{item.name}</h4>
                    <p>Even wear?</p>
-                    <label>True 
+                    <label> 
                         <input type='radio' name={`isEvenRadio${item.id}`} value={true} checked={item.isEven} onChange={() => item.setIsEven(true)}/>
+                        True
                     </label>
-                    <label>False 
+                    <label>
                         <input type='radio' name={`isEvenRadio${item.id}`} value={false} checked={!item.isEven} onChange={() => item.setIsEven(false)}/>
+                        False 
                     </label>
                     <label> Pad remaining in mm: 
                         <input 

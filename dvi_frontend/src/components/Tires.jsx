@@ -84,6 +84,11 @@ export const Tires = ({ addToConcerns, driveType }) => {
         }
     }
 
+    useEffect(() => {
+        handleDriveType()
+        console.log(driveType, isAWD)
+
+    }, [driveType])
 
 
  
@@ -100,7 +105,7 @@ export const Tires = ({ addToConcerns, driveType }) => {
             const formattedTireSize = formatTireSize();
             let msg = `${item.name}: ${item.tread}/32, ${tireAge} years old, ${item.isUneven ? 'Uneven wear' : '' }`
             // No date code info
-            if (item.date === '') {
+            if (item.date === '' || !item.date ) {
                 msg = `${item.name}: ${item.tread}/32, ${item.isUneven ? 'Uneven wear' : '' }`
             }            
            // Sort by tire age, tread, and uneven wear

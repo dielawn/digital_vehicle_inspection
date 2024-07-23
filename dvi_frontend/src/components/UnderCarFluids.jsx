@@ -130,13 +130,13 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
         const rDiffTxt = 'Rear diff fluid'
         const tCaseTxt = 'Transfer case fluid'
         if (frontDiffFluid === 3 || rearDiffFluid === 3 || tCaseFluid === 3) {
-            msg = `❌ ${frontDiffFluid === 3 ? fDiffTxt : ''} ${rearDiffFluid === 3 ? rDiffTxt : ''} ${tCaseFluid === 3 ? tCaseTxt : ''} ${notes}`
+            msg = `${frontDiffFluid === 3 ? `❌ ${fDiffTxt}` : ''} ${rearDiffFluid === 3 ? `❌ ${rDiffTxt}` : ''} ${tCaseFluid === 3 ? `❌ ${tCaseTxt}` : ''} ${notes}`
             addToConcerns(3, msg)
         } else if (frontDiffFluid === 2 || rearDiffFluid === 2 || tCaseFluid === 2) {
-            msg = `🟡 ${frontDiffFluid === 2 ? fDiffTxt : ''} ${rearDiffFluid === 2 ? rDiffTxt : ''} ${tCaseFluid === 2 ? tCaseTxt : ''} ${notes}`
+            msg = `${frontDiffFluid === 2 ? `🟡  ${fDiffTxt}` : ''} ${rearDiffFluid === 2 ? `🟡 ${rDiffTxt}` : ''} ${tCaseFluid === 2 ? `🟡 ${tCaseTxt}` : ''} ${notes}`
             addToConcerns(2, msg)
-        } else {
-            msg = `✅ ${frontDiffFluid === 1 ? fDiffTxt : ''} ${rearDiffFluid === 1 ? rDiffTxt : ''} ${tCaseFluid === 1 ? tCaseTxt : ''} ${notes}`
+        } else if (frontDiffFluid === 1 || rearDiffFluid === 1 || tCaseFluid === 1) {
+            msg = `${frontDiffFluid === 1 ? `✅ ${fDiffTxt}` : ''} ${rearDiffFluid === 1 ? `✅ ${rDiffTxt}` : ''} ${tCaseFluid === 1 ? `✅ ${tCaseTxt}` : ''} ${notes}`
             addToConcerns(1, msg)
         }
     }
@@ -157,7 +157,7 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
             }
              {driveType === 'AWD' && 
                 <div>
-                    <FrontDiff />
+                    <TransferCase />
                     <RearDiff />
                     <Notes />
                 </div>

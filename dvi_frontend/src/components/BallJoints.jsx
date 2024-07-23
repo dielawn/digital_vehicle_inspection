@@ -54,18 +54,22 @@ export const BallJoints = ({ addToConcerns }) => {
                 <div key={item.id}>
                     <h3>{item.name}</h3>
                    <p>Upper has play?</p>
-                        <label>True
+                        <label>
                             <input type='radio' name={`${item.id}UpBJRadio`} value={true} checked={item.upper} onChange={() => item.setUpper(true)}/>
+                            True
                         </label>
-                        <label>False  
+                        <label>  
                             <input type='radio' name={`${item.id}UpBJRadio`} value={false} checked={!item.upper} onChange={() => item.setUpper(false)}/>
+                            False
                         </label>
                         <p>Lower has play?</p>
-                        <label>True
+                        <label>
                             <input type='radio' name={`${item.id}LwrBJRadio`} value={true} checked={item.lower} onChange={() => item.setLower(true)}/>
+                            True
                         </label>
-                        <label>False  
+                        <label>
                             <input type='radio' name={`${item.id}LwrBJRadio`} value={false} checked={!item.lower} onChange={() => item.setLower(false)}/>
+                            False
                         </label>
                         <hr></hr>
                 </div>
