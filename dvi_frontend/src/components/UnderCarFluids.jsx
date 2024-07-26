@@ -72,10 +72,10 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
                                 checked={item.fluid === 3}
                             />❌
                         </label>
-                        <label>{item.text} Notes
+                        <label>Notes
                             <textarea 
                                 value={item.note}
-                                onChange={(e) => item.setNote(e.target.value)}
+                                onChange={(e) => item.setNote(item.id, e.target.value)}
                             />
                         </label>
                     </div>
@@ -83,7 +83,6 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
         );
     };
     
-
     const handleResults = () => {
         const statusIcon = {
             1: '✅',
@@ -91,13 +90,19 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
             3: '❌'
         };
         
-        fluids.filter(fluid => fluid.drive.includes(driveType))
+        fluids.filter(item => item.drive.includes(driveType))
             .forEach(({ fluid, text, note }) => {
                 if (statusIcon[fluid]) {
                     const msg = `${statusIcon[fluid]} ${text}. ${note}`;
                     addToConcerns(fluid, msg);
                 }
         });
+    };
+
+    const handleNotesChange = (id, notes) => {
+        setNote(prevState =>
+            prevState.map(note => (note.id === id ? { ...axle, notes } : axle))
+        );
     };
 
     return (

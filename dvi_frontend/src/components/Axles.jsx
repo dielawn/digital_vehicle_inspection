@@ -2,62 +2,92 @@ import { useEffect, useState } from 'react';
 
 export const Axles = ({ addToConcerns, driveType, setDriveType }) => {
     
-    const [selectedAxles, setSelectedAxles] = useState([]);
+    const [axleLF, setAxleLF] = useState(1);
+    const [axleRF, setAxleRF] = useState(1);
+    const [axleRR, setAxleRR] = useState(1);
+    const [axleLR, setAxleLR] = useState(1);
 
-    const initialAxles = [
-        { name: 'Left front', id: 'lfAxle', axle: 1, notes: '' },
-        { name: 'Right front', id: 'rfAxle', axle: 1, notes: '' },
-        { name: 'Right rear', id: 'rrAxle', axle: 1, notes: '' },
-        { name: 'Left rear', id: 'lrAxle', axle: 1, notes: '' },
-        { name: 'Front Drive Line', id: 'frontDLine', axle: 1, notes: '' },
-        { name: 'Rear Drive Line', id: 'rearDLine', axle: 1, notes: '' },
+    const [frontDLine, setFrontDLine] = useState(1);
+    const [rearDLine, setRearDLine] = useState(1);
+
+    const [notesLF, setNotesLF] = useState('');
+    const [notesRF, setNotesRF] = useState('');
+    const [notesRR, setNotesRR] = useState('');
+    const [notesLR, setNotesLR] = useState('');
+    const [notesRDLine, setNotesRDLine] = useState('');
+    const [notesFDLine, setNotesFDLine] = useState('');
+
+    const propShafts = [
+        { 
+            text: 'Left front axle', 
+            id: 'lfAxle', 
+            axle: axleLF, 
+            setAxle: setAxleLF,
+            notes: notesLF,
+            setNotes: setNotesLF,
+            drive: ['FWD', '4WD', 'AWD'] 
+        },
+        { 
+            text: 'Right front axle',
+            id: 'rfAxle', 
+            axle: axleRF,
+            setAxle: setAxleRF, 
+            notes: notesRF,
+            setNotes: setNotesRF, 
+            drive: ['FWD', '4WD', 'AWD'] 
+        },
+        { 
+            text: 'Right rear axle',
+            id: 'rrAxle', 
+            axle: axleRR,
+            setAxle: setAxleRR, 
+            notes: notesRR,
+            setNotes: setNotesRR, 
+            drive: ['RWD', '4WD', 'AWD'] 
+        },
+        { 
+            text: 'Left rear axle', 
+            id: 'lrAxle', 
+            axle: axleLR,
+            setAxle: setAxleLR, 
+            notes: notesLR,
+            setNotes: setNotesLR, 
+            drive: ['RWD', '4WD', 'AWD'] 
+        },
+        {
+            text: 'Front Drive Line', 
+            id: 'frontDLine', 
+            axle: frontDLine,
+            setAxle: setFrontDLine, 
+            notes: notesFDLine,
+            setNotes: setNotesFDLine, 
+            drive: ['4WD'] 
+        },
+        { 
+            text: 'Rear Drive Line', 
+            id: 'rearDLine', 
+            axle: rearDLine,
+            setAxle: setRearDLine, 
+            notes: notesRDLine,
+            setNotes: setNotesRDLine, 
+            drive: ['RWD', '4WD', 'AWD'] 
+        },
     ];
 
-    useEffect(() => {
-        let tempArray = [];
-        if (driveType === 'FWD') {
-            tempArray = initialAxles.slice(0, 2);
-        } else if (driveType === 'RWD') {
-            tempArray = [initialAxles[2], initialAxles[3], initialAxles[5]];
-        } else if (driveType === '4WD') {
-            tempArray = initialAxles;
-        } else if (driveType === 'AWD') {
-            tempArray = [initialAxles[0], initialAxles[1], initialAxles[2], initialAxles[3], initialAxles[5]];
-        }
-        setSelectedAxles(tempArray);
-    }, [driveType]);
-
-    const resetDriveType = () => setDriveType(null);
-
-    const handleAxleChange = (id, value) => {
-        setSelectedAxles(prevState =>
-            prevState.map(axle => (axle.id === id ? { ...axle, axle: value } : axle))
-        );
-    };
-
-    const handleNotesChange = (id, notes) => {
-        setSelectedAxles(prevState =>
-            prevState.map(axle => (axle.id === id ? { ...axle, notes } : axle))
-        );
-    };
-
     const handleResults = () => {
-        selectedAxles.map((item) => {
-            let msg = ``;
-            console.log(item.name)
-            if (item.axle === 3) {
-                msg = `❌  ${item.name} ${item.name === 'Rear Drive Line' || item.name === 'Front Drive Line' ? '' : ' axle'} ${item.notes}`
-                addToConcerns(3, msg)
-            } else if (item.axle === 2) {
-                msg = `🟡 ${item.name}  ${item.name === 'Rear Drive Line' || item.name === 'Front Drive Line' ? '' : ' axle'}  ${item.notes}`
-                addToConcerns(2, msg)
-            } else {
-                msg = `✅ ${item.name} ${item.name === 'Rear Drive Line' || item.name === 'Front Drive Line' ? '' : ' axle'} `
-                addToConcerns(1, msg)
-            }
-        })
-        
+        const statusIcon = {
+            1: '✅',
+            2: '🟡',
+            3: '❌'
+        };
 
+        propShafts.filter(item => item.drive.includes(driveType))
+            .forEach(({ text, axle, notes }) => {
+                if (statusIcon[axle]) {
+                    const msg = `${statusIcon[axle]} ${text}, ${notes}`
+                    addToConcerns(axle, msg)
+                }
+            })
     }
 
     return (
@@ -66,19 +96,19 @@ export const Axles = ({ addToConcerns, driveType, setDriveType }) => {
             {!driveType && (
                 <>
                     <label>                        
-                        <input type='radio' name='driveType' value='fwd' checked={driveType === 'fwd'} onChange={() => setDriveType('fwd')} />
+                        <input type='radio' text='driveType' value='fwd' checked={driveType === 'fwd'} onChange={() => setDriveType('fwd')} />
                         Front wheel drive (FWD)
                     </label>
                     <label>                        
-                        <input type='radio' name='driveType' value='rwd' checked={driveType === 'rwd'} onChange={() => setDriveType('rwd')} />
+                        <input type='radio' text='driveType' value='rwd' checked={driveType === 'rwd'} onChange={() => setDriveType('rwd')} />
                         Rear wheel drive (RWD)
                     </label>
                     <label>                        
-                        <input type='radio' name='driveType' value='awd' checked={driveType === 'awd'} onChange={() => setDriveType('awd')} />
+                        <input type='radio' text='driveType' value='awd' checked={driveType === 'awd'} onChange={() => setDriveType('awd')} />
                         All wheel drive (AWD)
                     </label>
                     <label>
-                        <input type='radio' name='driveType' value='4wd' checked={driveType === '4wd'} onChange={() => setDriveType('4wd')} />
+                        <input type='radio' text='driveType' value='4wd' checked={driveType === '4wd'} onChange={() => setDriveType('4wd')} />
                         Four wheel drive (4x4)                       
                     </label>
                 </>
@@ -87,50 +117,48 @@ export const Axles = ({ addToConcerns, driveType, setDriveType }) => {
             {driveType && (
                 <>
                     <h3>{driveType.toUpperCase()}</h3>
-                    <button type="button" onClick={resetDriveType}>Edit drive type</button>
-                    <hr />
-                    {selectedAxles.map(item => (
+                    {propShafts.map(item => (
                         <div key={item.id}>
-                            <h4>{item.name} concern?</h4>
+                            <h4>{item.text} concern?</h4>
                             <label>                               
                                 <input
                                     type='radio'
-                                    name={`${item.id}AxleConcern`}
+                                    text={`${item.id}AxleConcern`}
                                     value={3}
                                     checked={item.axle === 3}
-                                    onChange={() => handleAxleChange(item.id, 3)}
+                                    onChange={() => item.setAxle(item.id, 3)}
                                 />
-                                Safety concern
+                                ❌
                             </label>                            
                             <label>                               
                                 <input
                                     type='radio'
-                                    name={`${item.id}AxleConcern`}
+                                    text={`${item.id}AxleConcern`}
                                     value={2}
                                     checked={item.axle === 2}
                                     onChange={() => handleAxleChange(item.id, 2)}
                                 />
-                                Needs attention
+                                🟡
                             </label>                           
                             <label>                               
                                 <input
                                     type='radio'
-                                    name={`${item.id}AxleConcern`}
+                                    text={`${item.id}AxleConcern`}
                                     value={1}
                                     checked={item.axle === 1}
                                     onChange={() => handleAxleChange(item.id, 1)}
                                 />
-                                No concern
+                                ✅
                             </label>
-                            {item.axle > 1 && (
+                            
                                 <label>
-                                    {item.name} notes:
+                                    {item.text} notes:
                                     <textarea
                                         value={item.notes}
                                         onChange={e => handleNotesChange(item.id, e.target.value)}
                                     />
                                 </label>
-                            )}
+                            
                         </div>
                     ))}
                 </>
