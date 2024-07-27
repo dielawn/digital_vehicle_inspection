@@ -4,6 +4,16 @@ export const Brakes = ({ addToConcerns }) => {
 
     const [isDisc, setIsDisc] = useState(true);
 
+    const [brakesLF, setBrakesLF] = useState(1);
+    const [brakesRF, setBrakesRF] = useState(1);
+    const [brakesRR, setBrakesRR] = useState(1);
+    const [brakesLR, setBrakesLR] = useState(1);
+
+    const [notesLF, setNotesLF] = useState('');
+    const [notesRF, setNotesRF] = useState('');
+    const [notesRR, setNotesRR] = useState('');
+    const [notesLR, setNotesLR] = useState('');
+
     const [isEvenLF, setIsEvenLF] = useState(true);
     const [isEvenRF, setIsEvenRF] = useState(true);
     const [isEvenRR, setIsEvenRR] = useState(true);
@@ -23,6 +33,10 @@ export const Brakes = ({ addToConcerns }) => {
             setIsEven: setIsEvenLF,
             pad: padLF,
             setPad: setPadLF,
+            brakes: brakesLF,
+            setBrakes: setBrakesLF,
+            notes: notesLF,
+            setNotes: setNotesLF,
             id: 'lfBrakes'
         },
         {
@@ -31,6 +45,10 @@ export const Brakes = ({ addToConcerns }) => {
             setIsEven: setIsEvenRF,
             pad: padRF,
             setPad: setPadRF,
+            brakes: brakesRF,
+            setBrakes: setBrakesRF,
+            notes: notesRF,
+            setNotes: setNotesRF,
             id: 'rfBrakes'
         },
         {
@@ -39,6 +57,10 @@ export const Brakes = ({ addToConcerns }) => {
             setIsEven: setIsEvenRR,
             pad: padRR,
             setPad: setPadRR,
+            brakes: brakesRR,
+            setBrakes: setBrakesRR,
+            notes: notesRR,
+            setNotes: setNotesRR,
             id: 'rrBrakes'
         },
         {
@@ -47,6 +69,10 @@ export const Brakes = ({ addToConcerns }) => {
             setIsEven: setIsEvenLR,
             pad: padLR,
             setPad: setPadLR,
+            brakes: brakesLR,
+            setBrakes: setBrakesLR,
+            notes: notesLR,
+            setNotes: setNotesLR,
             id: 'lrBrakes'
         },
     ];
@@ -76,15 +102,37 @@ export const Brakes = ({ addToConcerns }) => {
             {brakes.map((item) => (
                 <div key={item.id}>
                     <h4>{item.name}</h4>
-                   <p>Even wear?</p>
+
                     <label> 
-                        <input type='radio' name={`isEvenRadio${item.id}`} value={true} checked={item.isEven} onChange={() => item.setIsEven(true)}/>
-                        True
+                        <input 
+                            type='radio' 
+                            name={`${item.id}StatusRadio`} 
+                            value={1} 
+                            checked={item.brakes === 1} 
+                            onChange={() => item.setBrakes(1)}
+                        />
+                        ✅
                     </label>
                     <label>
-                        <input type='radio' name={`isEvenRadio${item.id}`} value={false} checked={!item.isEven} onChange={() => item.setIsEven(false)}/>
-                        False 
+                        <input 
+                            type='radio' 
+                            name={`${item.id}StatusRadio`} 
+                            value={2} 
+                            checked={item.brakes === 2} 
+                            onChange={() => item.setBrakes(2)}
+                        />
+                        🟡 
                     </label>
+                    <label>
+                        <input 
+                            type='radio' 
+                            name={`${item.id}StatusRadio`} 
+                            value={3} 
+                            checked={item.brakes === 3} 
+                            onChange={() => item.setBrakes(3)}
+                        />
+                        ❌ 
+                    </label>                   
                     <label> Pad remaining in mm: 
                         <input 
                             type='text'
@@ -92,15 +140,38 @@ export const Brakes = ({ addToConcerns }) => {
                             onChange={(e) => item.setPad(e.target.value)}
                         />
                     </label>
+                    <label>Notes: 
+                        <textarea 
+                            value={item.notes}
+                            onChange={(e) => item.setNotes(e.target.value)}
+                        />
+                    </label>
+                    {item.brakes > 1 && 
+                        <>
+                            <p>Even wear?</p>
+                            <label> 
+                                <input 
+                                    type='radio' 
+                                    name={`isEvenRadio${item.id}`} 
+                                    value={true} checked={item.isEven} 
+                                    onChange={() => item.setIsEven(true)}
+                                />
+                                True
+                            </label>
+                            <label>
+                                <input 
+                                    type='radio' 
+                                    name={`isEvenRadio${item.id}`} 
+                                    value={false} checked={!item.isEven} 
+                                    onChange={() => item.setIsEven(false)}
+                                />
+                                False 
+                            </label>
+                        </>
+                    }
                 </div>
             ))}
-            <label>Notes: 
-                <input 
-                    type='text'
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                />
-            </label>
+            
             <button type='button' onClick={handleResults}>Test Result</button>
         </fieldset>
     )
