@@ -99,11 +99,6 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
         });
     };
 
-    const handleNotesChange = (id, notes) => {
-        setNote(prevState =>
-            prevState.map(note => (note.id === id ? { ...axle, notes } : axle))
-        );
-    };
 
     return (
         <fieldset>

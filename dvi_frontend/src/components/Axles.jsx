@@ -126,7 +126,7 @@ export const Axles = ({ addToConcerns, driveType, setDriveType }) => {
                                     text={`${item.id}AxleConcern`}
                                     value={3}
                                     checked={item.axle === 3}
-                                    onChange={() => item.setAxle(item.id, 3)}
+                                    onChange={() => item.setAxle(3)}
                                 />
                                 ❌
                             </label>                            
@@ -136,7 +136,7 @@ export const Axles = ({ addToConcerns, driveType, setDriveType }) => {
                                     text={`${item.id}AxleConcern`}
                                     value={2}
                                     checked={item.axle === 2}
-                                    onChange={() => handleAxleChange(item.id, 2)}
+                                    onChange={() => item.setAxle(2)}
                                 />
                                 🟡
                             </label>                           
@@ -146,7 +146,7 @@ export const Axles = ({ addToConcerns, driveType, setDriveType }) => {
                                     text={`${item.id}AxleConcern`}
                                     value={1}
                                     checked={item.axle === 1}
-                                    onChange={() => handleAxleChange(item.id, 1)}
+                                    onChange={() => item.setAxle(1)}
                                 />
                                 ✅
                             </label>
@@ -155,7 +155,7 @@ export const Axles = ({ addToConcerns, driveType, setDriveType }) => {
                                     {item.text} notes:
                                     <textarea
                                         value={item.notes}
-                                        onChange={e => handleNotesChange(item.id, e.target.value)}
+                                        onChange={e => item.setNotes(e.target.value)}
                                     />
                                 </label>
                             
