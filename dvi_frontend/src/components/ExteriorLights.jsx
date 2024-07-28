@@ -2,13 +2,11 @@ import { useEffect, useState } from 'react'
 
 export const ExteriorLights = ({ addToConcerns }) => {
 
-    const [isPass, setIsPass] = useState(false);
-
     const [headlight, setHeadlight] = useState(1);
     const [taillight, setTaillight] = useState(1);
-    const [platelight, setPlatelight] = useState(false);
-    const [turnlight, setTurnlight] = useState(false);
-    const [brakelight, setBrakelight] = useState(false);
+    const [platelight, setPlatelight] = useState(1);
+    const [turnlight, setTurnlight] = useState(1);
+    const [brakelight, setBrakelight] = useState(1);
 
     const [headlightNotes, setHeadlightNotes] = useState('');
     const [taillightNotes, setTaillightNotes] = useState('');
@@ -16,15 +14,11 @@ export const ExteriorLights = ({ addToConcerns }) => {
     const [turnlightNotes, setTurnlightNotes] = useState('');
     const [brakelightNotes, setBrakelightNotes] = useState('');
 
-
-    // loc === location of concern
     const lightOptions = [
         { 
             name: 'Headlights', 
             light: headlight, 
             setLight: setHeadlight, 
-            locations: ['LF', 'RF'], 
-            loc: [],
             notes: headlightNotes, 
             setNotes: setHeadlightNotes,
             id: 'hl'
@@ -34,8 +28,6 @@ export const ExteriorLights = ({ addToConcerns }) => {
             name: 'Taillights', 
             light: taillight, 
             setLight: setTaillight, 
-            locations: ['LR', 'RR'], 
-            loc: [],
             notes: taillightNotes, 
             setNotes: setTaillightNotes,
             id: 'tl'
@@ -44,8 +36,6 @@ export const ExteriorLights = ({ addToConcerns }) => {
             name: 'License Plate', 
             light: platelight, 
             setLight: setPlatelight, 
-            locations: ['LR', 'RR'], 
-            loc: [],
             notes: platelightNotes, 
             setNotes: setPlatelightNotes,
             id: 'lp'
@@ -54,8 +44,6 @@ export const ExteriorLights = ({ addToConcerns }) => {
             name: 'Turnlights', 
             light: turnlight, 
             setLight: setTurnlight, 
-            locations: ['LF', 'RF', 'RR', 'LR'], 
-            loc: [],
             notes: turnlightNotes, 
             setNotes: setTurnlightNotes,
             id: 'ts'
@@ -64,8 +52,6 @@ export const ExteriorLights = ({ addToConcerns }) => {
             name: 'Brakelights', 
             light: brakelight, 
             setLight: setBrakelight, 
-            locations: ['LR', 'CHIMSL', 'RR'], 
-            loc: [],
             notes: brakelightNotes, 
             setNotes: setBrakelightNotes,
             id: 'bl'
@@ -81,26 +67,10 @@ export const ExteriorLights = ({ addToConcerns }) => {
 
        lightOptions.forEach(({ name, light, loc, notes }) => {
             if (statusIcon[light]) {
-                const msg = `${loc.map((location) => location)} ${name}, ${notes}  `
+                const msg = `${statusIcon[light]} ${loc.join(', ')} ${name}, ${notes}`;
                 addToConcerns(light, msg)
             } 
        })
-    };
-
-    const handleLOC = (id, location) => {
-        lightOptions.filter((light) => {
-            if (light.id === id && !light.loc.includes(location)) {
-                loc = [...loc, location]
-            } else {
-                loc = loc.filter(locItem => locItem !== location);
-            }
-        })
-    };
-
-    const handleChecked = (id, location) => {
-        return lightOptions.filter((light) => 
-            light.id === id && light.loc.includes(location)
-        );
     };
    
     return (
@@ -136,24 +106,16 @@ export const ExteriorLights = ({ addToConcerns }) => {
                                 checked={item.light === 3}
                             />❌
                         </label>
-                        {item.locations.map((location) => (
-                            <label key={`${item.id}LOC${location}`}>
-                               <input
-                                    type="checkbox"
-                                    checked={handleChecked(item.id, location)}
-                                    onChange={() => handleLOC(item.id, location)}
-                                />{location}
-                            </label>
-                        ))}
                         <label>Notes
                             <textarea 
                                 value={item.notes}
-                                onChange={(e) => item.setNotes(item.id, e.target.value)}
+                                onChange={(e) => item.setNotes(e.target.value)}
                             />
                         </label>
-                        <button type='button' onClick={handleResults}>Test Result</button>
+                        
                     </div>
             ))}
+            <button type='button' onClick={handleResults}>Test Result</button>
         </fieldset>
     )
 } 
