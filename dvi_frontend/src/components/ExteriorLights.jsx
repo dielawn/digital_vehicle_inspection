@@ -4,11 +4,11 @@ export const ExteriorLights = ({ addToConcerns }) => {
 
     const [isPass, setIsPass] = useState(false);
 
-    const [isHeadlight, setIsHeadlight] = useState(false);
-    const [isTaillight, setIsTaillight] = useState(false);
-    const [isPlatelight, setIsPlatelight] = useState(false);
-    const [isTurnlight, setIsTurnlight] = useState(false);
-    const [isBrakelight, setIsBrakelight] = useState(false);
+    const [headlight, setHeadlight] = useState(1);
+    const [taillight, setTaillight] = useState(1);
+    const [platelight, setPlatelight] = useState(false);
+    const [turnlight, setTurnlight] = useState(false);
+    const [brakelight, setBrakelight] = useState(false);
 
     const [headlightNotes, setHeadlightNotes] = useState('');
     const [taillightNotes, setTaillightNotes] = useState('');
@@ -16,61 +16,144 @@ export const ExteriorLights = ({ addToConcerns }) => {
     const [turnlightNotes, setTurnlightNotes] = useState('');
     const [brakelightNotes, setBrakelightNotes] = useState('');
 
+
+    // loc === location of concern
     const lightOptions = [
-        { name: 'Pass', state: isPass, setState: setIsPass, notes: `✅ All Exterior lights pass.` },
-        { name: 'Headlights', state: isHeadlight, setState: setIsHeadlight, locations: ['LF', 'RF'], notes: headlightNotes, setNotes: setHeadlightNotes},
-        { name: 'Taillights', state: isTaillight, setState: setIsTaillight, locations: ['LR', 'RR'], notes: taillightNotes, setNotes: setTaillightNotes},
-        { name: 'License Plate', state: isPlatelight, setState: setIsPlatelight, locations: ['LR', 'RR'], notes: platelightNotes, setNotes: setPlatelightNotes},
-        { name: 'Turnlights', state: isTurnlight, setState: setIsTurnlight, locations: ['LF', 'RF', 'RR', 'LR'], notes: turnlightNotes, setNotes: setTurnlightNotes},
-        { name: 'Brakelights', state: isBrakelight, setState: setIsBrakelight, locations: ['LR', 'CHIMSL', 'RR'], notes: brakelightNotes, setNotes: setBrakelightNotes},
+        { 
+            name: 'Headlights', 
+            light: headlight, 
+            setLight: setHeadlight, 
+            locations: ['LF', 'RF'], 
+            loc: [],
+            notes: headlightNotes, 
+            setNotes: setHeadlightNotes,
+            id: 'hl'
+        },
+        { 
+            
+            name: 'Taillights', 
+            light: taillight, 
+            setLight: setTaillight, 
+            locations: ['LR', 'RR'], 
+            loc: [],
+            notes: taillightNotes, 
+            setNotes: setTaillightNotes,
+            id: 'tl'
+        },
+        { 
+            name: 'License Plate', 
+            light: platelight, 
+            setLight: setPlatelight, 
+            locations: ['LR', 'RR'], 
+            loc: [],
+            notes: platelightNotes, 
+            setNotes: setPlatelightNotes,
+            id: 'lp'
+        },
+        { 
+            name: 'Turnlights', 
+            light: turnlight, 
+            setLight: setTurnlight, 
+            locations: ['LF', 'RF', 'RR', 'LR'], 
+            loc: [],
+            notes: turnlightNotes, 
+            setNotes: setTurnlightNotes,
+            id: 'ts'
+        },
+        { 
+            name: 'Brakelights', 
+            light: brakelight, 
+            setLight: setBrakelight, 
+            locations: ['LR', 'CHIMSL', 'RR'], 
+            loc: [],
+            notes: brakelightNotes, 
+            setNotes: setBrakelightNotes,
+            id: 'bl'
+        },
     ];
 
-    const recommendationOptions = ['Diagnostic recommended', 'Replace', 'Repair', 'Perform procedure']
-
     const handleResults = () => {
-        const results = lightOptions.filter((option) => option.state)
-        console.log(results)
-        if (results[0].name === 'Pass') {
-            addToConcerns(1, `${lightOptions[0].notes}`)
-        } else {
-            const safetyConcernMsg = 
-            `❌ Exterior lights: ${results.map((result) => `${result.name} ${result.notes}`).join(', ')}`;
-            console.log(safetyConcernMsg);
-            addToConcerns(3, safetyConcernMsg)
-        }    
-    }
+        const statusIcon = {
+            1: '✅',
+            2: '🟡',
+            3: '❌'
+        };
 
-    // Uncheck isPass if anything else is checked
-    useEffect(() => {
-        let hasWarning = false;
-        lightOptions.forEach((option) => {
-            if (option.name !== 'Pass' && option.state === true) {
-                hasWarning = true;
-             }
+       lightOptions.forEach(({ name, light, loc, notes }) => {
+            if (statusIcon[light]) {
+                const msg = `${loc.map((location) => location)} ${name}, ${notes}  `
+                addToConcerns(light, msg)
+            } 
+       })
+    };
+
+    const handleLOC = (id, location) => {
+        lightOptions.filter((light) => {
+            if (light.id === id && !light.loc.includes(location)) {
+                loc = [...loc, location]
+            } else {
+                loc = loc.filter(locItem => locItem !== location);
+            }
         })
-        setIsPass(!hasWarning)
-    }, [isHeadlight, isTaillight, isPlatelight, isTurnlight, isBrakelight])
+    };
 
+    const handleChecked = (id, location) => {
+        return lightOptions.filter((light) => 
+            light.id === id && light.loc.includes(location)
+        );
+    };
+   
     return (
         <fieldset>
             <legend>Exterior Lights <em>include location, part, action</em></legend>
-            {lightOptions.map((option) => (
-                <div key={option.name}>
-                <label htmlFor={option.name}>{option.name}</label>
-                <input 
-                    type='checkbox'
-                    id={option.name}
-                    checked={option.state}
-                    onChange={(e) => option.setState(e.target.checked)}
-                />
-                {option.name !== 'Pass' && option.state &&
-                <>
-                    <label htmlFor={option.name}>Add {option.name} note</label>
-                    <input id={option.name} value={option.notes} onChange={(e) => option.setNotes(e.target.value)}/>
-                </>}
-            </div>
+            {lightOptions.map(item => (
+                    <div key={item.id}>
+                        <h3>{item.name}</h3>
+                        <label>
+                            <input 
+                                type='radio'
+                                name={`${item.id}Radio`}
+                                value={1}
+                                onChange={() => {item.setLight(1)}}
+                                checked={item.light === 1}
+                            />✅
+                        </label>
+                        <label>
+                            <input 
+                                type='radio'
+                                name={`${item.id}Radio`}
+                                value={2}
+                                onChange={() => {item.setLight(2)}}
+                                checked={item.light === 2}
+                            />🟡
+                        </label>
+                        <label>
+                            <input 
+                                type='radio'
+                                name={`${item.id}Radio`}
+                                value={3}
+                                onChange={() => {item.setLight(3)}}
+                                checked={item.light === 3}
+                            />❌
+                        </label>
+                        {item.locations.map((location) => (
+                            <label key={`${item.id}LOC${location}`}>
+                               <input
+                                    type="checkbox"
+                                    checked={handleChecked(item.id, location)}
+                                    onChange={() => handleLOC(item.id, location)}
+                                />{location}
+                            </label>
+                        ))}
+                        <label>Notes
+                            <textarea 
+                                value={item.notes}
+                                onChange={(e) => item.setNotes(item.id, e.target.value)}
+                            />
+                        </label>
+                        <button type='button' onClick={handleResults}>Test Result</button>
+                    </div>
             ))}
-            <button type='button' onClick={handleResults}>Test Message</button>
         </fieldset>
     )
 } 

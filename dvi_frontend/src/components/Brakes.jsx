@@ -24,11 +24,10 @@ export const Brakes = ({ addToConcerns }) => {
     const [padRR, setPadRR] = useState(8);
     const [padLR, setPadLR] = useState(8);
 
-    const [notes, setNotes] = useState('');
-
+  
     const brakes = [
         {
-            name: 'Left front',
+            name: 'Left front brakes',
             isEven: isEvenLF,
             setIsEven: setIsEvenLF,
             pad: padLF,
@@ -40,7 +39,7 @@ export const Brakes = ({ addToConcerns }) => {
             id: 'lfBrakes'
         },
         {
-            name: 'Right front',
+            name: 'Right front brakes',
             isEven: isEvenRF,
             setIsEven: setIsEvenRF,
             pad: padRF,
@@ -52,7 +51,7 @@ export const Brakes = ({ addToConcerns }) => {
             id: 'rfBrakes'
         },
         {
-            name: 'Right rear',
+            name: 'Right rear brakes',
             isEven: isEvenRR,
             setIsEven: setIsEvenRR,
             pad: padRR,
@@ -64,7 +63,7 @@ export const Brakes = ({ addToConcerns }) => {
             id: 'rrBrakes'
         },
         {
-            name: 'Left rear',
+            name: 'Left rear brakes',
             isEven: isEvenLR,
             setIsEven: setIsEvenLR,
             pad: padLR,
@@ -78,27 +77,24 @@ export const Brakes = ({ addToConcerns }) => {
     ];
 
     const handleResults = () => {
-        
-        let msg = ''
-        brakes.map((item) => {
-            const inspData =   `${item.name} ${item.pad}mm brake pad remaining. ${!item.isEven ? ' Uneven pad wear. ' : ''} `
-            if (item.pad <= 2) {
-                msg = `❌ ${inspData } ${notes}`
-                addToConcerns(3, msg)
-            } else if (item.pad === 3 || item.pad === 4 || !item.isEven) {
-                msg = `🟡 ${inspData} ${notes}`
-                addToConcerns(2, msg)
-            } else {
-                msg = `✅  ${inspData}`
-                addToConcerns(1, msg)
+        const statusIcon = {
+            1: '✅',
+            2: '🟡',
+            3: '❌'
+        };
+
+        brakes.forEach(({ name, isEven, pad, brakes, notes }) => {
+            if (statusIcon[brakes]) {                
+                const msg = `${statusIcon[brakes]} ${name} ${pad}mm pad/shoe remaining, ${isEven ? 'uneven wear, ' : ''} ${notes}`
+                addToConcerns(brakes, msg)
             }
         })
-
     }
 
     return (
         <fieldset>
             <legend>Brakes: <em>Are the brake pads within 1 mm of each other?</em></legend>
+           
             {brakes.map((item) => (
                 <div key={item.id}>
                     <h4>{item.name}</h4>
