@@ -1,319 +1,244 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
+
+const RackSteering = React.memo(({ rackSteering, handleFocus }) => {
+    return (
+        rackSteering.map((item) => (
+            <div key={item.id}>
+                <h3>{item.name} Outer tie rod</h3>
+                <label>
+                    <input
+                        type='radio'
+                        name={`${item.id}OuterRadio`}
+                        value={1}
+                        checked={item.outer === 1}
+                        onChange={() => item.setOuter(1)}
+                    />✅
+                </label>
+                <label>
+                    <input
+                        type='radio'
+                        name={`${item.id}OuterRadio`}
+                        value={2}
+                        checked={item.outer === 2}
+                        onChange={() => item.setOuter(2)}
+                    />🟡
+                </label>
+                <label>
+                    <input
+                        type='radio'
+                        name={`${item.id}OuterRadio`}
+                        value={3}
+                        checked={item.outer === 3}
+                        onChange={() => item.setOuter(3)}
+                    />❌
+                </label>
+                <label>{item.name} Outer Notes:
+                    <textarea
+                        value={item.notesOut}
+                        onFocus={handleFocus}
+                        onChange={(e) => item.setNotesOut(e.target.value)}
+                    />
+                </label>
+                <h3>{item.name} Inner tie rod</h3>
+                <label>
+                    <input
+                        type='radio'
+                        name={`${item.id}InnerTRRadio`}
+                        value={1}
+                        checked={item.inner === 1}
+                        onChange={() => item.setInner(1)}
+                    />✅
+                </label>
+                <label>
+                    <input
+                        type='radio'
+                        name={`${item.id}innerTRRadio`}
+                        value={2}
+                        checked={item.inner === 2}
+                        onChange={() => item.setInner(2)}
+                    />🟡
+                </label>
+                <label>
+                    <input
+                        type='radio'
+                        name={`${item.id}innerTRRadio`}
+                        value={3}
+                        checked={item.inner === 3}
+                        onChange={() => item.setInner(3)}
+                    />❌
+                </label>
+                <br></br>
+                <label>{item.name} inner Notes:
+                    <textarea
+                        value={item.notesIn}
+                        onFocus={handleFocus}
+                        onChange={(e) => item.setNotesIn(e.target.value)}
+                    />
+                </label>
+            </div>
+        ))
+    );
+});
+
+const DragLinkSteering = React.memo(({ relaySteering, handleFocus }) => {
+    return (
+        relaySteering.map((item) => (
+            <div key={item.id}>
+                <h3>{item.name}</h3>
+                <label>
+                    <input
+                        type='radio'
+                        name={`${item.id}Radio`}
+                        value={1}
+                        checked={item.component === 1}
+                        onChange={() => item.setComponent(1)}
+                    />✅
+                </label>
+                <label>
+                    <input
+                        type='radio'
+                        name={`${item.id}Radio`}
+                        value={2}
+                        checked={item.component === 2}
+                        onChange={() => item.setComponent(2)}
+                    />🟡
+                </label>
+                <label>
+                    <input
+                        type='radio'
+                        name={`${item.id}Radio`}
+                        value={3}
+                        checked={item.component === 3}
+                        onChange={() => item.setComponent(3)}
+                    />❌
+                </label>
+                <label>Notes:
+                    <textarea
+                        value={item.notes}
+                        onFocus={handleFocus}
+                        onChange={(e) => item.setNotes(e.target.value)}
+                    />
+                </label>
+            </div>
+        ))
+    );
+});
 
 export const Steering = ({ addToConcerns }) => {
+    const focusedElement = useRef(null);
 
-    // rack and pinion or relay rod steering
-    const [isRack, setIsRack] = useState(1);
-    //is rack or gear box leaking?
+    const handleFocus = (e) => {
+        focusedElement.current = e.target;
+    };
+
+    const [isRack, setIsRack] = useState(true);
     const [isLeak, setIsLeak] = useState(false);
-    // Rack steering
     const [outerTieRodLF, setOuterTieRodLF] = useState(1);
     const [outerTieRodRF, setOuterTieRodRF] = useState(1);
     const [innerTieRodLF, setInnerTieRodLF] = useState(1);
     const [innerTieRodRF, setInnerTieRodRF] = useState(1);
+    const [notesOuterLF, setNotesOuterLF] = useState('');
+    const [notesOuterRF, setNotesOuterRF] = useState('');
+    const [notesInnerLF, setNotesInnerLF] = useState('');
+    const [notesInnerRF, setNotesInnerRF] = useState('');
 
-    const [notesLF, setNotesLF] = useState('');
-    const [notesRF, setNotesRF] = useState('');
-
-    // Drag link steering
-    const [dragLink, setDragLink] = useState(1);
-    const [centerLink, setCenterLink] = useState(1);
+    const [tieRodEndLF, setTieRodEndLF] = useState(1);
+    const [tieRodEndRF, setTieRodEndRF] = useState(1);
     const [tieRodLF, setTieRodLF] = useState(1);
     const [tieRodRF, setTieRodRF] = useState(1);
     const [idler, setIdler] = useState(1);
-    const [pitman, setPitman] = useState(1);   
+    const [pitman, setPitman] = useState(1);
 
-    const [dragLinkNotes, setDragLinkNotes] = useState('');
-    
+    const [idlerNotes, setIdlerNotes] = useState('');
+    const [pitmanNotes, setPitmanNotes] = useState('');
+    const [tieRodLFNotes, setTieRodLFNotes] = useState('');
+    const [tieRodEndLFNotes, setTieRodEndLFNotes] = useState('');
+    const [tieRodEndRFNotes, setTieRodEndRFNotes] = useState('');
+    const [tieRodRFNotes, setTieRodRFNotes] = useState('');
+
     const rackSteering = [
         {
             name: 'Left front',
-            id: 'lf',
             outer: outerTieRodLF,
             setOuter: setOuterTieRodLF,
             inner: innerTieRodLF,
-            setInner: setInnerTieRodLF,      
-            notes: notesLF,
-            setNotes: setNotesLF    
+            setInner: setInnerTieRodLF,
+            notesIn: notesInnerLF,
+            setNotesIn: setNotesInnerLF,
+            notesOut: notesOuterLF,
+            setNotesOut: setNotesOuterLF,
+            id: 'steeringLF'
         },
         {
             name: 'Right front',
-            id: 'rf',
             outer: outerTieRodRF,
             setOuter: setOuterTieRodRF,
             inner: innerTieRodRF,
             setInner: setInnerTieRodRF,
-            notes: notesRF,
-            setNotes: setNotesRF
+            notesIn: notesInnerRF,
+            setNotesIn: setNotesInnerRF,
+            notesOut: notesOuterRF,
+            setNotesOut: setNotesOuterRF,
+            id: 'steeringRF'
         }
     ];
 
     const relaySteering = [
         {
-            name: 'Drag link',
-            id: 'dl',
-            pitman,
-            setPitman,
-            dragLink,
-            setDragLink,
-            idler,
-            setIdler,
-            centerLink,
-            setCenterLink,
-            tieRodLF,
-            setTieRodLF,
-            tieRodRF,
-            setTieRodRF,
-            notes: dragLinkNotes,
-            setNotes: setDragLinkNotes
+            name: 'Pitman',
+            component: pitman,
+            setComponent: setPitman,
+            notes: pitmanNotes,
+            setNotes: setPitmanNotes,
+            id: 'pitman'
         },
+        {
+            name: 'Idler',
+            component: idler,
+            setComponent: setIdler,
+            notes: idlerNotes,
+            setNotes: setIdlerNotes,
+            id: 'idler'
+        },
+        {
+            name: 'Tie rod left front outer',
+            component: tieRodLF,
+            setComponent: setTieRodLF,
+            notes: tieRodLFNotes,
+            setNotes: setTieRodLFNotes,
+            id: 'tieRodLF'
+        },
+        {
+            name: 'Tie rod right front outer',
+            component: tieRodRF,
+            setComponent: setTieRodRF,
+            notes: tieRodRFNotes,
+            setNotes: setTieRodRFNotes,
+            id: 'tieRodRF'
+        },
+        {
+            name: 'Tie rod end left front inner',
+            component: tieRodEndLF,
+            setComponent: setTieRodEndLF,
+            notes: tieRodEndLFNotes,
+            setNotes: setTieRodEndLFNotes,
+            id: 'tieRodEndLF'
+        },
+        {
+            name: 'Tie rod end right front inner',
+            component: tieRodEndRF,
+            setComponent: setTieRodEndRF,
+            notes: tieRodEndRFNotes,
+            setNotes: setTieRodEndRFNotes,
+            id: 'tieRodEndRF'
+        }
     ];
 
-    const RackSteering = () => {
-        return (
-            rackSteering.map((item) => (
-                <div key={item.id}>
-                    <h3>{item.name}</h3>
-                    <p>Outer tie rod</p>
-                    <label>
-                        <input 
-                            type='radio' 
-                            name={`${item.id}OuterRadio`} 
-                            value={1} 
-                            checked={item.outer === 1} 
-                            onChange={() => item.setOuter(1)}
-                        />✅
-                    </label>
-                    <label> 
-                        <input 
-                            type='radio' 
-                            name={`${item.id}OuterRadio`} 
-                            value={2} 
-                            checked={item.outer === 2} 
-                            onChange={() => item.setOuter(2)}
-                        />🟡
-                    </label>
-                    <label> 
-                        <input 
-                            type='radio' 
-                            name={`${item.id}OuterRadio`} 
-                            value={3} 
-                            checked={item.outer === 3} 
-                            onChange={() => item.setOuter(3)}
-                        />❌ 
-                    </label>                    
-                    <p>Inner tie rod</p>
-                    <label>
-                        <input 
-                            type='radio' 
-                            name={`${item.id}InnerTRRadio`} 
-                            value={1} 
-                            checked={item.inner === 1} 
-                            onChange={() => item.setInner(1)}
-                        />✅
-                    </label>
-                    <label> 
-                        <input 
-                            type='radio' 
-                            name={`${item.id}innerTRRadio`} 
-                            value={2} 
-                            checked={item.inner === 2} 
-                            onChange={() => item.setInner(2)}
-                        />🟡
-                    </label>
-                    <label> 
-                        <input 
-                            type='radio' 
-                            name={`${item.id}innerTRRadio`} 
-                            value={3} 
-                            checked={item.inner === 3} 
-                            onChange={() => item.setInner(3)}
-                        />❌ 
-                    </label>
-                </div>
-            ))
-        )
-    };
-
-    const DragLinkSteering = () => {
-        return (
-            relaySteering.map((item) => (
-                <div key={item.id}>
-                    <h3>{item.name} Steering</h3>
-                    <p>Outer tie rod play?</p>
-                    <p>LF</p>
-                    <label>
-                        <input 
-                            type='radio' 
-                            name={`${item.id}OuterRadio`} 
-                            value={1} 
-                            checked={item.tieRodLF === 1} 
-                            onChange={() => item.setTieRodLF(1)}
-                        />✅
-                    </label>
-                    <label>
-                        <input 
-                            type='radio' 
-                            name={`${item.id}OuterRadio`} 
-                            value={2} 
-                            checked={item.tieRodLF === 2} 
-                            onChange={() => item.setTieRodLF(2)}
-                        />🟡
-                    </label>
-                    <label> 
-                        <input 
-                            type='radio' 
-                            name={`${item.id}OuterRadio`} 
-                            value={3} 
-                            checked={item.tieRodLF === 3} 
-                            onChange={() => item.setTieRodLF(3)}
-                        />❌
-                    </label>
-                    <p>RF</p>
-                    <label>
-                        <input 
-                            type='radio' 
-                            name={`${item.id}OuterRadio`} 
-                            value={1} 
-                            checked={item.tieRodRF === 1} 
-                            onChange={() => item.setTieRodRF(1)}
-                        />✅
-                    </label>
-                    <label>  
-                        <input 
-                            type='radio' 
-                            name={`${item.id}OuterRadio`} 
-                            value={2} 
-                            checked={item.tieRodRF === 2} 
-                            onChange={() => item.setTieRodRF(2)}
-                        />🟡
-                    </label>
-                    <label>  
-                        <input 
-                            type='radio' 
-                            name={`${item.id}OuterRadio`} 
-                            value={3} 
-                            checked={item.tieRodRF === 3} 
-                            onChange={() => item.setTieRodRF(3)}
-                        />❌
-                    </label>
-                    <hr />
-                    <p>Pitman play?</p>
-                    <label>
-                        <input 
-                            type='radio' 
-                            name={`${item.id}PitmanRadio`} 
-                            value={1} 
-                            checked={item.pitman === 1} 
-                            onChange={() => item.setPitman(1)}
-                        />✅
-                    </label>
-                    <label> 
-                        <input 
-                            type='radio' 
-                            name={`${item.id}PitmanRadio`} 
-                            value={2} 
-                            checked={item.pitman === 2} 
-                            onChange={() => item.setPitman(2)}
-                        />🟡
-                    </label>
-                    <label> 
-                        <input 
-                            type='radio' 
-                            name={`${item.id}PitmanRadio`} 
-                            value={3} 
-                            checked={item.pitman === 3} 
-                            onChange={() => item.setPitman(3)}
-                        />❌
-                    </label>
-                    <p>Idler play?</p>
-                    <label>
-                        <input 
-                            type='radio' 
-                            name={`${item.id}IdlerRadio`} 
-                            value={1} 
-                            checked={item.idler === 1} 
-                            onChange={() => item.setIdler(1)}
-                        />✅
-                    </label>
-                    <label> 
-                        <input 
-                            type='radio' 
-                            name={`${item.id}IdlerRadio`} 
-                            value={2} 
-                            checked={item.idler === 2} 
-                            onChange={() => item.setIdler(2)}
-                        />🟡
-                    </label>
-                    <label> 
-                        <input 
-                            type='radio' 
-                            name={`${item.id}IdlerRadio`} 
-                            value={3} 
-                            checked={item.idler === 3} 
-                            onChange={() => item.setIdler(3)}
-                        />❌
-                    </label>
-                    <hr />
-                    <p>Drag link play?</p>
-                    <label>
-                        <input 
-                            type='radio' 
-                            name={`${item.id}DragLinkRadio`} 
-                            value={1} checked={item.dragLink === 1} 
-                            onChange={() => item.setDragLink(1)}
-                        />✅
-                    </label>
-                    <label> 
-                        <input 
-                            type='radio' 
-                            name={`${item.id}DragLinkRadio`} 
-                            value={2} 
-                            checked={item.dragLink === 2} 
-                            onChange={() => item.setDragLink(2)}
-                        />🟡
-                    </label>
-                    <label> 
-                        <input 
-                            type='radio' 
-                            name={`${item.id}DragLinkRadio`} 
-                            value={3} 
-                            checked={item.dragLink === 3} 
-                            onChange={() => item.setDragLink(3)}
-                        />❌
-                    </label>
-                    <p>Center link play?</p>
-                    <label>
-                        <input 
-                            type='radio' 
-                            name={`${item.id}CenterLinkRadio`} 
-                            value={1} 
-                            checked={item.centerLink === 1} 
-                            onChange={() => item.setCenterLink(1)}
-                        />✅
-                    </label>
-                    <label> 
-                        <input 
-                            type='radio' 
-                            name={`${item.id}CenterLinkrRadio`} 
-                            value={2} 
-                            checked={item.centerLink === 2} 
-                            onChange={() => item.setCenterLink(2)}
-                        />🟡
-                    </label>
-                    <label> 
-                        <input 
-                            type='radio' 
-                            name={`${item.id}CenterLinkrRadio`} 
-                            value={3} 
-                            checked={item.centerLink === 3} 
-                            onChange={() => item.setCenterLink(3)}
-                        />❌
-                    </label>
-                </div>
-            ))
-        )
-    };
+    useEffect(() => {
+        if (focusedElement.current) {
+            focusedElement.current.focus();
+        }
+    });
 
     const handleResults = () => {
         const statusIcon = {
@@ -322,69 +247,55 @@ export const Steering = ({ addToConcerns }) => {
             3: '❌'
         };
 
-        isRack ?
-        rackSteering.forEach(({ name, outer,inner, notes }) => {
-            const outerMsg = `${statusIcon[outer]} ${name} outer tie rod, ${notes}`
-            addToConcerns(outer, outerMsg);
-            const innerMsg = `${statusIcon[inner]} ${name} inner tie rod, ${notes}`
-            addToConcerns(inner, innerMsg);
-        })        
-        :
-        relaySteering.map(({ pitman, dragLink, idler, centerLink, tieRodLF, tieRodRF }) => {
-           const pitmanMsg = `${statusIcon[pitman]} pitman arm`
-           const dragLinkMsg = `${statusIcon[dragLink]} drag link`
-           const idlerMsg = `${statusIcon[idler]} idler arm`
-           const centerLinkMsg = `${statusIcon[centerLink]} center link`
-           const tieRodLFMsg = `${statusIcon[tieRodLF]} lf outer tie rod`
-           const tieRodRFMsg = `${statusIcon[tieRodRF]} rf outer tie rod`
-           const notes = `${dragLinkNotes}`
-           if (pitman === 1) {
-            
-           }
-
-
-        })
+        if (isRack) {
+            rackSteering.forEach(({ name, outer, inner, notesOut, notesIn }) => {
+                const outerMsg = `${statusIcon[outer]} ${name} outer tie rod, ${notesOut}`;
+                addToConcerns(outer, outerMsg);
+                const innerMsg = `${statusIcon[inner]} ${name} inner tie rod, ${notesIn}`;
+                addToConcerns(inner, innerMsg);
+            });
+        } else {
+            relaySteering.forEach(({ component, name, notes }) => {
+                const msg = `${statusIcon[component]} ${name} ${notes}`;
+                addToConcerns(component, msg);
+            });
+        }
     };
 
     return (
         <fieldset>
             <legend>Steering & Alignment</legend>
             <label>
-                <input 
-                    type='radio' 
-                    name='isRackRadio' 
-                    value={1} 
-                    checked={isRack} 
-                    onChange={() => setIsRack(1)}
+                <input
+                    type='radio'
+                    name='isRackRadio'
+                    value={false}
+                    checked={isRack}
+                    onChange={() => setIsRack(true)}
                 />
                 Rack & Pinion Steering
             </label>
-            <label>   
-                <input 
-                    type='radio' 
-                    name='isRackRadio' 
-                    value={false} 
-                    checked={!isRack} 
+            <label>
+                <input
+                    type='radio'
+                    name='isRackRadio'
+                    value={false}
+                    checked={!isRack}
                     onChange={() => setIsRack(false)}
                 />
                 Drag Link Steering
             </label>
             <p>{isRack ? 'Rack and pinion ' : 'Gearbox '} Leaking?</p>
             <label>
-                <input type='radio' name='isLeakingRadio' value={1} checked={isLeak} onChange={() => setIsLeak(1)}/>
-                1
+                <input type='radio' name='isLeakingRadio' value={1} checked={isLeak} onChange={() => setIsLeak(1)} />
+                False
             </label>
-            <label> 
-                <input type='radio' name='isLeakingRadio' value={false} checked={!isLeak} onChange={() => setIsLeak(false)}/>
-                
+            <label>
+                <input type='radio' name='isLeakingRadio' value={false} checked={!isLeak} onChange={() => setIsLeak(false)} />
+                True
             </label>
-          
-            {isRack ?
-                <RackSteering />
-            :
-                <DragLinkSteering />
-            }
-           <button type='button' onClick={handleResults}>Test Result</button>
+            {isRack ? <RackSteering rackSteering={rackSteering} handleFocus={handleFocus} /> : <DragLinkSteering relaySteering={relaySteering} handleFocus={handleFocus} />}
+            <button type='button' onClick={handleResults}>Test Result</button>
         </fieldset>
-    )
-}
+    );
+};
