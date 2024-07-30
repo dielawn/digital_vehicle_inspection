@@ -7,6 +7,11 @@ export const WheelBearings = ({ addToConcerns }) => {
     const [wheelBearingRR, setWheelBearingRR] = useState(1);
     const [wheelBearingLR, setWheelBearingLR] = useState(1);  
 
+    const [wheelBearingNotesLF, setWheelBearingNotesLF] = useState('');
+    const [wheelBearingNotesRF, setWheelBearingNotesRF] = useState('');
+    const [wheelBearingNotesRR, setWheelBearingNotesRR] = useState('');
+    const [wheelBearingNotesLR, setWheelBearingNotesLR] = useState('');
+
     // Wheel bearing level 1 === good, 2 === needs attention, 3 === safety concern
 
     const wheelBearings = [
@@ -14,43 +19,46 @@ export const WheelBearings = ({ addToConcerns }) => {
             name: 'LF wheel bearing',
             bearing: wheelBearingLF,
             setBearing: setWheelBearingLF, 
+            notes: wheelBearingNotesLF,
+            setNotes: setWheelBearingNotesLF,
             id: 'lfWB'
         },
         {
             name: 'RF wheel bearing',
             bearing: wheelBearingRF,
             setBearing: setWheelBearingRF, 
+            notes: wheelBearingNotesRF,
+            setNotes: setWheelBearingNotesRF,
             id: 'rfWB'     
         },
         {
             name: 'RR wheel bearing',
             bearing: wheelBearingRR,
             setBearing: setWheelBearingRR, 
+            notes: wheelBearingNotesRR,
+            setNotes: setWheelBearingNotesRR,
             id: 'rrWB'
         },
         {
             name: 'LR wheel bearing',
             bearing: wheelBearingLR,
             setBearing: setWheelBearingLR, 
+            notes: wheelBearingNotesLR,
+            setNotes: setWheelBearingNotesLR,
             id: 'lrWB'
         },
     ];
 
     const handleResults = () => {
-        wheelBearings.map((item) => {
-            let msg = ``
-
-            if (item.bearing === 3) {                
-                msg = `❌ ${item.name} wheel bearing has significant play.`;
-                addToConcerns(3, msg);              
-            } else if (item.bearing === 2) {
-                msg = `🟡 ${item.name} wheel bearing has minor play.`;
-                addToConcerns(2, msg);
-            } else {
-                msg = `✅ ${item.name} wheel bearing is good.`;
-                addToConcerns(1, msg);
-            }
-        })        
+        const statusIcon = {
+            1: '✅',
+            2: '🟡',
+            3: '❌'
+        };
+        wheelBearings.forEach(({ name, bearing, notes}) => {
+            const msg = `${statusIcon[bearing]} ${name} ${notes}`
+            addToConcerns(bearing, msg)
+        });
     };
 
     return (
@@ -66,7 +74,7 @@ export const WheelBearings = ({ addToConcerns }) => {
                             value={1} 
                             checked={item.bearing === 1} 
                             onChange={() => item.setBearing(1)} 
-                        />No Concern
+                        />✅
                     </label>
                     <label>
                         <input 
@@ -75,7 +83,7 @@ export const WheelBearings = ({ addToConcerns }) => {
                             value={2} 
                             checked={item.bearing === 2} 
                             onChange={() => item.setBearing(2)} 
-                        />Some concern
+                        />🟡
                     </label>
                     <label>
                         <input 
@@ -84,7 +92,13 @@ export const WheelBearings = ({ addToConcerns }) => {
                             value={3} 
                             checked={item.bearing === 3} 
                             onChange={() => item.setBearing(3)} 
-                        />Safety Concern
+                        />❌
+                    </label>
+                    <label>Notes: 
+                        <textarea 
+                            value={item.notes}
+                            onChange={(e) => item.setNotes(e.target.value)}
+                        />
                     </label>
                 </div>
             ))}
