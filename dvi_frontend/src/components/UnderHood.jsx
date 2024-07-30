@@ -52,20 +52,16 @@ export const UnderHood = ({ addToConcerns }) => {
         },
     ];
     const handleResults = () => {
-        underHoodInspItems.map((item) => {
-            if (item.level === 1) {
-                if (item.name !== 'Other') {
-                    addToConcerns(1, `✅ ${item.name}`)
-                }
-            } else if (item.level === 2) {
-                const someConcernMsg = `🟡 ${item.name}: ${item.notes}`
-                addToConcerns(2, someConcernMsg)
-            } else {
-                const safetyConcernMsg = `❌ ${item.name}: ${item.notes}`
-                addToConcerns(3, safetyConcernMsg)
-            }
-        })        
-    }
+        const statusIcon = {
+            1: '✅',
+            2: '🟡',
+            3: '❌'
+        };
+        underHoodInspItems.forEach(({ name, level, notes }) => {
+            const msg = `${statusIcon[level]} ${name} ${notes}`
+            addToConcerns(level, msg)
+        });
+    };
 
     return (
         <fieldset>
@@ -81,8 +77,7 @@ export const UnderHood = ({ addToConcerns }) => {
                     value={1} 
                     checked={item.level === 1} 
                     onChange={() => item.setLevel(1)} 
-                />
-                Pass
+                />✅
             </label>
             <label>
                 <input 
@@ -91,8 +86,7 @@ export const UnderHood = ({ addToConcerns }) => {
                     value={2} 
                     checked={item.level === 2} 
                     onChange={() => item.setLevel(2)} 
-                />
-                Needs attention
+                />🟡
             </label>
             <label>
                 <input 
@@ -101,21 +95,14 @@ export const UnderHood = ({ addToConcerns }) => {
                     value={3} 
                     checked={item.level === 3} 
                     onChange={() => item.setLevel(3)} 
-                />
-                Safety concern
+                />❌
             </label>
-            {item.level > 1 &&  
-                <>
-                <br></br>
                 <label> Notes:
-                    <input
+                    <textarea
                         value={item.notes}
                         onChange={(e) => item.setNotes(e.target.value)}
                     />
                 </label>
-                </>
-            }
-            <hr></hr>
                 </div>
             ))}
             <button type='button' onClick={handleResults}>Test Result</button>
