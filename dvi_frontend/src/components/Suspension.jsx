@@ -2,105 +2,103 @@ import { useEffect, useState } from 'react'
 
 export const Suspension = ({ addToConcerns }) => {
 
-    const [isStrutLeaking, setIsStrutLeaking] = useState(false);
-    const [isShockLeaking, setIsShockLeaking] = useState(false);
+    const [frontStruts, setFrontStruts] = useState(1);
+    const [rearStruts, setRearStruts] = useState(1);
+    const [frontSway, setFrontSway] = useState(1);
+    const [rearSway, setRearSway] = useState(1);
 
-    const [isFrontBouncy, setIsFrontBouncy] = useState(false);
-    const [isReartBouncy, setIsRearBouncy] = useState(false);
-
-    const [isFrontSwayOk, setIsFrontSwayOk] = useState(true);
-    const [isRearSwayOk, setIsRearSwayOk] = useState(true);
-
-    const [frontNotes, setFontNotes] = useState('');
-    const [rearNotes, setRearNotes] = useState('');
+    const [frontStrutNotes, setFontStrutNotes] = useState('');
+    const [rearShockNotes, setRearShockNotes] = useState('');
+    const [frontSwayNotes, setFrontSwayNotes] = useState('');
+    const [rearSwayNotes, setRearSwayNotes] = useState('');
 
     const suspension = [
         {
-            name: 'Front ',
-            isLeak: isStrutLeaking,
-            setIsLeak: setIsStrutLeaking,
-            isBouncy: isFrontBouncy,
-            setIsBouncy: setIsFrontBouncy,
-            isSwayOk: isFrontSwayOk,
-            setIsSwayOk: setIsFrontSwayOk,
-            notes: frontNotes,
-            setNotes: setFontNotes,
+            name: 'Front Struts',
+            component: frontStruts,
+            setComponent: setFrontStruts,
+            notes: frontStrutNotes,
+            setNotes: setFontStrutNotes,
+            id: 'struts'
         },
         {
-            name: 'Rear ',
-            isLeak: isShockLeaking,
-            setIsLeak: setIsShockLeaking,
-            isBouncy: isReartBouncy,
-            setIsBouncy: setIsRearBouncy,
-            isSwayOk: isRearSwayOk,
-            setIsSwayOk: setIsRearSwayOk,
-            notes: rearNotes,
-            setNotes: setRearNotes,
-            },
+            name: 'Front Sway bar links/bushings',
+            component: frontSway,
+            setComponent: setFrontSway,
+            notes: frontSwayNotes,
+            setNotes: setFrontSwayNotes,
+            id:'frontSway'
+        },
+        {
+            name: 'Rear Shocks',
+            component: rearStruts,
+            setComponent: setRearStruts,
+            notes: rearShockNotes,
+            setNotes: setRearShockNotes,
+            id: 'shocks'
+        },
+        {
+            name: 'Rear Sway bar links/bushings',
+            component: rearSway,
+            setComponent: setRearSway,
+            notes: rearSwayNotes,
+            setNotes: setRearSwayNotes,
+            id: 'rearSway'
+        },
     ];
 
     const handleResults = () => {
+        const statusIcon = {
+            1: '✅',
+            2: '🟡',
+            3: '❌'
+        };
         
-      suspension.map((item) => {
-        const leakMsg = `leaking shocks/struts. ` 
-        const bounceMsg = `shocks/struts are weak/bouncy. `
-        const swayMsg = `${item.name} stabalizer links & bushings. `
-        const notesMsg = `${item.notes ? item.notes : ''}`
-        
-        let msg = ``
-        if (item.isLeak && item.isBouncy || (item.isLeak && item.notes !== '') || item.isBouncy && item.notes !== '') {   
-            msg = `${item.name} ${leakMsg} ${bounceMsg} ${item.isSwayOk ? '' : swayMsg} ${notesMsg}`         
-            addToConcerns(3, `❌ ${msg}`)
-        } else if (item.isLeak || item.isBouncy || !item.isSwayOk || item.notes !== '' ) {
-            msg = `🟡 ${item.name} ${item.isLeak ? leakMsg : ''} ${item.isBouncy ? bounceMsg : ''} ${item.isSwayOk ? '' : swayMsg} ${notesMsg}`
-            addToConcerns(2, msg)
-        } else {    
-            msg = `✅ ${item.name} suspension! ${notesMsg}`              
-            addToConcerns(1, passMsg)               
-        } 
-      })
-       
+        suspension.forEach(({ name, component, notes }) => {
+        const msg = `${statusIcon[component]} ${name}, ${notes}`
+        addToConcerns(component, msg)
+        });
     };
-
     return (
         <fieldset>
             <legend>Suspension</legend>
             {suspension.map((item) => (
-                <div key={item.name}> 
-            <h4>{item.name} shock/struts leaking?</h4>
-            <label>True
-                <input type='radio' name={`${item.name}LeakingRadio`} value={true} checked={item.isLeak} onChange={() => item.setIsLeak(true)}/>
+                <div key={item.id}> 
+            <h4>{item.name}</h4>
+            <label>
+                <input 
+                    type='radio' 
+                    name={`${item.id}Radio`} 
+                    value={1} 
+                    checked={item.component === 1} 
+                    onChange={() => item.setComponent(1)}/>✅
             </label>
-            <label>False   
-                <input type='radio' name={`${item.name}LeakingRadio`} value={false} checked={!item.isLeak} onChange={() => item.setIsLeak(false)}/>
+            <label>  
+                <input 
+                    type='radio' 
+                    name={`${item.id}Radio`} 
+                    value={2} 
+                    checked={item.component === 2} 
+                    onChange={() => item.setComponent(2)}/>🟡
+            </label>
+            <label>  
+                <input 
+                    type='radio' 
+                    name={`${item.id}Radio`} 
+                    value={3} 
+                    checked={item.component === 3} 
+                    onChange={() => item.setComponent(3)}/>❌
             </label>
            
-            <h4>{item.name} Bounce test</h4>
-            <label>Pass   
-                <input type='radio' name={`${item.name}BounceRadio`} value={false} checked={!item.isBouncy} onChange={() => item.setIsBouncy(false)}/>
-            </label>
-            <label>Fail
-                <input type='radio' name={`${item.name}BounceRadio`} value={true} checked={item.isBouncy} onChange={() => item.setIsBouncy(true)}/>
-            </label>            
-            <h4>{item.name} Sway bar links & bushings</h4>
-            <label>Pass
-                <input type='radio' name={`${item.name}SwayRadio`} value={true} checked={item.isSwayOk} onChange={() => item.setIsSwayOk(true)}/>
-            </label>
-            <label>Fail   
-                <input type='radio' name={`${item.name}SwayRadio`} value={false} checked={!item.isSwayOk} onChange={() => item.setIsSwayOk(false)}/>
-            </label>
-            <br></br>
-            <label>{item.name} Suspension Notes: <br></br>
-                <textarea
-                    type='text'
-                    value={item.notes}
-                    onChange={(e) => item.setNotes(e.target.value)}
-                />
-            </label>
-            <hr></hr>
+          <label>Notes: 
+            <textarea 
+                value={item.notes}
+                onChange={(e) => item.setNotes(e.target.value)}
+            />
+          </label>
             </div>
             ))}
         <button type='button' onClick={handleResults}>Test Result</button>
         </fieldset>
     )
-}
+};

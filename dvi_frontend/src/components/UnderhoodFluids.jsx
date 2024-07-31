@@ -24,35 +24,40 @@ export const UnderHoodFluids = ({ addToConcerns }) => {
             notes: aFNotes,
             setNotes: setAFNotes,
             frz_tmp: freezeTemp,
-            setTemp: setFreezeTemp
+            setTemp: setFreezeTemp,
+            id: 'af'
         },
         {
             name: 'Engine Oil',
             level: eOLevel,
             setLevel: setEOLevel,
             notes: eONotes,
-            setNotes: setEONotes 
+            setNotes: setEONotes,
+            id: 'oil' 
         },
         {
             name: 'Transmission Fluid',
             level: aTFLevel,
             setLevel: setATFLevel,
             notes: aTFNotes,
-            setNotes: setATFNotes
+            setNotes: setATFNotes,
+            id: 'atf'
         },
         {
             name: 'Power Steering Fluid',
             level: pSFluidLevel,
             setLevel: setPSFluidLevel,
             notes: pSFluidNotes,
-            setNotes: setPSFluidNotes
+            setNotes: setPSFluidNotes,
+            id: 'ps'
         },
         {
             name: 'Brake Fluid',
             level: brakeFluidLevel,
             setLevel: setBrakeFluidLevel,
             notes: brakeFluidNotes,
-            setNotes: setBrakeFluidNotes
+            setNotes: setBrakeFluidNotes,
+            id: 'bf'
         },
         {
             name: 'Other',
@@ -60,24 +65,23 @@ export const UnderHoodFluids = ({ addToConcerns }) => {
             setLevel: setOtherLevel,
             notes: otherNotes,
             setNotes: setOtherNotes,
+            id: 'other'
         },
     ];
 
     const handleResults = () => {
-        underHoodFluids.map((item) => {
-            if (item.level === 1) {
-                if (item.name !== 'Other') {
-                    addToConcerns(1, `✅ ${item.name} ${item.frz_tmp ? ', Freeze point: ' + item.frz_tmp + '°F' : ''}`)
-                }
-            } else if (item.level === 2) {
-                const someConcernMsg = `🟡 ${item.name} ${item.notes} ${item.frz_tmp ? ', Freeze point: ' + item.frz_tmp + '°F' : ''}`
-                addToConcerns(2, someConcernMsg)
-            } else {
-                const safetyConcernMsg = `❌ Recommend Change/Flush ${item.name}: ${item.notes} ${item.frz_tmp ? ', Freeze point: ' + item.frz_tmp + '°F' : ''}`
-                addToConcerns(3, safetyConcernMsg)
-            }
-        })        
-    }
+        const statusIcon = {
+            1: '✅',
+            2: '🟡',
+            3: '❌'
+        };
+        
+        underHoodFluids.forEach(({ name, level, notes, id }) => {             
+            const msg = `${statusIcon[level]} ${name} ${id === 'af' ? `Freeze temp ${freezeTemp}` : ''} ${notes}`
+            addToConcerns(level, msg)
+        })     
+    };
+    
     return (
         <fieldset>
         <legend>Under Hood Fluids</legend>
@@ -92,8 +96,7 @@ export const UnderHoodFluids = ({ addToConcerns }) => {
                 value={1} 
                 checked={item.level === 1} 
                 onChange={() => item.setLevel(1)} 
-            />
-            Good
+            />✅
         </label>
         <label>
             <input 
@@ -102,8 +105,7 @@ export const UnderHoodFluids = ({ addToConcerns }) => {
                 value={2} 
                 checked={item.level === 2} 
                 onChange={() => item.setLevel(2)} 
-            />
-            Ok
+            />🟡
         </label>
         <label>
             <input 
@@ -112,8 +114,7 @@ export const UnderHoodFluids = ({ addToConcerns }) => {
                 value={3} 
                 checked={item.level === 3} 
                 onChange={() => item.setLevel(3)} 
-            />
-            Change fluid
+            />❌
         </label>
         {item.name === 'Anti-freeze' && 
         <>
@@ -126,17 +127,14 @@ export const UnderHoodFluids = ({ addToConcerns }) => {
             </label>
         </>
         }
-        {item.level > 1 &&  
-            <>
-            <br></br>
+            
             <label> Notes:
-                <input
+                <textarea
                     value={item.notes}
                     onChange={(e) => item.setNotes(e.target.value)}
                 />
             </label>
-            </>
-        }
+         
         <hr></hr>
             </div>
         ))}

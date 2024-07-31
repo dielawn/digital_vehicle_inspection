@@ -150,14 +150,6 @@ export const Tires = ({ addToConcerns, driveType }) => {
                     onChange={(e) => setTireNotes(e.target.value)}
                 />
             </label>
-            {/* <h4>AWD</h4>
-            <label>True
-                <input type='radio' name='awdRadio' value={true} checked={isAWD} onChange={() => setIsAWD(true)}/>
-            </label>
-            <label>False   
-                <input type='radio' name='awdRadio' value={false} checked={!isAWD} onChange={() => setIsAWD(false)}/>
-            </label>
-            <hr></hr> */}
             {tireInfo.map((item, index) => (
                 <div key={index} className='flexCol'>
                     
