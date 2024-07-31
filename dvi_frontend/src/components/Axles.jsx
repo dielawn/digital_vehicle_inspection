@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export const Axles = ({ addToConcerns, driveType, setDriveType }) => {
+export const Axles = ({ sortConcerns, driveType, setDriveType }) => {
     
     const [axleLF, setAxleLF] = useState(1);
     const [axleRF, setAxleRF] = useState(1);
@@ -85,7 +85,7 @@ export const Axles = ({ addToConcerns, driveType, setDriveType }) => {
             .forEach(({ text, axle, notes }) => {
                 if (statusIcon[axle]) {
                     const msg = `${statusIcon[axle]} ${text}, ${notes}`
-                    addToConcerns(axle, msg)
+                    sortConcerns('axles', axle, msg)
                 }
             })
     }

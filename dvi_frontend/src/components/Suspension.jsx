@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export const Suspension = ({ addToConcerns }) => {
+export const Suspension = ({ sortConcerns }) => {
 
     const [frontStruts, setFrontStruts] = useState(1);
     const [rearStruts, setRearStruts] = useState(1);
@@ -56,7 +56,7 @@ export const Suspension = ({ addToConcerns }) => {
         
         suspension.forEach(({ name, component, notes }) => {
         const msg = `${statusIcon[component]} ${name}, ${notes}`
-        addToConcerns(component, msg)
+        sortConcerns('suspension', component, msg)
         });
     };
     return (

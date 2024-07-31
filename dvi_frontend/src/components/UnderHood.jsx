@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export const UnderHood = ({ addToConcerns }) => {
+export const UnderHood = ({ sortConcerns }) => {
     const [airfilterNotes, setAirfilterNotes] = useState('');
     const [batteryNotes, setBatteryNotes] = useState('');
     const [beltsNotes, setBeltsNotes] = useState('');
@@ -59,7 +59,7 @@ export const UnderHood = ({ addToConcerns }) => {
         };
         underHoodInspItems.forEach(({ name, level, notes }) => {
             const msg = `${statusIcon[level]} ${name} ${notes}`
-            addToConcerns(level, msg)
+            sortConcerns('underHood', level, msg)
         });
     };
 

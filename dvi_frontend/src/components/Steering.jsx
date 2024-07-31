@@ -124,7 +124,7 @@ const DragLinkSteering = React.memo(({ relaySteering, handleFocus }) => {
     );
 });
 
-export const Steering = ({ addToConcerns }) => {
+export const Steering = ({ sortConcerns }) => {
     const focusedElement = useRef(null);
 
     const handleFocus = (e) => {
@@ -250,14 +250,14 @@ export const Steering = ({ addToConcerns }) => {
         if (isRack) {
             rackSteering.forEach(({ name, outer, inner, notesOut, notesIn }) => {
                 const outerMsg = `${statusIcon[outer]} ${name} outer tie rod, ${notesOut}`;
-                addToConcerns(outer, outerMsg);
+                sortConcerns('steering', outer, outerMsg);
                 const innerMsg = `${statusIcon[inner]} ${name} inner tie rod, ${notesIn}`;
-                addToConcerns(inner, innerMsg);
+                sortConcerns('steering', inner, innerMsg);
             });
         } else {
             relaySteering.forEach(({ component, name, notes }) => {
                 const msg = `${statusIcon[component]} ${name} ${notes}`;
-                addToConcerns(component, msg);
+                sortConcerns('steering', component, msg);
             });
         }
     };

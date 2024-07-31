@@ -28,7 +28,42 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
     // maintenance
     const [maintenance, setMaintenance] = useState('');
 
-    const [serviceNotes, setServiceNotes] = useState([]);
+    const [exteriorLights, setExteriorLights] = useState({ 1: [], 2: [], 3: [], });
+
+    const [underHood, setUnderHood] = useState({ 1: [], 2: [], 3: [], }); 
+
+    const [tires, setTires] = useState({ 1: [], 2: [], 3: [], });
+    const [suspension, setSuspension] = useState({ 1: [], 2: [], 3: [], });
+    const [steering, setSteering] = useState({ 1: [], 2: [], 3: [], });
+    const [ballJoints, setBallJoints] = useState({ 1: [], 2: [], 3: [], });
+    const [wheelBearings, setWheelBearings] = useState({ 1: [], 2: [], 3: [], });
+    const [brakes, setBrakes] = useState({ 1: [], 2: [], 3: [], });
+    const [axles, setAxles] = useState({ 1: [], 2: [], 3: [], });
+    const [underCar, setUnderCar] = useState({ 1: [], 2: [], 3: [], });
+    
+    const sectionStateSetters = {
+        exteriorLights: setExteriorLights,
+        underHood: setUnderHood,
+        tires: setTires,
+        suspension: setSuspension,
+        steering: setSteering,
+        ballJoints: setBallJoints,
+        wheelBearings: setWheelBearings,
+        brakes: setBrakes,
+        axles: setAxles,
+        underCar: setUnderCar,
+    };
+
+    const sortConcerns = (section, level, note) => {
+        const setState = sectionStateSetters[section];
+        if (setState) {
+            setState(prevData => ({
+                ...prevData,
+                [level]: [...prevData[level], note]
+            }));
+        }
+    };
+
 
     const addToConcerns = (level, note) => {
         switch (level) {
@@ -48,18 +83,18 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
 
     // Set order of inspection
     const steps = [
-        <WarningLights addToConcerns={addToConcerns} />,
-        <ExteriorLights addToConcerns={addToConcerns}/>,
-        <UnderHood addToConcerns={addToConcerns} />,
-        <UnderHoodFluids addToConcerns={addToConcerns} />,
-        <Tires addToConcerns={addToConcerns} driveType={driveType} />,
-        <Suspension addToConcerns={addToConcerns} />,
-        <Steering addToConcerns={addToConcerns} />,
-        <BallJoints addToConcerns={addToConcerns} />,
-        <WheelBearings addToConcerns={addToConcerns} />,
-        <Brakes addToConcerns={addToConcerns} />,
-        <Axles addToConcerns={addToConcerns} driveType={driveType} setDriveType={setDriveType}/>,
-        <UnderCarFluids addToConcerns={addToConcerns} driveType={driveType} />,
+        <WarningLights addToConcerns={addToConcerns}  />,
+        <ExteriorLights addToConcerns={addToConcerns} sortConcerns={sortConcerns}/>,
+        <UnderHood addToConcerns={addToConcerns} sortConcerns={sortConcerns}/>,
+        <UnderHoodFluids addToConcerns={addToConcerns} sortConcerns={sortConcerns}/>,
+        <Tires addToConcerns={addToConcerns} sortConcerns={sortConcerns} driveType={driveType} />,
+        <Suspension addToConcerns={addToConcerns} sortConcerns={sortConcerns}/>,
+        <Steering addToConcerns={addToConcerns} sortConcerns={sortConcerns}/>,
+        <BallJoints addToConcerns={addToConcerns} sortConcerns={sortConcerns}/>,
+        <WheelBearings addToConcerns={addToConcerns} sortConcerns={sortConcerns}/>,
+        <Brakes addToConcerns={addToConcerns} sortConcerns={sortConcerns}/>,
+        <Axles addToConcerns={addToConcerns} sortConcerns={sortConcerns} driveType={driveType} setDriveType={setDriveType}/>,
+        <UnderCarFluids addToConcerns={addToConcerns} sortConcerns={sortConcerns} driveType={driveType} />,
         <Maintenance setMaintenance={setMaintenance} />
     ];
 

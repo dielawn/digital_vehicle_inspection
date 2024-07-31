@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export const ExteriorLights = ({ addToConcerns }) => {
+export const ExteriorLights = ({ sortConcerns }) => {
 
     const [headlight, setHeadlight] = useState(1);
     const [taillight, setTaillight] = useState(1);
@@ -68,7 +68,7 @@ export const ExteriorLights = ({ addToConcerns }) => {
        lightOptions.forEach(({ name, light, loc, notes }) => {
             if (statusIcon[light]) {
                 const msg = `${statusIcon[light]} ${loc.join(', ')} ${name}, ${notes}`;
-                addToConcerns(light, msg)
+                sortConcerns('exteriorLights', light, msg)
             } 
        })
     };

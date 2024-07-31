@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export const Brakes = ({ addToConcerns }) => {
+export const Brakes = ({ sortConcerns }) => {
 
     const [isDisc, setIsDisc] = useState(true);
 
@@ -86,7 +86,7 @@ export const Brakes = ({ addToConcerns }) => {
         brakes.forEach(({ name, isEven, pad, brakes, notes }) => {
             if (statusIcon[brakes]) {                
                 const msg = `${statusIcon[brakes]} ${name} ${pad}mm pad/shoe remaining, ${isEven ? 'uneven wear, ' : ''} ${notes}`
-                addToConcerns(brakes, msg)
+                sortConcerns('brakes', brakes, msg)
             }
         })
     }

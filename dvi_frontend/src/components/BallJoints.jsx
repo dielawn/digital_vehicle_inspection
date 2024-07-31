@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export const BallJoints = ({ addToConcerns }) => {
+export const BallJoints = ({ sortConcerns }) => {
 
     const [upperBallJointLF, setUpperBallJointLF] = useState(1);
     const [upperBallJointRF, setUpperBallJointRF] = useState(1);
@@ -58,7 +58,7 @@ export const BallJoints = ({ addToConcerns }) => {
         ballJoints.forEach(({ ballJoint, name, note }) => {
             if (statusIcon[ballJoint]) {
                 const msg = `${statusIcon[ballJoint]} ${name} ${note}`
-                addToConcerns(ballJoint, msg)
+                sortConcerns('ballJoints', ballJoint, msg)
             }
         })
     };

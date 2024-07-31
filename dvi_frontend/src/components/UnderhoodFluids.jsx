@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export const UnderHoodFluids = ({ addToConcerns }) => {
+export const UnderHoodFluids = ({ sortConcerns }) => {
 
     const [aFNotes, setAFNotes] = useState('');
     const [aFLevel, setAFLevel] = useState(1);
@@ -78,10 +78,10 @@ export const UnderHoodFluids = ({ addToConcerns }) => {
         
         underHoodFluids.forEach(({ name, level, notes, id }) => {             
             const msg = `${statusIcon[level]} ${name} ${id === 'af' ? `Freeze temp ${freezeTemp}` : ''} ${notes}`
-            addToConcerns(level, msg)
+            sortConcerns('underHood', level, msg)
         })     
     };
-    
+
     return (
         <fieldset>
         <legend>Under Hood Fluids</legend>

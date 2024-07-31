@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export const Tires = ({ addToConcerns, driveType }) => {
+export const Tires = ({ sortConcerns, driveType }) => {
     const [tireSize, setTireSize] = useState('');
     const [loadRange, setLoadRange] = useState('P')
     const [tireNotes, setTireNotes] = useState('');
@@ -110,11 +110,11 @@ export const Tires = ({ addToConcerns, driveType }) => {
             }            
            // Sort by tire age, tread, and uneven wear
             if (tireAge >= 7 || item.tread < 3) {
-                addToConcerns(3, `❌ ${loadRange} ${formattedTireSize} ${msg}`)
+                sortConcerns('tires', 3, `❌ ${loadRange} ${formattedTireSize} ${msg}`)
             } else if ((item.tread <= 5 && item.tread >= 3) || tireAge === 6 || item.isUneven) {
-                addToConcerns(2, `🟡 ${loadRange} ${formattedTireSize} ${msg}`)
+                sortConcerns('tires', 2, `🟡 ${loadRange} ${formattedTireSize} ${msg}`)
             } else {                    
-                addToConcerns(1, `✅ ${loadRange} ${formattedTireSize} ${msg}`)               
+                sortConcerns('tires', 1, `✅ ${loadRange} ${formattedTireSize} ${msg}`)               
             } 
         })
     };

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export const WheelBearings = ({ addToConcerns }) => {
+export const WheelBearings = ({ sortConcerns }) => {
     // Play in wheel bearing?
     const [wheelBearingLF, setWheelBearingLF] = useState(1);
     const [wheelBearingRF, setWheelBearingRF] = useState(1);
@@ -57,7 +57,7 @@ export const WheelBearings = ({ addToConcerns }) => {
         };
         wheelBearings.forEach(({ name, bearing, notes}) => {
             const msg = `${statusIcon[bearing]} ${name} ${notes}`
-            addToConcerns(bearing, msg)
+            sortConcerns('wheelBearings', bearing, msg)
         });
     };
 

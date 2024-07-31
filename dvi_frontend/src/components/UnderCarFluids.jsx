@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export const UnderCarFluids = ({ addToConcerns, driveType }) => {
+export const UnderCarFluids = ({ sortConcerns, driveType }) => {
     const [frontDiffFluid, setFrontDiffFluid] = useState(1);
     const [rearDiffFluid, setRearDiffFluid] = useState(1);
     const [tCaseFluid, setTCaseFluid] = useState(1);
@@ -94,7 +94,7 @@ export const UnderCarFluids = ({ addToConcerns, driveType }) => {
             .forEach(({ fluid, text, note }) => {
                 if (statusIcon[fluid]) {
                     const msg = `${statusIcon[fluid]} ${text}. ${note}`;
-                    addToConcerns(fluid, msg);
+                    sortConcerns('underCar', fluid, msg);
                 }
         });
     };
