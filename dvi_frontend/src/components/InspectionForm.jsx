@@ -40,6 +40,23 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
     const [brakes, setBrakes] = useState({ 1: [], 2: [], 3: [], });
     const [axles, setAxles] = useState({ 1: [], 2: [], 3: [], });
     const [underCar, setUnderCar] = useState({ 1: [], 2: [], 3: [], });
+
+    const [tireSize, setTireSize] = useState('');
+    const [loadRange, setLoadRange] = useState('P');
+    const [formattedTireSize, setFormattedTireSize] = useState('');
+
+    const sections = [ 
+        exteriorLights,
+        underHood,
+        tires,
+        suspension,
+        steering,
+        ballJoints,
+        wheelBearings,
+        brakes,
+        axles,
+        underCar,
+    ]
     
     const sectionStateSetters = {
         exteriorLights: setExteriorLights,
@@ -64,6 +81,21 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
         }
     };
 
+    const formatTireSize = () => {
+        const regex = /^(\d{3})(\d{2})(\d{2})$/;
+        const match = tireSize.match(regex)
+        if (match) {
+            return `${match[1]}/${match[2]}/${match[3]}`
+        } else {
+            return tireSize
+        }
+    };
+
+    useEffect(() => {
+        const size = formatTireSize()
+        setFormattedTireSize(size)
+        
+    }, [tireSize])
 
     const addToConcerns = (level, note) => {
         switch (level) {
@@ -79,22 +111,32 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
             default:
                 setLowConcern(prevLowConcern => [...prevLowConcern, note]);
         }
-    }
+    };
+
+    const handleConcerns = () => {
+        sections.forEach(section => {
+            Object.keys(section).forEach(level => {
+                section[level].forEach(note => {
+                    addToConcerns(Number(level), note);
+                });
+            });
+        });
+    };
 
     // Set order of inspection
     const steps = [
-        <WarningLights addToConcerns={addToConcerns}  />,
-        <ExteriorLights addToConcerns={addToConcerns} sortConcerns={sortConcerns}/>,
-        <UnderHood addToConcerns={addToConcerns} sortConcerns={sortConcerns}/>,
-        <UnderHoodFluids addToConcerns={addToConcerns} sortConcerns={sortConcerns}/>,
-        <Tires addToConcerns={addToConcerns} sortConcerns={sortConcerns} driveType={driveType} />,
-        <Suspension addToConcerns={addToConcerns} sortConcerns={sortConcerns}/>,
-        <Steering addToConcerns={addToConcerns} sortConcerns={sortConcerns}/>,
-        <BallJoints addToConcerns={addToConcerns} sortConcerns={sortConcerns}/>,
-        <WheelBearings addToConcerns={addToConcerns} sortConcerns={sortConcerns}/>,
-        <Brakes addToConcerns={addToConcerns} sortConcerns={sortConcerns}/>,
-        <Axles addToConcerns={addToConcerns} sortConcerns={sortConcerns} driveType={driveType} setDriveType={setDriveType}/>,
-        <UnderCarFluids addToConcerns={addToConcerns} sortConcerns={sortConcerns} driveType={driveType} />,
+        <WarningLights   addToConcerns={addToConcerns}/>,
+        <ExteriorLights  sortConcerns={sortConcerns}/>,
+        <UnderHood  sortConcerns={sortConcerns}/>,
+        <UnderHoodFluids  sortConcerns={sortConcerns}/>,
+        <Tires  sortConcerns={sortConcerns} driveType={driveType} tireSize={tireSize} setTireSize={setTireSize} loadRange={loadRange} setLoadRange={setLoadRange}/>,
+        <Suspension  sortConcerns={sortConcerns}/>,
+        <Steering  sortConcerns={sortConcerns}/>,
+        <BallJoints  sortConcerns={sortConcerns}/>,
+        <WheelBearings  sortConcerns={sortConcerns}/>,
+        <Brakes  sortConcerns={sortConcerns}/>,
+        <Axles  sortConcerns={sortConcerns} driveType={driveType} setDriveType={setDriveType}/>,
+        <UnderCarFluids  sortConcerns={sortConcerns} driveType={driveType} />,
         <Maintenance setMaintenance={setMaintenance} />
     ];
 
@@ -115,18 +157,138 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
             <div className="resultsDiv">
                 <h3>Pass</h3>
                 <ul className='lowConcernList'>
+                {tires[1].length > 0 && <h3>Tires {loadRange} {formattedTireSize} </h3>}
+                {tires[1].length > 0 && 
+                    tires[1].map((tire, index) => (
+                        <li key={index}>{tire}</li>
+                    ))}
+                {suspension[1].length > 0 && <h3>Suspension</h3>}
+                {suspension[1].length > 0 && 
+                    suspension[1].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
+                {steering[1].length > 0 && <h3>Steering</h3>}
+                {steering[1].length > 0 && 
+                    steering[1].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
+                {ballJoints[1].length > 0 && <h3>Ball Joints</h3>}
+                {ballJoints[1].length > 0 && 
+                    ballJoints[1].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
+                {wheelBearings[1].length > 0 && <h3>Wheel Bearings</h3>}
+                {wheelBearings[1].length > 0 && 
+                    wheelBearings[1].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
+                {brakes[1].length > 0 && <h3>Brakes</h3>}
+                {brakes[1].length > 0 && 
+                    brakes[1].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
+                {axles[1].length > 0 && <h3>Axles</h3>}
+                {axles[1].length > 0 && 
+                    axles[1].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
+                {underCar[1].length > 0 && <h3>Under Car</h3>}
+                {underCar[1].length > 0 && 
+                    underCar[1].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
                 {lowConcern && lowConcern.map((concern, index) => (
                     <li key={index}>{concern}</li>
                 ))}
                 </ul>
                 <h3>Needs attention</h3>
                 <ul className='someConcernList'>
+                {tires[2].length > 0 && <h3>Tires {loadRange} {formattedTireSize}</h3>}
+                {tires[2].length > 0 && 
+                    tires[2].map((tire, index) => (
+                        <li key={index}>{tire}</li>
+                    ))} 
+                {suspension[2].length > 0 && <h3>Suspension</h3>}
+                {suspension[2].length > 0 && 
+                    suspension[2].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
+                {steering[2].length > 0 && <h3>Steering</h3>}
+                {steering[2].length > 0 && 
+                    steering[2].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
+                {ballJoints[2].length > 0 && <h3>Ball Joints</h3>}
+                {ballJoints[2].length > 0 && 
+                    ballJoints[2].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
+                {wheelBearings[2].length > 0 && <h3>Wheel Bearings</h3>}
+                {wheelBearings[2].length > 0 && 
+                    wheelBearings[2].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
+                {brakes[2].length > 0 && <h3>Brakes</h3>}
+                {brakes[2].length > 0 && 
+                    brakes[2].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
+                {axles[2].length > 0 && <h3>Axles</h3>}
+                {axles[2].length > 0 && 
+                    axles[2].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
+                {underCar[2].length > 0 && <h3>Under Car</h3>}
+                {underCar[2].length > 0 && 
+                    underCar[2].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
                 {someConcern && someConcern.map((concern, index) => (
                     <li key={index}>{concern}</li>
                 ))}
                 </ul>
                 <h3>Safety concern</h3>
                 <ul className='safetyConcernList'>
+                {tires[3].length > 0 && <h3>Tires {loadRange} {formattedTireSize}</h3>}
+                {tires[3].length > 0 && 
+                    tires[3].map((tire, index) => (
+                        <li key={index}>{tire}</li>
+                    ))} 
+                {suspension[3].length > 0 && <h3>Suspension</h3>}
+                {suspension[3].length > 0 && 
+                    suspension[3].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
+                {steering[3].length > 0 && <h3>Steering</h3>}
+                {steering[3].length > 0 && 
+                    steering[3].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
+                {ballJoints[3].length > 0 && <h3>Ball Joints</h3>}
+                {ballJoints[3].length > 0 && 
+                    ballJoints[3].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
+                {wheelBearings[3].length > 0 && <h3>Wheel Bearings</h3>}
+                {wheelBearings[3].length > 0 && 
+                    wheelBearings[3].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
+                {brakes[3].length > 0 && <h3>Brakes</h3>}
+                {brakes[3].length > 0 && 
+                    brakes[3].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
+                {axles[3].length > 0 && <h3>Axles</h3>}
+                {axles[3].length > 0 && 
+                    axles[3].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
+                {underCar[3].length > 0 && <h3>Under Car</h3>}
+                {underCar[3].length > 0 && 
+                    underCar[3].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
                 {safetyConcern && safetyConcern.map((concern, index) => (
                     <li key={index}>{concern}</li>
                 ))}
@@ -138,7 +300,7 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
                 }
                 </ul>
             </div>
-
+<button type='button' onClick={handleConcerns}>add to concerns</button>
         </div>
     )
 }

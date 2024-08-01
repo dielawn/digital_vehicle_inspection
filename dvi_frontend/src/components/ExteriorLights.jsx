@@ -67,7 +67,7 @@ export const ExteriorLights = ({ sortConcerns }) => {
 
        lightOptions.forEach(({ name, light, loc, notes }) => {
             if (statusIcon[light]) {
-                const msg = `${statusIcon[light]} ${loc.join(', ')} ${name}, ${notes}`;
+                const msg = `${statusIcon[light]} ${name}, ${notes}`;
                 sortConcerns('exteriorLights', light, msg)
             } 
        })
