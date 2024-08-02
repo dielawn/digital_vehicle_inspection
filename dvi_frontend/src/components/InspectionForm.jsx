@@ -157,31 +157,43 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
             <div className="resultsDiv">
                 <h3>Pass</h3>
                 <ul className='lowConcernList'>
+                {exteriorLights[1].length > 0 && <h3>Exterior lights</h3>}
+                {exteriorLights[1].length > 0 && 
+                    exteriorLights[1].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
+                {underHood[1].length > 0 && <h3>Under Hood</h3>}
+                {underHood[1].length > 0 && 
+                    underHood[1].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
                 {tires[1].length > 0 && <h3>Tires {loadRange} {formattedTireSize} </h3>}
                 {tires[1].length > 0 && 
                     tires[1].map((tire, index) => (
                         <li key={index}>{tire}</li>
-                    ))}
-                {suspension[1].length > 0 && <h3>Suspension</h3>}
+                    ))}                
+                {(steering[1].length > 0 || suspension[1].length > 0 || ballJoints[1].length > 0 || wheelBearings[1].length > 0) && <h3>Steering & Suspension</h3>}
                 {suspension[1].length > 0 && 
                     suspension[1].map((item, index) => (
                         <li key={index}>{item}</li>
                     ))} 
-                {steering[1].length > 0 && <h3>Steering</h3>}
                 {steering[1].length > 0 && 
                     steering[1].map((item, index) => (
                         <li key={index}>{item}</li>
                     ))} 
-                {ballJoints[1].length > 0 && <h3>Ball Joints</h3>}
+                {suspension[1].length > 0 && 
+                    suspension[1].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
                 {ballJoints[1].length > 0 && 
                     ballJoints[1].map((item, index) => (
                         <li key={index}>{item}</li>
                     ))}
-                {wheelBearings[1].length > 0 && <h3>Wheel Bearings</h3>}
                 {wheelBearings[1].length > 0 && 
                     wheelBearings[1].map((item, index) => (
                         <li key={index}>{item}</li>
                     ))} 
+
                 {brakes[1].length > 0 && <h3>Brakes</h3>}
                 {brakes[1].length > 0 && 
                     brakes[1].map((item, index) => (
@@ -203,31 +215,44 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
                 </ul>
                 <h3>Needs attention</h3>
                 <ul className='someConcernList'>
+                {exteriorLights[2].length > 0 && <h3>Exterior lights</h3>}
+                {exteriorLights[2].length > 0 && 
+                    exteriorLights[2].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
+                {underHood[2].length > 0 && <h3>Under Hood</h3>}
+                {underHood[2].length > 0 && 
+                    underHood[2].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
                 {tires[2].length > 0 && <h3>Tires {loadRange} {formattedTireSize}</h3>}
                 {tires[2].length > 0 && 
                     tires[2].map((tire, index) => (
                         <li key={index}>{tire}</li>
                     ))} 
-                {suspension[2].length > 0 && <h3>Suspension</h3>}
+
+               {steering[2].length > 0 || suspension[2].length > 0 || ballJoints[2].length > 0 || wheelBearings[2].length > 0 && <h3>Steering & Suspension</h3>}
                 {suspension[2].length > 0 && 
                     suspension[2].map((item, index) => (
                         <li key={index}>{item}</li>
                     ))} 
-                {steering[2].length > 0 && <h3>Steering</h3>}
                 {steering[2].length > 0 && 
                     steering[2].map((item, index) => (
                         <li key={index}>{item}</li>
                     ))} 
-                {ballJoints[2].length > 0 && <h3>Ball Joints</h3>}
+                {suspension[2].length > 0 && 
+                    suspension[2].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
                 {ballJoints[2].length > 0 && 
                     ballJoints[2].map((item, index) => (
                         <li key={index}>{item}</li>
-                    ))} 
-                {wheelBearings[2].length > 0 && <h3>Wheel Bearings</h3>}
+                    ))}
                 {wheelBearings[2].length > 0 && 
                     wheelBearings[2].map((item, index) => (
                         <li key={index}>{item}</li>
-                    ))} 
+                    ))}
+
                 {brakes[2].length > 0 && <h3>Brakes</h3>}
                 {brakes[2].length > 0 && 
                     brakes[2].map((item, index) => (
@@ -249,27 +274,38 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
                 </ul>
                 <h3>Safety concern</h3>
                 <ul className='safetyConcernList'>
+                {exteriorLights[3].length > 0 && <h3>Exterior lights</h3>}
+                {exteriorLights[3].length > 0 && 
+                    exteriorLights[3].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
+                {underHood[3].length > 0 && <h3>Under Hood</h3>}
+                {underHood[3].length > 0 && 
+                    underHood[3].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
                 {tires[3].length > 0 && <h3>Tires {loadRange} {formattedTireSize}</h3>}
                 {tires[3].length > 0 && 
                     tires[3].map((tire, index) => (
                         <li key={index}>{tire}</li>
                     ))} 
-                {suspension[3].length > 0 && <h3>Suspension</h3>}
+                {steering[3].length > 0 || suspension[3].length > 0 || ballJoints[3].length > 0 || wheelBearings[3].length > 0 && <h3>Steering & Suspension</h3>}
                 {suspension[3].length > 0 && 
                     suspension[3].map((item, index) => (
                         <li key={index}>{item}</li>
                     ))} 
-                {steering[3].length > 0 && <h3>Steering</h3>}
                 {steering[3].length > 0 && 
                     steering[3].map((item, index) => (
                         <li key={index}>{item}</li>
                     ))} 
-                {ballJoints[3].length > 0 && <h3>Ball Joints</h3>}
+                {suspension[3].length > 0 && 
+                    suspension[3].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))} 
                 {ballJoints[3].length > 0 && 
                     ballJoints[3].map((item, index) => (
                         <li key={index}>{item}</li>
-                    ))} 
-                {wheelBearings[3].length > 0 && <h3>Wheel Bearings</h3>}
+                    ))}
                 {wheelBearings[3].length > 0 && 
                     wheelBearings[3].map((item, index) => (
                         <li key={index}>{item}</li>

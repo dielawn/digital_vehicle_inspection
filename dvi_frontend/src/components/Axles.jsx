@@ -6,7 +6,6 @@ export const Axles = ({ sortConcerns, driveType, setDriveType }) => {
     const [axleRF, setAxleRF] = useState(1);
     const [axleRR, setAxleRR] = useState(1);
     const [axleLR, setAxleLR] = useState(1);
-
     const [frontDLine, setFrontDLine] = useState(1);
     const [rearDLine, setRearDLine] = useState(1);
 
@@ -119,17 +118,17 @@ export const Axles = ({ sortConcerns, driveType, setDriveType }) => {
                     <h3>{driveType.toUpperCase()}</h3>
                     {propShafts.map(item => (
                         <div key={item.id}>
-                            <h4>{item.text} concern?</h4>
+                            <h4>{item.text}</h4>
                             <label>                               
                                 <input
                                     type='radio'
                                     text={`${item.id}AxleConcern`}
-                                    value={3}
-                                    checked={item.axle === 3}
-                                    onChange={() => item.setAxle(3)}
+                                    value={1}
+                                    checked={item.axle === 1}
+                                    onChange={() => item.setAxle(1)}
                                 />
-                                ❌
-                            </label>                            
+                                ✅
+                            </label>                       
                             <label>                               
                                 <input
                                     type='radio'
@@ -144,15 +143,15 @@ export const Axles = ({ sortConcerns, driveType, setDriveType }) => {
                                 <input
                                     type='radio'
                                     text={`${item.id}AxleConcern`}
-                                    value={1}
-                                    checked={item.axle === 1}
-                                    onChange={() => item.setAxle(1)}
+                                    value={3}
+                                    checked={item.axle === 3}
+                                    onChange={() => item.setAxle(3)}
                                 />
-                                ✅
-                            </label>
+                                ❌
+                            </label>     
                             
                                 <label>
-                                    {item.text} notes:
+                                    Notes:
                                     <textarea
                                         value={item.notes}
                                         onChange={e => item.setNotes(e.target.value)}

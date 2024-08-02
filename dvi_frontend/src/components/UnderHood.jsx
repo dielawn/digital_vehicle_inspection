@@ -58,8 +58,13 @@ export const UnderHood = ({ sortConcerns }) => {
             3: '❌'
         };
         underHoodInspItems.forEach(({ name, level, notes }) => {
-            const msg = `${statusIcon[level]} ${name} ${notes}`
-            sortConcerns('underHood', level, msg)
+            console.log(name !== 'Other')
+            if (name !== 'Other' && notes !== '') {
+                const msg = `${statusIcon[level]} ${name} ${notes}`
+                sortConcerns('underHood', level, msg)
+            }
+          
+            
         });
     };
 

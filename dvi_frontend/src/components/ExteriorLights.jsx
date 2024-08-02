@@ -65,12 +65,21 @@ export const ExteriorLights = ({ sortConcerns }) => {
             3: '❌'
         };
 
-       lightOptions.forEach(({ name, light, loc, notes }) => {
-            if (statusIcon[light]) {
+        if (lightOptions.every((light) => light.light === 1)) {
+            const allNotes = lightOptions.reduce((acc, light) => {
+                if (light.notes !== '') {
+                  acc.push(light.notes);
+                }
+                return acc;
+              }, []).join(', ').replace(/\,(?=[^,]*$)/g, ', ');
+            const msg = `${statusIcon[1]} All Exterior lights, ${allNotes}`
+            sortConcerns('exteriorLights', 1, msg)
+        } else {
+            lightOptions.forEach(({ name, light, notes }) => {
                 const msg = `${statusIcon[light]} ${name}, ${notes}`;
-                sortConcerns('exteriorLights', light, msg)
-            } 
-       })
+                sortConcerns('exteriorLights', light, msg) 
+           })
+        }
     };
    
     return (

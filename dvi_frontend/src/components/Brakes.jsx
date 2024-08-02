@@ -28,8 +28,6 @@ export const Brakes = ({ sortConcerns }) => {
     const brakes = [
         {
             name: 'Left front brakes',
-            isEven: isEvenLF,
-            setIsEven: setIsEvenLF,
             pad: padLF,
             setPad: setPadLF,
             brakes: brakesLF,
@@ -40,8 +38,6 @@ export const Brakes = ({ sortConcerns }) => {
         },
         {
             name: 'Right front brakes',
-            isEven: isEvenRF,
-            setIsEven: setIsEvenRF,
             pad: padRF,
             setPad: setPadRF,
             brakes: brakesRF,
@@ -52,8 +48,6 @@ export const Brakes = ({ sortConcerns }) => {
         },
         {
             name: 'Right rear brakes',
-            isEven: isEvenRR,
-            setIsEven: setIsEvenRR,
             pad: padRR,
             setPad: setPadRR,
             brakes: brakesRR,
@@ -64,8 +58,6 @@ export const Brakes = ({ sortConcerns }) => {
         },
         {
             name: 'Left rear brakes',
-            isEven: isEvenLR,
-            setIsEven: setIsEvenLR,
             pad: padLR,
             setPad: setPadLR,
             brakes: brakesLR,
@@ -83,9 +75,9 @@ export const Brakes = ({ sortConcerns }) => {
             3: '❌'
         };
 
-        brakes.forEach(({ name, isEven, pad, brakes, notes }) => {
+        brakes.forEach(({ name, pad, brakes, notes }) => {
             if (statusIcon[brakes]) {                
-                const msg = `${statusIcon[brakes]} ${name} ${pad}mm pad/shoe remaining, ${isEven ? 'uneven wear, ' : ''} ${notes}`
+                const msg = `${statusIcon[brakes]} ${name} ${pad}mm pad/shoe remaining, ${notes}`
                 sortConcerns('brakes', brakes, msg)
             }
         })
@@ -142,29 +134,6 @@ export const Brakes = ({ sortConcerns }) => {
                             onChange={(e) => item.setNotes(e.target.value)}
                         />
                     </label>
-                    {item.brakes > 1 && 
-                        <>
-                            <p>Even wear?</p>
-                            <label> 
-                                <input 
-                                    type='radio' 
-                                    name={`isEvenRadio${item.id}`} 
-                                    value={true} checked={item.isEven} 
-                                    onChange={() => item.setIsEven(true)}
-                                />
-                                True
-                            </label>
-                            <label>
-                                <input 
-                                    type='radio' 
-                                    name={`isEvenRadio${item.id}`} 
-                                    value={false} checked={!item.isEven} 
-                                    onChange={() => item.setIsEven(false)}
-                                />
-                                False 
-                            </label>
-                        </>
-                    }
                 </div>
             ))}
             
