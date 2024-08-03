@@ -20,7 +20,8 @@ export const UnderHood = ({ sortConcerns }) => {
             level: airfilterLevel,
             setLevel: setAirfilterLevel,
             notes: airfilterNotes, 
-            setNotes: setAirfilterNotes           
+            setNotes: setAirfilterNotes,
+            id: 'airFilter'           
         },
         {
             name: 'Battery',
@@ -28,6 +29,7 @@ export const UnderHood = ({ sortConcerns }) => {
             setLevel: setBatteryLevel,
             notes: batteryNotes,
             setNotes: setBatteryNotes,
+            id: 'battery' 
         },
         {
             name: 'Belts',
@@ -35,6 +37,7 @@ export const UnderHood = ({ sortConcerns }) => {
             setLevel: setBeltsLevel,
             notes: beltsNotes,
             setNotes: setBeltsNotes,
+            id: 'belts'
         },
         {
             name: 'Hoses',
@@ -42,6 +45,7 @@ export const UnderHood = ({ sortConcerns }) => {
             setLevel: setHosesLevel,
             notes: hosesNotes,
             setNotes: setHosesNotes,
+            id: 'hoses'
         },
         {
             name: 'Other',
@@ -49,6 +53,7 @@ export const UnderHood = ({ sortConcerns }) => {
             setLevel: setOtherLevel,
             notes: otherNotes,
             setNotes: setOtherNotes,
+            id: 'other'
         },
     ];
     const handleResults = () => {
@@ -57,14 +62,17 @@ export const UnderHood = ({ sortConcerns }) => {
             2: '🟡',
             3: '❌'
         };
-        underHoodInspItems.forEach(({ name, level, notes }) => {
-            console.log(name !== 'Other')
-            if (name !== 'Other' && notes !== '') {
+        underHoodInspItems.forEach(({ name, level, notes, id }) => {
+            console.log(id !== 'other')
+            if (id !== 'other') {
                 const msg = `${statusIcon[level]} ${name} ${notes}`
                 sortConcerns('underHood', level, msg)
             }
-          
-            
+            if(underHoodInspItems[4].notes !== '') {
+                const { level, notes } = underHoodInspItems[4]
+                const msg = `${statusIcon[level]} ${notes}`
+                sortConcerns('underHood', level, msg)
+            }  
         });
     };
 
@@ -72,7 +80,7 @@ export const UnderHood = ({ sortConcerns }) => {
         <fieldset>
             <legend>Under Hood</legend>
             {underHoodInspItems.map((item) => (
-                <div key={item.name}>
+                <div key={item.id}>
                     
                     <h4>{item.name}</h4>
                     <label>

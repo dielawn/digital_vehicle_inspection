@@ -5,23 +5,21 @@ export const Tires = ({ sortConcerns, driveType, tireSize, setTireSize, loadRang
     const [tireNotes, setTireNotes] = useState('');
     const [isAWD, setIsAWD] = useState(false);
     // LF
-    const [lFDate, setLFDate] = useState('');
+    const [lFDate, setLFDate] = useState(2021);
     const [lFTread, setLFTread] = useState(8);
     const [isUnevenLF, setIsUnevenLF] = useState(false);
     // RF
-    const [rFDate, setRFDate] = useState('');
+    const [rFDate, setRFDate] = useState(2021);
     const [rFTread, setRFTread] = useState(8);
     const [isUnevenRF, setIsUnevenRF] = useState(false);
     // RR
-    const [rRDate, setRRDate] = useState('');
+    const [rRDate, setRRDate] = useState(2021);
     const [rRTread, setRRTread] = useState(8);
     const [isUnevenRR, setIsUnevenRR] = useState(false);
     // LR
-    const [lRDate, setLRDate] = useState('');
+    const [lRDate, setLRDate] = useState(2021);
     const [lRTread, setLRTread] = useState(8);
     const [isUnevenLR, setIsUnevenLR] = useState(false);
-
-
 
     const tireInfo = [
       {
@@ -89,33 +87,57 @@ export const Tires = ({ sortConcerns, driveType, tireSize, setTireSize, loadRang
 
     }, [driveType])
 
-
- 
     const handleResults = () => {
 
+        const statusIcon = {
+            1: '✅',
+            2: '🟡',
+            3: '❌'
+        };
         // Get last 2 digits of current year
         const now = new Date();
         const twoDigitYear = now.getFullYear() - 2000;        
            
         const getTireAge = (date) => twoDigitYear - (date % 100);
 
-        tireInfo.map((item) => {
-            const tireAge = getTireAge(item.date);            
-            const formattedTireSize = formatTireSize();
-            let msg = `${item.name}: ${item.tread}/32, ${tireAge} years old, ${item.isUneven ? 'Uneven wear' : '' }`
-            // No date code info
-            if (item.date === '' || !item.date ) {
-                msg = `${item.name}: ${item.tread}/32, ${item.isUneven ? 'Uneven wear' : '' }`
-            }            
-           // Sort by tire age, tread, and uneven wear
-            if (tireAge >= 7 || item.tread < 3) {
-                sortConcerns('tires', 3, `❌ ${msg}`)
-            } else if ((item.tread <= 5 && item.tread >= 3) || tireAge === 6 || item.isUneven) {
-                sortConcerns('tires', 2, `🟡 ${msg}`)
-            } else {                    
-                sortConcerns('tires', 1, `✅ ${msg}`)               
-            } 
-        })
+
+        // Compare all treads and dates
+        const tireInfoValues = tireInfo.reduce((acc, item) => {
+            acc.tread = [...(acc.tread || []), item.tread];
+            acc.date = [...(acc.date || []), item.date];
+            return acc;
+        }, { tread: [], date: [] });
+
+        if (tireInfoValues.tread.every(val => val === tireInfoValues.tread[0]) && 
+            tireInfoValues.date.every(val => val === tireInfoValues.date[0])) {
+                const { date, tread, isUneven } = tireInfo[0]
+                const tireAge = getTireAge(date)
+                const msg = `All tires: ${tread}/32 ${tireAge} years old, ${isUneven ? 'Uneven wear' : '' }`
+                if (tireAge >= 7 || tread < 3) {
+                    sortConcerns('tires', 3, `❌ ${msg}`)
+                } else if ((tread <= 5 && tread >= 3) || tireAge === 6 || isUneven) {
+                    sortConcerns('tires', 2, `🟡 ${msg}`)
+                } else {                    
+                    sortConcerns('tires', 1, `✅ ${msg}`)               
+                } 
+        } else {
+            tireInfo.map((item) => {
+                const tireAge = getTireAge(item.date);            
+                let msg = `${item.name}: ${item.tread}/32, ${tireAge} years old, ${item.isUneven ? 'Uneven wear' : '' }`
+                // No date code info
+                if (item.date === '' || !item.date ) {
+                    msg = `${item.name}: ${item.tread}/32, ${item.isUneven ? 'Uneven wear' : '' }`
+                }            
+               // Sort by tire age, tread, and uneven wear
+                if (tireAge >= 7 || item.tread < 3) {
+                    sortConcerns('tires', 3, `❌ ${msg}`)
+                } else if ((item.tread <= 5 && item.tread >= 3) || tireAge === 6 || item.isUneven) {
+                    sortConcerns('tires', 2, `🟡 ${msg}`)
+                } else {                    
+                    sortConcerns('tires', 1, `✅ ${msg}`)               
+                } 
+            })
+        }   
     };
 
 

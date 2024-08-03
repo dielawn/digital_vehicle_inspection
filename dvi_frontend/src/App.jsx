@@ -86,12 +86,15 @@ function App() {
       <h1>{message}</h1>
       {isInsp ? 
       <>
-        <p>Vehicle owner: {owner.name}</p>
-        <p>{vehicle.vin}</p>
-        <p>{vehicle.year} {vehicle.make} {vehicle.model} </p>
-        <p>Mileage: {mileage}</p>
-        <p>Inspecting Technician: {tech}</p>
-        <p>Drive Type: {driveType}</p>
+        <div className='ownerDiv'>
+          <p>Vehicle owner: {owner.name} <br />
+          {vehicle.vin} <br />
+          {vehicle.year} {vehicle.make} {vehicle.model} <br />
+          Mileage: {mileage} <br />
+          Inspecting Technician: {tech} <br />
+          Drive Type: {driveType}</p>
+        </div>
+        
         <InspectionForm driveType={driveType} setDriveType={setDriveType} />
       </>
       :

@@ -53,11 +53,24 @@ export const Suspension = ({ sortConcerns }) => {
             2: '🟡',
             3: '❌'
         };
-        
-        suspension.forEach(({ name, component, notes }) => {
-        const msg = `${statusIcon[component]} ${name}, ${notes}`
-        sortConcerns('suspension', component, msg)
-        });
+        if(suspension.every((item) => item.component === suspension[0].component)) {
+            console.log("All components are the same", suspension.every((item) => item.component === suspension[0].component));
+            const allNotes = suspension.reduce((acc, item) => {
+                if (item.notes !== '') {
+                    acc.push(item.notes);
+                }
+                return acc
+            }, []).join(', ').replace(/\,(?=[^,]*$)/g, ', ');
+            const msg = `${statusIcon[suspension[0].component]} Front and rear suspension, ${allNotes}`
+            sortConcerns('suspension', suspension[0].component, msg)
+            console.log("Message added:", msg);
+            return
+        } else {
+            suspension.forEach(({ name, component, notes }) => {
+                const msg = `${statusIcon[component]} ${name}, ${notes}`
+                sortConcerns('suspension', component, msg)
+                });
+        }        
     };
     return (
         <fieldset>

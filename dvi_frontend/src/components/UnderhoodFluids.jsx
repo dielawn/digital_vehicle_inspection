@@ -77,9 +77,16 @@ export const UnderHoodFluids = ({ sortConcerns }) => {
         };
         
         underHoodFluids.forEach(({ name, level, notes, id }) => {             
-            const msg = `${statusIcon[level]} ${name} ${id === 'af' ? `Freeze temp ${freezeTemp}` : ''} ${notes}`
+            if (id !== 'other') {
+                const msg = `${statusIcon[level]} ${name} ${id === 'af' ? `Freeze temp ${freezeTemp}` : ''} ${notes}`
+                sortConcerns('underHood', level, msg)
+            }            
+        })   
+        if(underHoodFluids[5].notes !== '') {
+            const { level, notes } = underHoodFluids[5]
+            const msg = `${statusIcon[level]} ${notes}`
             sortConcerns('underHood', level, msg)
-        })     
+        }  
     };
 
     return (
