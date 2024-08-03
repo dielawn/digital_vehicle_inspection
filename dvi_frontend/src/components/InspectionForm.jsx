@@ -181,10 +181,6 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
                     steering[1].map((item, index) => (
                         <li key={index}>{item}</li>
                     ))} 
-                {suspension[1].length > 0 && 
-                    suspension[1].map((item, index) => (
-                        <li key={index}>{item}</li>
-                    ))} 
                 {ballJoints[1].length > 0 && 
                     ballJoints[1].map((item, index) => (
                         <li key={index}>{item}</li>
@@ -240,10 +236,6 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
                     steering[2].map((item, index) => (
                         <li key={index}>{item}</li>
                     ))} 
-                {suspension[2].length > 0 && 
-                    suspension[2].map((item, index) => (
-                        <li key={index}>{item}</li>
-                    ))} 
                 {ballJoints[2].length > 0 && 
                     ballJoints[2].map((item, index) => (
                         <li key={index}>{item}</li>
@@ -296,10 +288,6 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
                     ))} 
                 {steering[3].length > 0 && 
                     steering[3].map((item, index) => (
-                        <li key={index}>{item}</li>
-                    ))} 
-                {suspension[3].length > 0 && 
-                    suspension[3].map((item, index) => (
                         <li key={index}>{item}</li>
                     ))} 
                 {ballJoints[3].length > 0 && 

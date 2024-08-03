@@ -248,17 +248,45 @@ export const Steering = ({ sortConcerns }) => {
         };
 
         if (isRack) {
-            rackSteering.forEach(({ name, outer, inner, notesOut, notesIn }) => {
-                const outerMsg = `${statusIcon[outer]} ${name} outer tie rod, ${notesOut}`;
-                sortConcerns('steering', outer, outerMsg);
-                const innerMsg = `${statusIcon[inner]} ${name} inner tie rod, ${notesIn}`;
-                sortConcerns('steering', inner, innerMsg);
-            });
+            if (rackSteering.every((item) => item.inner === rackSteering[0].inner) && rackSteering.every((item) => item.outer === rackSteering[0].outer)) {
+                const allNotes = rackSteering.reduce((acc, item) => {
+                    if (item.notesIn !== '') {
+                        acc.push(item.notesIn)
+                    }
+                    if (item.notesOut !== '') {
+                        acc.push(item.notesOut)
+                    }
+                    return acc
+                }, []).join(', ').replace(/\,(?=[^,]*$)/g, ', ');
+                const msg = `${statusIcon[rackSteering[0].inner]} Steering components, ${allNotes}`
+                sortConcerns('steering', rackSteering[0].inner, msg)
+                return
+            } else {
+                rackSteering.forEach(({ name, outer, inner, notesOut, notesIn }) => {
+                    const outerMsg = `${statusIcon[outer]} ${name} outer tie rod, ${notesOut}`;
+                    sortConcerns('steering', outer, outerMsg);
+                    const innerMsg = `${statusIcon[inner]} ${name} inner tie rod, ${notesIn}`;
+                    sortConcerns('steering', inner, innerMsg);
+                });
+            }
+            
         } else {
-            relaySteering.forEach(({ component, name, notes }) => {
-                const msg = `${statusIcon[component]} ${name} ${notes}`;
-                sortConcerns('steering', component, msg);
-            });
+            if (relaySteering.every((item) => item.component === relaySteering[0].component)) {
+                const allNotes = relaySteering.reduce((acc, item) => {
+                    if (item.notes !== '') {
+                        acc.push(item.notes)
+                    }
+                    return acc
+                }, []).join(', ').replace(/\,(?=[^,]*$)/g, ', ');
+                const msg = `${statusIcon[relaySteering[0].component]} Steering components, ${allNotes}`
+                sortConcerns('steering', relaySteering[0].component, msg)
+                return
+            } else {
+                relaySteering.forEach(({ component, name, notes }) => {
+                    const msg = `${statusIcon[component]} ${name} ${notes}`;
+                    sortConcerns('steering', component, msg);
+                });
+            }            
         }
     };
 

@@ -54,16 +54,14 @@ export const Suspension = ({ sortConcerns }) => {
             3: '❌'
         };
         if(suspension.every((item) => item.component === suspension[0].component)) {
-            console.log("All components are the same", suspension.every((item) => item.component === suspension[0].component));
             const allNotes = suspension.reduce((acc, item) => {
                 if (item.notes !== '') {
                     acc.push(item.notes);
                 }
                 return acc
             }, []).join(', ').replace(/\,(?=[^,]*$)/g, ', ');
-            const msg = `${statusIcon[suspension[0].component]} Front and rear suspension, ${allNotes}`
+            const msg = `${statusIcon[suspension[0].component]} Shocks Struts &  Sway bar bushings/link, ${allNotes === '' ? 'No notes' : `${allNotes}`}`
             sortConcerns('suspension', suspension[0].component, msg)
-            console.log("Message added:", msg);
             return
         } else {
             suspension.forEach(({ name, component, notes }) => {
