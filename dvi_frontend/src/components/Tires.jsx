@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
+import { abrevNotes, formatTireSize } from '../../utils';
 
-export const Tires = ({ sortConcerns, driveType, tireSize, setTireSize, loadRange, setLoadRange }) => {
+export const Tires = ({ sortConcerns, driveType, setTireSize, loadRange, setLoadRange }) => {
     
+    const [rawTireSize, setRawTireSize] = useState('');
     const [tireNotes, setTireNotes] = useState('');
     const [isAWD, setIsAWD] = useState(false);
     // LF
@@ -60,6 +62,11 @@ export const Tires = ({ sortConcerns, driveType, tireSize, setTireSize, loadRang
         },
     ];
 
+    useEffect(() => {
+        const formattedSize = formatTireSize(rawTireSize)
+        setTireSize(formattedSize)
+    }, [rawTireSize])
+
     const loadRangeOptions = ['P', 'C', 'D', 'E']
 
     const handleDriveType = () => {
@@ -98,7 +105,7 @@ export const Tires = ({ sortConcerns, driveType, tireSize, setTireSize, loadRang
             tireInfoValues.date.every(val => val === tireInfoValues.date[0])) {
                 const { date, tread, isUneven } = tireInfo[0]
                 const tireAge = getTireAge(date)
-                const msg = `All tires: ${tread}/32 ${tireAge} years old, ${isUneven ? 'Uneven wear' : '' }`
+                const msg = `All tires: ${tread}/32 ${tireAge} years old${isUneven ? ', Uneven wear' : '' }${abrevNotes(tireNotes)}`
                 if (tireAge >= 7 || tread < 3) {
                     sortConcerns('tires', 3, `❌ ${msg}`)
                 } else if ((tread <= 5 && tread >= 3) || tireAge === 6 || isUneven) {
@@ -109,10 +116,10 @@ export const Tires = ({ sortConcerns, driveType, tireSize, setTireSize, loadRang
         } else {
             tireInfo.map((item) => {
                 const tireAge = getTireAge(item.date);            
-                let msg = `${item.name}: ${item.tread}/32, ${tireAge} years old, ${item.isUneven ? 'Uneven wear' : '' }`
+                let msg = `${item.name}: ${item.tread}/32, ${tireAge} years old${item.isUneven ? ', Uneven wear' : '' }${abrevNotes(tireNotes)}`
                 // No date code info
                 if (item.date === '' || !item.date ) {
-                    msg = `${item.name}: ${item.tread}/32, ${item.isUneven ? 'Uneven wear' : '' }`
+                    msg = `${item.name}: ${item.tread}/32, ${item.isUneven ? 'Uneven wear' : '' }${abrevNotes(tireNotes)}`
                 }            
                // Sort by tire age, tread, and uneven wear
                 if (tireAge >= 7 || item.tread < 3) {
@@ -125,15 +132,15 @@ export const Tires = ({ sortConcerns, driveType, tireSize, setTireSize, loadRang
             })
         }   
     };
-
+ 
     return (
         <fieldset >
             <legend>Tires</legend>
             <label>Tire size: 
                 <input 
                     type='text'
-                    value={tireSize}
-                    onChange={(e) => setTireSize(e.target.value)}
+                    value={rawTireSize}
+                    onChange={(e) => setRawTireSize(e.target.value)}
                 />
             </label>
             <h3>Select Load Range</h3>

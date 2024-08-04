@@ -17,7 +17,9 @@ import { Axles } from './Axles';
 import { UnderCarFluids } from './UnderCarFluids';
 import { Maintenance } from './Maintenance';
 
-export const InspectionForm = ({ driveType, setDriveType }) => {
+import { formatTireSize } from '../../utils';
+
+export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize , loadRange, setLoadRange}) => {
 
     // Levels of concern
     const [lowConcern, setLowConcern] = useState([]);
@@ -28,6 +30,7 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
     // maintenance
     const [maintenance, setMaintenance] = useState('');
 
+    const [warningLights, setWarningLights] = useState({ 1: [], 2: [], 3: [], });
     const [exteriorLights, setExteriorLights] = useState({ 1: [], 2: [], 3: [], });
 
     const [underHood, setUnderHood] = useState({ 1: [], 2: [], 3: [], }); 
@@ -41,11 +44,10 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
     const [axles, setAxles] = useState({ 1: [], 2: [], 3: [], });
     const [underCar, setUnderCar] = useState({ 1: [], 2: [], 3: [], });
 
-    const [tireSize, setTireSize] = useState('');
-    const [loadRange, setLoadRange] = useState('P');
     const [formattedTireSize, setFormattedTireSize] = useState('');
 
     const sections = [ 
+        warningLights,
         exteriorLights,
         underHood,
         tires,
@@ -59,6 +61,7 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
     ]
     
     const sectionStateSetters = {
+        warningLights: setWarningLights,
         exteriorLights: setExteriorLights,
         underHood: setUnderHood,
         tires: setTires,
@@ -81,38 +84,9 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
         }
     };
 
-    const formatTireSize = () => {
-        const regex = /^(\d{3})(\d{2})(\d{2})$/;
-        const match = tireSize.match(regex)
-        if (match) {
-            return `${match[1]}/${match[2]}/${match[3]}`
-        } else {
-            return tireSize
-        }
-    };
-
-    const reduceNotes = (array) => {
-        return array.reduce((acc, item) => {
-            if (item.notes !== '' ) {
-                if (item.name) {
-                    const txt = `${item.name} ${item.notes}`
-                    acc.push(txt);
-                } else {
-                    acc.push(item.notes)
-                }                
-            }
-            return acc
-        }, []).join(', ').replace(/\,(?=[^,]*$)/g, ', ');
-    };
-
-    const abrevNotes = (string) => {
-       return string === '' ? '.' : `, ${string}`
-    }
-
     useEffect(() => {
-        const size = formatTireSize()
-        setFormattedTireSize(size)
-        
+        const size = formatTireSize(tireSize)
+        setFormattedTireSize(size)        
     }, [tireSize])
 
     const addToConcerns = (level, note) => {
@@ -143,7 +117,7 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
 
     // Set order of inspection
     const steps = [
-        <WarningLights   addToConcerns={addToConcerns} />,
+        <WarningLights   sortConcerns={sortConcerns}  />,
         <ExteriorLights  sortConcerns={sortConcerns} />,
         <UnderHood  sortConcerns={sortConcerns}/>,
         <UnderHoodFluids  sortConcerns={sortConcerns} />,
@@ -173,9 +147,12 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
                
            </div>
             <div className="resultsDiv">
-                <h3>Pass</h3>
                 <ul className='lowConcernList'>
-                {exteriorLights[1].length > 0 && <h3>Exterior lights</h3>}
+                {(warningLights[1].length > 0 || exteriorLights[1].length > 0 )&& <h3>In Vehicle</h3>}
+                {warningLights[1].length > 0 && 
+                    warningLights[1].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
                 {exteriorLights[1].length > 0 && 
                     exteriorLights[1].map((item, index) => (
                         <li key={index}>{item}</li>
@@ -185,7 +162,7 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
                     underHood[1].map((item, index) => (
                         <li key={index}>{item}</li>
                     ))}
-                {tires[1].length > 0 && <h3>Tires {loadRange} {formattedTireSize} </h3>}
+                {tires[1].length > 0 && <h3>Tires</h3>}
                 {tires[1].length > 0 && 
                     tires[1].map((tire, index) => (
                         <li key={index}>{tire}</li>
@@ -229,6 +206,11 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
                 </ul>
                 <h3>Needs attention</h3>
                 <ul className='someConcernList'>
+                {warningLights[2].length > 0 && <h3>Warning Lights</h3>}
+                {warningLights[2].length > 0 && 
+                    warningLights[2].map((item, index) => (
+                        <li key={index}>{item}</li>
+                    ))}
                 {exteriorLights[2].length > 0 && <h3>Exterior lights</h3>}
                 {exteriorLights[2].length > 0 && 
                     exteriorLights[2].map((item, index) => (
@@ -239,7 +221,7 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
                     underHood[2].map((item, index) => (
                         <li key={index}>{item}</li>
                     ))}
-                {tires[2].length > 0 && <h3>Tires {loadRange} {formattedTireSize}</h3>}
+                {tires[2].length > 0 && <h3>Tires</h3>}
                 {tires[2].length > 0 && 
                     tires[2].map((tire, index) => (
                         <li key={index}>{tire}</li>
@@ -294,7 +276,7 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
                     underHood[3].map((item, index) => (
                         <li key={index}>{item}</li>
                     ))}
-                {tires[3].length > 0 && <h3>Tires {loadRange} {formattedTireSize}</h3>}
+                {tires[3].length > 0 && <h3>Tires</h3>}
                 {tires[3].length > 0 && 
                     tires[3].map((tire, index) => (
                         <li key={index}>{tire}</li>
@@ -342,7 +324,7 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
                 }
                 </ul>
             </div>
-<button type='button' onClick={handleConcerns}>add to concerns</button>
+
         </div>
     )
 }

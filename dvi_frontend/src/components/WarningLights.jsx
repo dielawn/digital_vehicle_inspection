@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
+import { abrevNotes, reduceNotes } from '../../utils';
 
-export const WarningLights = ({ addToConcerns }) => {
-    const [isPass, setIsPass] = useState(false);
+export const WarningLights = ({ sortConcerns }) => {
     const [isCEL, setIsCEL] = useState(false);
     const [isABS, setIsABS] = useState(false);
     const [isTPMS, setIsTPMS] = useState(false);
@@ -10,39 +10,28 @@ export const WarningLights = ({ addToConcerns }) => {
     const [isOther, setIsOther] = useState(false);
 
     const [otherNote, setOtherNote] = useState('');
-    const [techNote, setTechNote] = useState('');
+    const [notes, setNotes] = useState('');
 
     const warningOptions = [ 
-        { name: 'Pass', state: isPass, setState: setIsPass },
-        { name: 'CEL', state: isCEL, setState: setIsCEL },
-        { name: 'ABS', state: isABS, setState: setIsABS },
-        { name: 'TPMS', state: isTPMS, setState: setIsTPMS },
-        { name: 'Traction', state: isTRAC, setState: setIsTRAC },
-        { name: 'Airbag', state: isAirbag, setState: setIsAirbag },
-        { name: 'Other Warning Light', state: isOther, setState: setIsOther }
+        { name: 'CEL', state: isCEL, setState: setIsCEL, id: 'cel' },
+        { name: 'ABS', state: isABS, setState: setIsABS, id: 'abs' },
+        { name: 'TPMS', state: isTPMS, setState: setIsTPMS, id: 'tpms' },
+        { name: 'Traction', state: isTRAC, setState: setIsTRAC, id: 'trac' },
+        { name: 'Airbag', state: isAirbag, setState: setIsAirbag, id: 'airbag' },
+        { name: otherNote ? otherNote : 'Other', state: isOther, setState: setIsOther, id:'other' }
     ];
 
     const handleResults = () => {
         const results = warningOptions.filter((option) => option.state)
-        if (results[0].name === 'Pass') {
-            addToConcerns(1, '✅ No Warning Lights')
+        if (results.length === 0) {
+            sortConcerns('warningLights', 1, '✅ No Warning Lights')
         } else {
-            const someConcernMsg = 
-            `🟡 Warning lights: ${results.map((result) => result.name + ' ').join(', ')} ${isOther ? otherNote : ''} ${techNote ? `Tech notes: ${techNote}` : ''}\n Recommend scan tool diagnostics.`;        
-            addToConcerns(2, someConcernMsg)
+            const msg = 
+            `🟡 ${results.map((result) => result.name).join(', ')} ${abrevNotes(notes)}\n Recommend diagnostics.`;        
+            sortConcerns('warningLights', 2, msg)
         }       
     }
 
-    // Uncheck isPass if anything else is checked
-    useEffect(() => {
-        let hasWarning = false;
-        warningOptions.forEach((option) => {
-            if (option.name !== 'Pass' && option.state === true) {
-               hasWarning = true;
-            }
-        });
-        setIsPass(!hasWarning)
-    }, [isCEL, isABS, isTPMS, isTRAC, isAirbag, isOther])
 
     return (
         <fieldset >
@@ -50,11 +39,11 @@ export const WarningLights = ({ addToConcerns }) => {
             <legend>Warning lights: <em>Check if illuminated</em></legend>
             
           {warningOptions.map((warningOption) => (
-                <div key={warningOption.name}>
-                    <label htmlFor={warningOption.name}>{warningOption.name}</label>
+                <div key={warningOption.id}>
+                    <label htmlFor={warningOption.id}>{warningOption.name}</label>
                     <input 
                         type='checkbox'
-                        id={warningOption.name}
+                        id={warningOption.id}
                         checked={warningOption.state}
                         onChange={(e) => warningOption.setState(e.target.checked)}
                     />
@@ -74,8 +63,8 @@ export const WarningLights = ({ addToConcerns }) => {
             <textarea 
                 name="techInput" 
                 id="techInput"
-                value={techNote}
-                onChange={(e) => setTechNote(e.target.value)}   
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}   
             />
             <button type='button' onClick={handleResults}>test message</button>
 

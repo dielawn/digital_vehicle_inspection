@@ -7,7 +7,7 @@ const partnerToken = import.meta.env.VITE_APP_CAR_MD_PARTNER_TOKEN
 
 import StateSelector from './StateSelect';
 
-export const VehicleInfo = ({ vin, setVin, license, setLicense, state, setState, vehicle, setVehicle, mileage, setMileage }) => {
+export const VehicleInfo = ({ vin, setVin, license, setLicense, state, setState, vehicle, setVehicle, mileage, setMileage, tireSize, setTireSize }) => {
     const [message, setMessage] = useState('')
     const [isVin, setIsVin] = useState(false)
     // if license and state, decode license and state to vehicle

@@ -16,7 +16,7 @@ export const abrevNotes = (string) => {
     }, []).join(', ').replace(/\,(?=[^,]*$)/g, ', ');
 };
 
-export const formatTireSize = () => {
+export const formatTireSize = (tireSize) => {
     const regex = /^(\d{3})(\d{2})(\d{2})$/;
     const match = tireSize.match(regex)
     if (match) {

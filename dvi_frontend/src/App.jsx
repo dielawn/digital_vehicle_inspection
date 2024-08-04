@@ -29,7 +29,8 @@ function App() {
 
   const [isInsp, setIsInsp] = useState(false);
 
- 
+  const [tireSize, setTireSize] = useState('');
+  const [loadRange, setLoadRange] = useState('P');
 
   const startInsp = () => {
     let errorMsgs = []
@@ -81,6 +82,15 @@ function App() {
     console.log(response)
   }, [response])
 
+
+  useEffect(() => {
+    const currentVehicle = {
+        ...vehicle,
+        tireSize,
+    }
+    setVehicle(currentVehicle)
+}, [tireSize])
+
   return (
     <div className='flexCol'>
       <h1>{message}</h1>
@@ -92,10 +102,19 @@ function App() {
           {vehicle.year} {vehicle.make} {vehicle.model} <br />
           Mileage: {mileage} <br />
           Inspecting Technician: {tech} <br />
-          Drive Type: {driveType}</p>
+          Drive Type: {driveType} <br />
+          {vehicle.tireSize? `Tire Size: ${loadRange} ${vehicle.tireSize}` : ''}
+          </p>
         </div>
         
-        <InspectionForm driveType={driveType} setDriveType={setDriveType} />
+        <InspectionForm 
+          driveType={driveType} 
+          setDriveType={setDriveType} 
+          tireSize={tireSize} 
+          setTireSize={setTireSize} 
+          setLoadRange={setLoadRange}
+          loadRange={loadRange}
+        />
       </>
       :
       <>
