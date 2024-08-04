@@ -94,12 +94,20 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
     const reduceNotes = (array) => {
         return array.reduce((acc, item) => {
             if (item.notes !== '' ) {
-                const txt = `${item.name} ${item.notes}`
-                acc.push(txt);
+                if (item.name) {
+                    const txt = `${item.name} ${item.notes}`
+                    acc.push(txt);
+                } else {
+                    acc.push(item.notes)
+                }                
             }
             return acc
         }, []).join(', ').replace(/\,(?=[^,]*$)/g, ', ');
     };
+
+    const abrevNotes = (string) => {
+       return string === '' ? '.' : `, ${string}`
+    }
 
     useEffect(() => {
         const size = formatTireSize()
@@ -135,19 +143,19 @@ export const InspectionForm = ({ driveType, setDriveType }) => {
 
     // Set order of inspection
     const steps = [
-        <WarningLights   addToConcerns={addToConcerns} reduceNotes={reduceNotes}/>,
-        <ExteriorLights  sortConcerns={sortConcerns} reduceNotes={reduceNotes}/>,
-        <UnderHood  sortConcerns={sortConcerns} reduceNotes={reduceNotes}/>,
-        <UnderHoodFluids  sortConcerns={sortConcerns} reduceNotes={reduceNotes}/>,
-        <Tires  sortConcerns={sortConcerns} driveType={driveType} tireSize={tireSize} setTireSize={setTireSize} loadRange={loadRange} setLoadRange={setLoadRange} reduceNotes={reduceNotes}/>,
-        <Suspension  sortConcerns={sortConcerns} reduceNotes={reduceNotes}/>,
-        <Steering  sortConcerns={sortConcerns} reduceNotes={reduceNotes}/>,
-        <BallJoints  sortConcerns={sortConcerns} reduceNotes={reduceNotes}/>,
-        <WheelBearings  sortConcerns={sortConcerns} reduceNotes={reduceNotes}/>,
-        <Brakes  sortConcerns={sortConcerns} reduceNotes={reduceNotes}/>,
-        <Axles  sortConcerns={sortConcerns} driveType={driveType} setDriveType={setDriveType} reduceNotes={reduceNotes}/>,
-        <UnderCarFluids  sortConcerns={sortConcerns} driveType={driveType} reduceNotes={reduceNotes}/>,
-        <Maintenance setMaintenance={setMaintenance} reduceNotes={reduceNotes}/>
+        <WarningLights   addToConcerns={addToConcerns} />,
+        <ExteriorLights  sortConcerns={sortConcerns} />,
+        <UnderHood  sortConcerns={sortConcerns}/>,
+        <UnderHoodFluids  sortConcerns={sortConcerns} />,
+        <Tires  sortConcerns={sortConcerns} driveType={driveType} tireSize={tireSize} setTireSize={setTireSize} loadRange={loadRange} setLoadRange={setLoadRange} />,
+        <Suspension  sortConcerns={sortConcerns} />,
+        <Steering  sortConcerns={sortConcerns} />,
+        <BallJoints  sortConcerns={sortConcerns} />,
+        <WheelBearings  sortConcerns={sortConcerns} />,
+        <Brakes  sortConcerns={sortConcerns} />,
+        <Axles  sortConcerns={sortConcerns} driveType={driveType} setDriveType={setDriveType} />,
+        <UnderCarFluids  sortConcerns={sortConcerns} driveType={driveType} />,
+        <Maintenance setMaintenance={setMaintenance} />
     ];
 
     // Scroll through inspection components

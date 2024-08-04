@@ -62,29 +62,16 @@ export const Tires = ({ sortConcerns, driveType, tireSize, setTireSize, loadRang
 
     const loadRangeOptions = ['P', 'C', 'D', 'E']
 
-    const formatTireSize = () => {
-        const regex = /^(\d{3})(\d{2})(\d{2})$/;
-        const match = tireSize.match(regex)
-        if (match) {
-            return `${match[1]}/${match[2]}/${match[3]}`
-        } else {
-            return tireSize
-        }
-    };
-
     const handleDriveType = () => {
-        console.log(driveType)
         if (driveType === 'AWD') {
             setIsAWD(true)
         } else {
             setIsAWD(false)
         }
-    }
+    };
 
     useEffect(() => {
         handleDriveType()
-        console.log(driveType, isAWD)
-
     }, [driveType])
 
     const handleResults = () => {
@@ -99,7 +86,6 @@ export const Tires = ({ sortConcerns, driveType, tireSize, setTireSize, loadRang
         const twoDigitYear = now.getFullYear() - 2000;        
            
         const getTireAge = (date) => twoDigitYear - (date % 100);
-
 
         // Compare all treads and dates
         const tireInfoValues = tireInfo.reduce((acc, item) => {
@@ -139,8 +125,6 @@ export const Tires = ({ sortConcerns, driveType, tireSize, setTireSize, loadRang
             })
         }   
     };
-
-
 
     return (
         <fieldset >

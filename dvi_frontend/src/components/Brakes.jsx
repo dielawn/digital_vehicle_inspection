@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
+import { reduceNotes, abrevNotes } from '../../utils';
 
-export const Brakes = ({ sortConcerns, reduceNotes }) => {
+export const Brakes = ({ sortConcerns }) => {
 
     const [isDisc, setIsDisc] = useState(true);
 
@@ -93,14 +94,14 @@ export const Brakes = ({ sortConcerns, reduceNotes }) => {
         if (brakes[0].brakes === brakes[1].brakes) {            
             const frontNotes = reduceNotes(frontBrakes);
             const padMsg = `${brakes[0].pad === brakes[1].pad ? `${brakes[0].pad}mm pad/shoe remaining` : `LF ${brakes[0].pad}mm, RF ${brakes[1].pad}mm pad/shoe remaining`}`
-            const frontBrakeMsg = `Front brakes ${padMsg}${frontNotes === '' ? '.' : `, ${frontNotes}`}`
+            const frontBrakeMsg = `Front brakes ${padMsg}${abrevNotes(frontNotes)}`
             const msg = `${statusIcon[brakes[0].brakes]} ${frontBrakeMsg}`
             sortConcerns('brakes', brakes[0].brakes, msg)
             
         } else {
             frontBrakes.forEach(({ name, pad, brakes, notes }) => {
                 if (statusIcon[brakes]) {                
-                    const msg = `${statusIcon[brakes]} ${name} ${pad}mm pad/shoe remaining, ${notes}`
+                    const msg = `${statusIcon[brakes]} ${name} ${pad}mm pad/shoe remaining${abrevNotes(notes)}`
                     sortConcerns('brakes', brakes, msg)
                 }
             })
@@ -109,14 +110,14 @@ export const Brakes = ({ sortConcerns, reduceNotes }) => {
             const rearBrakes = [brakes[2], brakes[3]]
             const rearNotes = reduceNotes(rearBrakes);
             const padMsg = `${brakes[2].pad === brakes[3].pad ? `${brakes[2].pad}mm pad/shoe remaining` : `LR ${brakes[2].pad}mm, RR ${brakes[3].pad}mm pad/shoe remaining`}`
-            const rearBrakeMsg = `Rear brakes  ${padMsg}${rearNotes === '' ? '.' : `, ${rearNotes}`}`
+            const rearBrakeMsg = `Rear brakes  ${padMsg}${abrevNotes(rearNotes)}`
             const msg = `${statusIcon[brakes[2].brakes]} ${rearBrakeMsg}`
             sortConcerns('brakes', brakes[2].brakes, msg)
             
         } else {
             rearBrakes.forEach(({ name, pad, brakes, notes }) => {
                 if (statusIcon[brakes]) {                
-                    const msg = `${statusIcon[brakes]} ${name} ${pad}mm pad/shoe remaining, ${notes === '' ? '.' : `, ${notes}`}`
+                    const msg = `${statusIcon[brakes]} ${name} ${pad}mm pad/shoe remaining, ${abrevNotes(notes)}`
                     sortConcerns('brakes', brakes, msg)
                 }
             })

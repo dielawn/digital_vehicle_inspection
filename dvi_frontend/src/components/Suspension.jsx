@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
+import { reduceNotes, abrevNotes } from '../../utils';
 
-export const Suspension = ({ sortConcerns, reduceNotes }) => {
+export const Suspension = ({ sortConcerns }) => {
 
     const [frontStruts, setFrontStruts] = useState(1);
     const [rearStruts, setRearStruts] = useState(1);
@@ -56,12 +57,12 @@ export const Suspension = ({ sortConcerns, reduceNotes }) => {
         if(suspension.every((item) => item.component === suspension[0].component)) {
 
             const allNotes = reduceNotes(suspension)
-            const msg = `${statusIcon[suspension[0].component]} Shocks Struts &  Sway bar bushings/link${allNotes === '' ? '.' : `, ${allNotes}`}`
+            const msg = `${statusIcon[suspension[0].component]} Shocks Struts &  Sway bar bushings/link${abrevNotes(allNotes)}`
             sortConcerns('suspension', suspension[0].component, msg)
             return
         } else {
             suspension.forEach(({ name, component, notes }) => {
-                const msg = `${statusIcon[component]} ${name}, ${notes}`
+                const msg = `${statusIcon[component]} ${name}${abrevNotes(notes)}`
                 sortConcerns('suspension', component, msg)
                 });
         }        

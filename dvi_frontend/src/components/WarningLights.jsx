@@ -24,7 +24,6 @@ export const WarningLights = ({ addToConcerns }) => {
 
     const handleResults = () => {
         const results = warningOptions.filter((option) => option.state)
-               console.log(results)
         if (results[0].name === 'Pass') {
             addToConcerns(1, '✅ No Warning Lights')
         } else {

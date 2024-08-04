@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { reduceNotes, abrevNotes } from '../../utils';
 
 export const UnderCarFluids = ({ sortConcerns, driveType }) => {
     const [frontDiffFluid, setFrontDiffFluid] = useState(1);
@@ -13,38 +14,62 @@ export const UnderCarFluids = ({ sortConcerns, driveType }) => {
         {
             fluid: frontDiffFluid, 
             setFluid: setFrontDiffFluid, 
-            text: 'Front diff fluid', 
-            note: frontDiffNotes, 
-            setNote: setFrontDiffNotes,
+            name: 'Front diff fluid', 
+            notes: frontDiffNotes, 
+            setNotes: setFrontDiffNotes,
             id: 'fDFluid',
             drive: ['4WD']
         },
         {
             fluid: rearDiffFluid, 
             setFluid: setRearDiffFluid, 
-            text: 'Rear diff fluid', 
-            note: rearDiffNotes, 
-            setNote: setRearDiffNotes,
+            name: 'Rear diff fluid', 
+            notes: rearDiffNotes, 
+            setNotes: setRearDiffNotes,
             id: 'rDFluid',
             drive: ['AWD', '4WD', 'RWD']
         },
         {
             fluid: tCaseFluid, 
             setFluid: setTCaseFluid, 
-            text: 'Transfer case fluid', 
-            note: tCaseNotes, 
-            setNote: setTCaseNotes,
+            name: 'Transfer case fluid', 
+            notes: tCaseNotes, 
+            setNotes: setTCaseNotes,
             id: 'tCaseFluid',
             drive: ['AWD', '4WD']
         },
     ];
 
-    const Fluids = () => {
-        return (
-            fluids.filter(fluid => fluid.drive.includes(driveType))
-                .map(item => (
+    const relevantFluids = fluids.filter(item => item.drive.includes(driveType))
+   
+    const handleResults = () => {
+        const statusIcon = {
+            1: '✅',
+            2: '🟡',
+            3: '❌'
+        };
+        
+        if (relevantFluids.every(item => item.fluid === relevantFluids[0].fluid)) {
+            const allNotes = reduceNotes(relevantFluids)
+            const fluidNames = relevantFluids.map(item => item.name).join(', ')
+            const msg = `${statusIcon[relevantFluids[0].fluid]} ${fluidNames}${abrevNotes(allNotes)}`
+            sortConcerns('underCar', relevantFluids[0].fluid, msg)
+        } else {
+            relevantFluids.forEach(({ fluid, name, notes }) => {
+                if (statusIcon[fluid]) {
+                    const msg = `${statusIcon[fluid]} ${name}${abrevNotes(notes)}}`;
+                    sortConcerns('underCar', fluid, msg);
+                }
+        });
+        }      
+    };
+
+    return (
+        <fieldset>
+            <legend>Under Car Fluids</legend>
+            {relevantFluids && relevantFluids.map(item => (
                     <div key={item.id}>
-                        <h3>{item.text}</h3>
+                        <h3>{item.name}</h3>
                         <label>
                             <input 
                                 type='radio'
@@ -74,36 +99,12 @@ export const UnderCarFluids = ({ sortConcerns, driveType }) => {
                         </label>
                         <label>Notes
                             <textarea 
-                                value={item.note}
-                                onChange={(e) => item.setNote(item.id, e.target.value)}
+                                value={item.notes}
+                                onChange={(e) => item.setNotes(e.target.value)}
                             />
                         </label>
                     </div>
-                ))
-        );
-    };
-    
-    const handleResults = () => {
-        const statusIcon = {
-            1: '✅',
-            2: '🟡',
-            3: '❌'
-        };
-        
-        fluids.filter(item => item.drive.includes(driveType))
-            .forEach(({ fluid, text, note }) => {
-                if (statusIcon[fluid]) {
-                    const msg = `${statusIcon[fluid]} ${text}. ${note}`;
-                    sortConcerns('underCar', fluid, msg);
-                }
-        });
-    };
-
-
-    return (
-        <fieldset>
-            <legend>Under Car Fluids</legend>
-            <Fluids />
+                ))}
             <button type='button' onClick={handleResults}>Test Result</button>
         </fieldset>
     );

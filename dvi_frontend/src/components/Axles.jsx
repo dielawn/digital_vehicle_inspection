@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { reduceNotes, abrevNotes } from '../../utils';
 
 export const Axles = ({ sortConcerns, driveType, setDriveType }) => {
     
@@ -18,7 +19,7 @@ export const Axles = ({ sortConcerns, driveType, setDriveType }) => {
 
     const propShafts = [
         { 
-            text: 'Left front axle', 
+            name: 'Left front axle', 
             id: 'lfAxle', 
             axle: axleLF, 
             setAxle: setAxleLF,
@@ -27,7 +28,7 @@ export const Axles = ({ sortConcerns, driveType, setDriveType }) => {
             drive: ['FWD', '4WD', 'AWD'] 
         },
         { 
-            text: 'Right front axle',
+            name: 'Right front axle',
             id: 'rfAxle', 
             axle: axleRF,
             setAxle: setAxleRF, 
@@ -36,7 +37,7 @@ export const Axles = ({ sortConcerns, driveType, setDriveType }) => {
             drive: ['FWD', '4WD', 'AWD'] 
         },
         { 
-            text: 'Right rear axle',
+            name: 'Right rear axle',
             id: 'rrAxle', 
             axle: axleRR,
             setAxle: setAxleRR, 
@@ -45,7 +46,7 @@ export const Axles = ({ sortConcerns, driveType, setDriveType }) => {
             drive: ['RWD', '4WD', 'AWD'] 
         },
         { 
-            text: 'Left rear axle', 
+            name: 'Left rear axle', 
             id: 'lrAxle', 
             axle: axleLR,
             setAxle: setAxleLR, 
@@ -54,7 +55,7 @@ export const Axles = ({ sortConcerns, driveType, setDriveType }) => {
             drive: ['RWD', '4WD', 'AWD'] 
         },
         {
-            text: 'Front Drive Line', 
+            name: 'Front Drive Line', 
             id: 'frontDLine', 
             axle: frontDLine,
             setAxle: setFrontDLine, 
@@ -63,7 +64,7 @@ export const Axles = ({ sortConcerns, driveType, setDriveType }) => {
             drive: ['4WD'] 
         },
         { 
-            text: 'Rear Drive Line', 
+            name: 'Rear Drive Line', 
             id: 'rearDLine', 
             axle: rearDLine,
             setAxle: setRearDLine, 
@@ -73,21 +74,28 @@ export const Axles = ({ sortConcerns, driveType, setDriveType }) => {
         },
     ];
 
+    const relevantAxles = propShafts.filter(item => item.drive.includes(driveType))
+
     const handleResults = () => {
         const statusIcon = {
             1: '✅',
             2: '🟡',
             3: '❌'
         };
-
-        propShafts.filter(item => item.drive.includes(driveType))
-            .forEach(({ text, axle, notes }) => {
+        
+        if (relevantAxles.every((item) => item.axle === relevantAxles[0].axle)) {
+            const allNotes = reduceNotes(relevantAxles);
+            const msg = `${statusIcon[relevantAxles[0].axle]} Axles & Drive lines${abrevNotes(allNotes)}`
+            sortConcerns('underCar', relevantAxles[0].axle, msg)
+        } else {
+            relevantAxles.forEach(({ name, axle, notes }) => {
                 if (statusIcon[axle]) {
-                    const msg = `${statusIcon[axle]} ${text}, ${notes}`
-                    sortConcerns('axles', axle, msg)
+                    const msg = `${statusIcon[axle]} ${name}${abrevNotes(notes)}`
+                    sortConcerns('underCar', axle, msg)
                 }
             })
-    }
+        }        
+    };
 
     return (
         <fieldset>
@@ -95,19 +103,19 @@ export const Axles = ({ sortConcerns, driveType, setDriveType }) => {
             {!driveType && (
                 <>
                     <label>                        
-                        <input type='radio' text='driveType' value='fwd' checked={driveType === 'fwd'} onChange={() => setDriveType('fwd')} />
+                        <input type='radio' name='driveType' value='fwd' checked={driveType === 'fwd'} onChange={() => setDriveType('fwd')} />
                         Front wheel drive (FWD)
                     </label>
                     <label>                        
-                        <input type='radio' text='driveType' value='rwd' checked={driveType === 'rwd'} onChange={() => setDriveType('rwd')} />
+                        <input type='radio' name='driveType' value='rwd' checked={driveType === 'rwd'} onChange={() => setDriveType('rwd')} />
                         Rear wheel drive (RWD)
                     </label>
                     <label>                        
-                        <input type='radio' text='driveType' value='awd' checked={driveType === 'awd'} onChange={() => setDriveType('awd')} />
+                        <input type='radio' name='driveType' value='awd' checked={driveType === 'awd'} onChange={() => setDriveType('awd')} />
                         All wheel drive (AWD)
                     </label>
                     <label>
-                        <input type='radio' text='driveType' value='4wd' checked={driveType === '4wd'} onChange={() => setDriveType('4wd')} />
+                        <input type='radio' name='driveType' value='4wd' checked={driveType === '4wd'} onChange={() => setDriveType('4wd')} />
                         Four wheel drive (4x4)                       
                     </label>
                 </>
@@ -116,13 +124,13 @@ export const Axles = ({ sortConcerns, driveType, setDriveType }) => {
             {driveType && (
                 <>
                     <h3>{driveType.toUpperCase()}</h3>
-                    {propShafts.map(item => (
+                    {relevantAxles.map(item => (
                         <div key={item.id}>
-                            <h4>{item.text}</h4>
+                            <h4>{item.name}</h4>
                             <label>                               
                                 <input
                                     type='radio'
-                                    text={`${item.id}AxleConcern`}
+                                    name={`${item.id}AxleConcern`}
                                     value={1}
                                     checked={item.axle === 1}
                                     onChange={() => item.setAxle(1)}
@@ -132,7 +140,7 @@ export const Axles = ({ sortConcerns, driveType, setDriveType }) => {
                             <label>                               
                                 <input
                                     type='radio'
-                                    text={`${item.id}AxleConcern`}
+                                    name={`${item.id}AxleConcern`}
                                     value={2}
                                     checked={item.axle === 2}
                                     onChange={() => item.setAxle(2)}
@@ -142,7 +150,7 @@ export const Axles = ({ sortConcerns, driveType, setDriveType }) => {
                             <label>                               
                                 <input
                                     type='radio'
-                                    text={`${item.id}AxleConcern`}
+                                    name={`${item.id}AxleConcern`}
                                     value={3}
                                     checked={item.axle === 3}
                                     onChange={() => item.setAxle(3)}
