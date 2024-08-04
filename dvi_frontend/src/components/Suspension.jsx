@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export const Suspension = ({ sortConcerns }) => {
+export const Suspension = ({ sortConcerns, reduceNotes }) => {
 
     const [frontStruts, setFrontStruts] = useState(1);
     const [rearStruts, setRearStruts] = useState(1);
@@ -54,13 +54,9 @@ export const Suspension = ({ sortConcerns }) => {
             3: '❌'
         };
         if(suspension.every((item) => item.component === suspension[0].component)) {
-            const allNotes = suspension.reduce((acc, item) => {
-                if (item.notes !== '') {
-                    acc.push(item.notes);
-                }
-                return acc
-            }, []).join(', ').replace(/\,(?=[^,]*$)/g, ', ');
-            const msg = `${statusIcon[suspension[0].component]} Shocks Struts &  Sway bar bushings/link, ${allNotes === '' ? 'No notes' : `${allNotes}`}`
+
+            const allNotes = reduceNotes(suspension)
+            const msg = `${statusIcon[suspension[0].component]} Shocks Struts &  Sway bar bushings/link${allNotes === '' ? '.' : `, ${allNotes}`}`
             sortConcerns('suspension', suspension[0].component, msg)
             return
         } else {

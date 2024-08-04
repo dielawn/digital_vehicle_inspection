@@ -80,7 +80,7 @@ const RackSteering = React.memo(({ rackSteering, handleFocus }) => {
     );
 });
 
-const DragLinkSteering = React.memo(({ relaySteering, handleFocus }) => {
+const DragLinkSteering = React.memo(({ relaySteering, handleFocus, reduceNotes }) => {
     return (
         relaySteering.map((item) => (
             <div key={item.id}>
@@ -124,7 +124,7 @@ const DragLinkSteering = React.memo(({ relaySteering, handleFocus }) => {
     );
 });
 
-export const Steering = ({ sortConcerns }) => {
+export const Steering = ({ sortConcerns, reduceNotes }) => {
     const focusedElement = useRef(null);
 
     const handleFocus = (e) => {
@@ -251,14 +251,16 @@ export const Steering = ({ sortConcerns }) => {
             if (rackSteering.every((item) => item.inner === rackSteering[0].inner) && rackSteering.every((item) => item.outer === rackSteering[0].outer)) {
                 const allNotes = rackSteering.reduce((acc, item) => {
                     if (item.notesIn !== '') {
-                        acc.push(item.notesIn)
+                        const txt = `${item.name} ${item.notesIn}`
+                        acc.push(txt)
                     }
                     if (item.notesOut !== '') {
-                        acc.push(item.notesOut)
+                        const txt = `${item.name} ${item.notesOut}`
+                        acc.push(txt)
                     }
                     return acc
                 }, []).join(', ').replace(/\,(?=[^,]*$)/g, ', ');
-                const msg = `${statusIcon[rackSteering[0].inner]} Steering components, ${allNotes}`
+                const msg = `${statusIcon[rackSteering[0].inner]} Steering components${allNotes === '' ? '. ' : `, ${allNotes}`}`
                 sortConcerns('steering', rackSteering[0].inner, msg)
                 return
             } else {
@@ -272,13 +274,8 @@ export const Steering = ({ sortConcerns }) => {
             
         } else {
             if (relaySteering.every((item) => item.component === relaySteering[0].component)) {
-                const allNotes = relaySteering.reduce((acc, item) => {
-                    if (item.notes !== '') {
-                        acc.push(item.notes)
-                    }
-                    return acc
-                }, []).join(', ').replace(/\,(?=[^,]*$)/g, ', ');
-                const msg = `${statusIcon[relaySteering[0].component]} Steering components, ${allNotes}`
+                const allNotes = reduceNotes(relaySteering)
+                const msg = `${statusIcon[relaySteering[0].component]} Steering components${allNotes === '' ? '. ' : `, ${allNotes}`}`
                 sortConcerns('steering', relaySteering[0].component, msg)
                 return
             } else {
@@ -322,7 +319,7 @@ export const Steering = ({ sortConcerns }) => {
                 <input type='radio' name='isLeakingRadio' value={false} checked={!isLeak} onChange={() => setIsLeak(false)} />
                 True
             </label>
-            {isRack ? <RackSteering rackSteering={rackSteering} handleFocus={handleFocus} /> : <DragLinkSteering relaySteering={relaySteering} handleFocus={handleFocus} />}
+            {isRack ? <RackSteering rackSteering={rackSteering} handleFocus={handleFocus} /> : <DragLinkSteering relaySteering={relaySteering} handleFocus={handleFocus} reduceNotes={reduceNotes}/>}
             <button type='button' onClick={handleResults}>Test Result</button>
         </fieldset>
     );

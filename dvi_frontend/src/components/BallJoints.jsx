@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export const BallJoints = ({ sortConcerns }) => {
+export const BallJoints = ({ sortConcerns, reduceNotes }) => {
 
     const [upperBallJointLF, setUpperBallJointLF] = useState(1);
     const [upperBallJointRF, setUpperBallJointRF] = useState(1);
@@ -55,13 +55,8 @@ export const BallJoints = ({ sortConcerns }) => {
             3: '❌'
         };
         if (ballJoints.every((item) => item.ballJoint === ballJoints[0].ballJoint)) {
-            const allNotes = ballJoints.reduce((acc, item) => {
-                if (item.notes !== '') {
-                    acc.push(item.notes);
-                }
-                return acc
-            }, []).join(', ').replace(/\,(?=[^,]*$)/g, ', ');
-            const msg = `${statusIcon[ballJoints[0].ballJoint]} All Ball Joints. ${allNotes}`
+            const allNotes = reduceNotes(ballJoints)
+            const msg = `${statusIcon[ballJoints[0].ballJoint]} All Ball Joints${allNotes === '' ? '. ' : `, ${allNotes}`}`
             sortConcerns('ballJoints', ballJoints[0].ballJoint, msg)
             return
         } else {

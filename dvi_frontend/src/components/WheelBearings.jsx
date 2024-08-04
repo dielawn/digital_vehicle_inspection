@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export const WheelBearings = ({ sortConcerns }) => {
+export const WheelBearings = ({ sortConcerns, reduceNotes }) => {
     // Play in wheel bearing?
     const [wheelBearingLF, setWheelBearingLF] = useState(1);
     const [wheelBearingRF, setWheelBearingRF] = useState(1);
@@ -55,10 +55,17 @@ export const WheelBearings = ({ sortConcerns }) => {
             2: '🟡',
             3: '❌'
         };
-        wheelBearings.forEach(({ name, bearing, notes}) => {
-            const msg = `${statusIcon[bearing]} ${name} ${notes}`
-            sortConcerns('wheelBearings', bearing, msg)
-        });
+        if (wheelBearings.every((item) => item.bearing === wheelBearings[0].bearing)){
+            const allNotes = reduceNotes(wheelBearings);
+            const msg = `${statusIcon[wheelBearings[0].bearing]} All Wheel Bearings${allNotes === '' ? '. ' : `, ${allNotes}`}`
+            sortConcerns('wheelBearings', wheelBearings[0].bearing, msg)
+            return
+        } else {
+            wheelBearings.forEach(({ name, bearing, notes}) => {
+                const msg = `${statusIcon[bearing]} ${name} ${notes}`
+                sortConcerns('wheelBearings', bearing, msg)
+            });
+        }
     };
 
     return (

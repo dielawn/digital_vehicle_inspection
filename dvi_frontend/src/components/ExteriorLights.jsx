@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export const ExteriorLights = ({ sortConcerns }) => {
+export const ExteriorLights = ({ sortConcerns, reduceNotes }) => {
 
     const [headlight, setHeadlight] = useState(1);
     const [taillight, setTaillight] = useState(1);
@@ -66,13 +66,8 @@ export const ExteriorLights = ({ sortConcerns }) => {
         };
 
         if (lightOptions.every((light) => light.light === 1)) {
-            const allNotes = lightOptions.reduce((acc, light) => {
-                if (light.notes !== '') {
-                  acc.push(light.notes);
-                }
-                return acc;
-              }, []).join(', ').replace(/\,(?=[^,]*$)/g, ', ');
-            const msg = `${statusIcon[1]} All Exterior lights, ${allNotes}`
+            const allNotes = reduceNotes(lightOptions)
+            const msg = `${statusIcon[1]} All Exterior lights${allNotes === '' ? '. ' : `, ${allNotes}`}`
             sortConcerns('exteriorLights', 1, msg)
         } else {
             lightOptions.forEach(({ name, light, notes }) => {

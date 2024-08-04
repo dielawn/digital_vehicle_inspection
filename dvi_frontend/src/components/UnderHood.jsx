@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export const UnderHood = ({ sortConcerns }) => {
+export const UnderHood = ({ sortConcerns, reduceNotes }) => {
     const [airfilterNotes, setAirfilterNotes] = useState('');
     const [batteryNotes, setBatteryNotes] = useState('');
     const [beltsNotes, setBeltsNotes] = useState('');
@@ -62,8 +62,8 @@ export const UnderHood = ({ sortConcerns }) => {
             2: '🟡',
             3: '❌'
         };
+        
         underHoodInspItems.forEach(({ name, level, notes, id }) => {
-            console.log(id !== 'other')
             if (id !== 'other') {
                 const msg = `${statusIcon[level]} ${name} ${notes}`
                 sortConcerns('underHood', level, msg)

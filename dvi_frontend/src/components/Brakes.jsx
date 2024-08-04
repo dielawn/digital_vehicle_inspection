@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export const Brakes = ({ sortConcerns }) => {
+export const Brakes = ({ sortConcerns, reduceNotes }) => {
 
     const [isDisc, setIsDisc] = useState(true);
 
@@ -27,7 +27,7 @@ export const Brakes = ({ sortConcerns }) => {
   
     const brakes = [
         {
-            name: 'Left front brakes',
+            name: 'Left front',
             pad: padLF,
             setPad: setPadLF,
             brakes: brakesLF,
@@ -37,7 +37,7 @@ export const Brakes = ({ sortConcerns }) => {
             id: 'lfBrakes'
         },
         {
-            name: 'Right front brakes',
+            name: 'Right front',
             pad: padRF,
             setPad: setPadRF,
             brakes: brakesRF,
@@ -47,7 +47,7 @@ export const Brakes = ({ sortConcerns }) => {
             id: 'rfBrakes'
         },
         {
-            name: 'Right rear brakes',
+            name: 'Right rear',
             pad: padRR,
             setPad: setPadRR,
             brakes: brakesRR,
@@ -57,7 +57,7 @@ export const Brakes = ({ sortConcerns }) => {
             id: 'rrBrakes'
         },
         {
-            name: 'Left rear brakes',
+            name: 'Left rear',
             pad: padLR,
             setPad: setPadLR,
             brakes: brakesLR,
@@ -68,20 +68,60 @@ export const Brakes = ({ sortConcerns }) => {
         },
     ];
 
+    // useEffect(() => {
+    //     if ((Math.abs(padLF, padRF) <= 2) || padLF < 2 || padRF < 2) {
+    //         setBrakesLF(3)
+    //         setBrakesRF(3)
+    //     }
+    // }, [padLF, padRF])
+
+    // useEffect(() => {
+    //     if ((Math.abs(padLR, padRR) <= 2 ) || padLR < 2 || padRR < 2) {
+    //         setBrakesLR(3)
+    //         setBrakesRR(3)
+    //     }
+    // }, [padRR, padLR])
+
     const handleResults = () => {
         const statusIcon = {
             1: '✅',
             2: '🟡',
             3: '❌'
         };
-
-        brakes.forEach(({ name, pad, brakes, notes }) => {
-            if (statusIcon[brakes]) {                
-                const msg = `${statusIcon[brakes]} ${name} ${pad}mm pad/shoe remaining, ${notes}`
-                sortConcerns('brakes', brakes, msg)
-            }
-        })
-    }
+        const frontBrakes = [brakes[0], brakes[1]]
+        const rearBrakes = [brakes[2], brakes[3]]
+        if (brakes[0].brakes === brakes[1].brakes) {            
+            const frontNotes = reduceNotes(frontBrakes);
+            const padMsg = `${brakes[0].pad === brakes[1].pad ? `${brakes[0].pad}mm pad/shoe remaining` : `LF ${brakes[0].pad}mm, RF ${brakes[1].pad}mm pad/shoe remaining`}`
+            const frontBrakeMsg = `Front brakes ${padMsg}${frontNotes === '' ? '.' : `, ${frontNotes}`}`
+            const msg = `${statusIcon[brakes[0].brakes]} ${frontBrakeMsg}`
+            sortConcerns('brakes', brakes[0].brakes, msg)
+            
+        } else {
+            frontBrakes.forEach(({ name, pad, brakes, notes }) => {
+                if (statusIcon[brakes]) {                
+                    const msg = `${statusIcon[brakes]} ${name} ${pad}mm pad/shoe remaining, ${notes}`
+                    sortConcerns('brakes', brakes, msg)
+                }
+            })
+        }
+        if (brakes[2].brakes === brakes[3].brakes) {
+            const rearBrakes = [brakes[2], brakes[3]]
+            const rearNotes = reduceNotes(rearBrakes);
+            const padMsg = `${brakes[2].pad === brakes[3].pad ? `${brakes[2].pad}mm pad/shoe remaining` : `LR ${brakes[2].pad}mm, RR ${brakes[3].pad}mm pad/shoe remaining`}`
+            const rearBrakeMsg = `Rear brakes  ${padMsg}${rearNotes === '' ? '.' : `, ${rearNotes}`}`
+            const msg = `${statusIcon[brakes[2].brakes]} ${rearBrakeMsg}`
+            sortConcerns('brakes', brakes[2].brakes, msg)
+            
+        } else {
+            rearBrakes.forEach(({ name, pad, brakes, notes }) => {
+                if (statusIcon[brakes]) {                
+                    const msg = `${statusIcon[brakes]} ${name} ${pad}mm pad/shoe remaining, ${notes === '' ? '.' : `, ${notes}`}`
+                    sortConcerns('brakes', brakes, msg)
+                }
+            })
+        }        
+    };
 
     return (
         <fieldset>
@@ -140,4 +180,4 @@ export const Brakes = ({ sortConcerns }) => {
             <button type='button' onClick={handleResults}>Test Result</button>
         </fieldset>
     )
-}
+};
