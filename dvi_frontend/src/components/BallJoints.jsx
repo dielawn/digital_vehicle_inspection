@@ -7,42 +7,42 @@ export const BallJoints = ({ sortConcerns }) => {
     const [lowerBallJointLF, setLowerBallJointLF] = useState(1);
     const [lowerBallJointRF, setLowerBallJointRF] = useState(1);
     
-    const [noteUpLF, setNoteUpLF] = useState('');
-    const [noteUpRF, setNoteUpRF] = useState('');
-    const [noteLwrLF, setNoteLwrLF] = useState('');
-    const [noteLwrRF, setNoteLwrRF] = useState('');
+    const [notesUpLF, setNotesUpLF] = useState('');
+    const [notesUpRF, setNotesUpRF] = useState('');
+    const [notesLwrLF, setNotesLwrLF] = useState('');
+    const [notesLwrRF, setNotesLwrRF] = useState('');
 
     const ballJoints = [
         {
             name: 'Left front upper Ball Joint',
             ballJoint: upperBallJointLF,
             setBallJoint: setUpperBallJointLF,
-            note: noteUpLF,
-            setNote: setNoteUpLF,
+            notes: notesUpLF,
+            setNotes: setNotesUpLF,
             id: 'upBJLF'
         },
         {
             name: 'Left front lower Ball Joint',
             ballJoint: lowerBallJointLF,
             setBallJoint: setLowerBallJointLF,
-            note: noteLwrLF,
-            setNote: setNoteLwrLF,
+            notes: notesLwrLF,
+            setNotes: setNotesLwrLF,
             id: 'lwrBJLF'
         },
         {
             name: 'Right front upper Ball Joint',
             ballJoint: upperBallJointRF,
             setBallJoint: setUpperBallJointRF,
-            note: noteUpRF,
-            setNote: setNoteUpRF,
+            notes: notesUpRF,
+            setNotes: setNotesUpRF,
             id: 'upBJRF'
         },        
         {
             name: 'Right front lower Ball Joint',
             ballJoint: lowerBallJointRF,
             setBallJoint: setLowerBallJointRF,
-            note: noteLwrRF,
-            setNote: setNoteLwrRF,
+            notes: notesLwrRF,
+            setNotes: setNotesLwrRF,
             id: 'lwerBJRF'
         },
 
@@ -54,13 +54,24 @@ export const BallJoints = ({ sortConcerns }) => {
             2: '🟡',
             3: '❌'
         };
-
-        ballJoints.forEach(({ ballJoint, name, note }) => {
-            if (statusIcon[ballJoint]) {
-                const msg = `${statusIcon[ballJoint]} ${name} ${note}`
-                sortConcerns('ballJoints', ballJoint, msg)
-            }
-        })
+        if (ballJoints.every((item) => item.ballJoint === ballJoints[0].ballJoint)) {
+            const allNotes = ballJoints.reduce((acc, item) => {
+                if (item.notes !== '') {
+                    acc.push(item.notes);
+                }
+                return acc
+            }, []).join(', ').replace(/\,(?=[^,]*$)/g, ', ');
+            const msg = `${statusIcon[ballJoints[0].ballJoint]} All Ball Joints. ${allNotes}`
+            sortConcerns('ballJoints', ballJoints[0].ballJoint, msg)
+            return
+        } else {
+            ballJoints.forEach(({ ballJoint, name, notes }) => {
+                if (statusIcon[ballJoint]) {
+                    const msg = `${statusIcon[ballJoint]} ${name} ${notes}`
+                    sortConcerns('ballJoints', ballJoint, msg)
+                }
+            });
+        }
     };
     
 
@@ -98,10 +109,10 @@ export const BallJoints = ({ sortConcerns }) => {
                         ❌
                     </label>
                     
-                    <label>Note: 
+                    <label>Notes: 
                         <textarea 
-                            value={item.note} 
-                            onChange={(e) => item.setNote(e.target.value)}
+                            value={item.notes} 
+                            onChange={(e) => item.setNotes(e.target.value)}
                         />                        
                     </label>
                         
