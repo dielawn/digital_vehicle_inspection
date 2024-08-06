@@ -118,7 +118,6 @@ function App() {
       </>
       :
       <>
-        
           <OwnerInfo 
             owner={owner}
             setOwner={setOwner}
