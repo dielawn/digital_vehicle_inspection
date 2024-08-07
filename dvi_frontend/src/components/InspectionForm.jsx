@@ -18,7 +18,7 @@ import { UnderCarFluids } from './UnderCarFluids';
 import { Maintenance } from './Maintenance';
 import { Snap } from './SnapFrame';
 
-import { formatTireSize } from '../../utils';
+import { abrevNotes, formatTireSize } from '../../utils';
 
 export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize , loadRange, setLoadRange }) => {
 
@@ -46,6 +46,7 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
     const [underCar, setUnderCar] = useState({ 1: [], 2: [], 3: [], });
 
     const [formattedTireSize, setFormattedTireSize] = useState('');
+    const [serviceNotes, setServiceNotes] = useState([]);
 
     const sections = [ 
         warningLights,
@@ -116,9 +117,59 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
         });
     };
 
+    const adviserNotes = () => {
+        let tireNotes = '';
+        let brakeNotes = '';
+
+                
+        if (tires.length > 0) {
+            tireNotes = tires.flatMap(level => {
+                return level.map(section => {
+                    console.log('Tire section:', section);
+                    return section[1];
+                });
+            }).join(', ');
+        }
+    
+        if (brakes.length > 0) {
+            brakeNotes = brakes.flatMap(level => {
+                return level.map(section => {
+                    console.log('Brake section:', section);
+                    return section[1];
+                });
+            }).join(', ');
+        }
+    
+
+        const leve2Notes = sections.flatMap(section => section[2]).filter(note => note !== '').join(', ');
+        const leve3Notes = sections.flatMap(section => section[3]).filter(note => note !== '').join(', ');
+
+        console.log('tireNotes', tireNotes);
+        console.log('brakeNotes', brakeNotes);
+
+        const notesArray = [
+            tireSize,
+            tireNotes,
+            brakeNotes,
+            leve2Notes,
+            leve3Notes
+        ].filter(note => note !== '').join(', ')
+    };
+
+    const addToServiceNotes = (names, notes, detail) => {
+        console.log(names, notes, detail)
+        const note = `${names} ${detail ? `${detail}` : ''} ${abrevNotes(notes)}`
+        console.log(note)
+        setServiceNotes(...serviceNotes, note)
+    }
+
+    useEffect(() => {
+        console.log(serviceNotes)
+    }, [serviceNotes])
+
     // Set order of inspection
     const steps = [
-        <WarningLights   sortConcerns={sortConcerns}  />,
+        <WarningLights   sortConcerns={sortConcerns} addToServiceNotes={addToServiceNotes}  />,
         <ExteriorLights  sortConcerns={sortConcerns} />,
         <UnderHood  sortConcerns={sortConcerns}/>,
         <UnderHoodFluids  sortConcerns={sortConcerns} />,
@@ -139,7 +190,7 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
 
     return (
         <div>
-            
+            <button type='button' onClick={addToServiceNotes}>Check advisor notes</button>
            <div className='inspectionDiv'>
                 <button type='button' onClick={scrollBack} disabled={currentStep === 0}><FontAwesomeIcon icon={faChevronLeft} /></button>
                 <button type='button' onClick={scrollNext} disabled={currentStep === steps.length - 1}><FontAwesomeIcon icon={faChevronRight} /></button>
@@ -149,7 +200,7 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
                
            </div>
             <div className="resultsDiv">
-                <ul className='inspResultsList'>
+                <ul key='testKey' className='inspResultsList'>
                     <h3 className='col1'>Good</h3>
                     <h3 className='col2'>Needs Attention</h3>
                     <h3 className='col3'>Needs Immediate Attention</h3>

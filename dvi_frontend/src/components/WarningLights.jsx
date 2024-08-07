@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { abrevNotes, reduceNotes } from '../../utils';
 
-export const WarningLights = ({ sortConcerns }) => {
+export const WarningLights = ({ sortConcerns, addToServiceNotes }) => {
     const [isCEL, setIsCEL] = useState(false);
     const [isABS, setIsABS] = useState(false);
     const [isTPMS, setIsTPMS] = useState(false);
@@ -26,11 +26,16 @@ export const WarningLights = ({ sortConcerns }) => {
         if (results.length === 0) {
             sortConcerns('warningLights', 1, '✅ No Warning Lights')
         } else {
+            const allNames = results.map((result) => result.name).join(', ')
             const msg = 
-            `🟡 ${results.map((result) => result.name).join(', ')} ${abrevNotes(notes)}\n Recommend diagnostics.`;        
+            `🟡 ${allNames} ${abrevNotes(notes)}\n `;        
             sortConcerns('warningLights', 2, msg)
-        }       
-    }
+           
+            addToServiceNotes(allNames, abrevNotes(notes), null)
+        }    
+    };
+
+ 
 
 
     return (
