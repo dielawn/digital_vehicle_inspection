@@ -25,7 +25,7 @@ export const Tires = ({ sortConcerns, driveType, setTireSize, loadRange, setLoad
 
     const tireInfo = [
       {
-            name: 'Left front',
+            name: 'Left front tire',
             date: lFDate,
             setDate: setLFDate,
             tread: lFTread,
@@ -34,7 +34,7 @@ export const Tires = ({ sortConcerns, driveType, setTireSize, loadRange, setLoad
             setIsUneven: setIsUnevenLF
         },
         {
-            name: 'Right front',
+            name: 'Right front tire',
             date: rFDate,
             setDate: setRFDate,
             tread: rFTread,
@@ -43,7 +43,7 @@ export const Tires = ({ sortConcerns, driveType, setTireSize, loadRange, setLoad
             setIsUneven: setIsUnevenRF
         },
         {
-            name: 'Right rear',
+            name: 'Right rear tire',
             date: rRDate,
             setDate: setRRDate,
             tread: rRTread,
@@ -52,7 +52,7 @@ export const Tires = ({ sortConcerns, driveType, setTireSize, loadRange, setLoad
             setIsUneven: setIsUnevenRR
         },
         {
-            name: 'Left rear',
+            name: 'Left rear tire',
             date: lRDate,
             setDate: setLRDate,
             tread: lRTread,
