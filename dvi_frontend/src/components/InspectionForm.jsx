@@ -45,7 +45,9 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
     const [axles, setAxles] = useState({ 1: [], 2: [], 3: [], });
     const [underCar, setUnderCar] = useState({ 1: [], 2: [], 3: [], });
 
+    const [rawTireSize, setRawTireSize] = useState('');
     const [formattedTireSize, setFormattedTireSize] = useState('');
+
     const [serviceNotes, setServiceNotes] = useState({
         warningLights: '',
         exteriorLights: '',
@@ -91,6 +93,11 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
             }));
         }
     };
+
+    useEffect(() => {
+        const formattedSize = formatTireSize(rawTireSize)
+        setTireSize(formattedSize)
+    }, [rawTireSize])
 
     useEffect(() => {
         const size = formatTireSize(tireSize)
@@ -146,15 +153,20 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
         setServiceNotes(notesArray)
     };
 
-    const copyAdvisorNotes = async () => {
+    const copyToClipboard = async (content) => {
         try {
-            const advisorNote = serviceNotes.join(' ')
-            await navigator.clipboard.writeText(advisorNote)
+            if (Array.isArray(content)) {
+                const joinedNotes = content.join(' ');
+                await navigator.clipboard.writeText(joinedNotes);
+            } else if (typeof content === 'string') {
+                await navigator.clipboard.writeText(content);
+            } else {
+                alert(`Incorrect data type: ${typeof content}. `);
+            }
         } catch (err) {
-            alert('Failed to copy text: ', err)
+            alert(`Failed to copy content: ${err.message}`)
         }
     };
-
 
     // Set order of inspection
     const steps = [
@@ -162,7 +174,7 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
         <ExteriorLights  sortConcerns={sortConcerns} />,
         <UnderHood  sortConcerns={sortConcerns}/>,
         <UnderHoodFluids  sortConcerns={sortConcerns} />,
-        <Tires  sortConcerns={sortConcerns} driveType={driveType} tireSize={tireSize} setTireSize={setTireSize} loadRange={loadRange} setLoadRange={setLoadRange} />,
+        <Tires  sortConcerns={sortConcerns} driveType={driveType} rawTireSize={rawTireSize} setRawTireSize={setRawTireSize} loadRange={loadRange} setLoadRange={setLoadRange} />,
         <Suspension  sortConcerns={sortConcerns} />,
         <Steering  sortConcerns={sortConcerns} />,
         <BallJoints  sortConcerns={sortConcerns} />,
@@ -206,7 +218,9 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
                 </ul>
             </div>
                 <button type='button' onClick={handleConcerns}>Test</button>
-                <button type='button' onClick={copyAdvisorNotes}>Copy advisor notes</button>
+                <button type='button' onClick={() => copyToClipboard(serviceNotes)}>Copy advisor notes</button>
+                <button type='button' onClick={() => copyToClipboard(rawTireSize)}>Copy raw tire size</button>
+                <button type='button' onClick={() => copyToClipboard(tireSize)}>Copy formatted tire size</button>
         </div>
     )
 }

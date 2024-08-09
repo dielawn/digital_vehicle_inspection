@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { abrevNotes, formatTireSize } from '../../utils';
+import { abrevNotes } from '../../utils';
 
-export const Tires = ({ sortConcerns, driveType, setTireSize, loadRange, setLoadRange }) => {
+export const Tires = ({ sortConcerns, driveType, rawTireSize, setRawTireSize, loadRange, setLoadRange }) => {
     
-    const [rawTireSize, setRawTireSize] = useState('');
+    
     const [tireNotes, setTireNotes] = useState('');
     const [isAWD, setIsAWD] = useState(false);
     // LF
@@ -62,10 +62,7 @@ export const Tires = ({ sortConcerns, driveType, setTireSize, loadRange, setLoad
         },
     ];
 
-    useEffect(() => {
-        const formattedSize = formatTireSize(rawTireSize)
-        setTireSize(formattedSize)
-    }, [rawTireSize])
+
 
     const loadRangeOptions = ['P', 'C', 'D', 'E']
 
