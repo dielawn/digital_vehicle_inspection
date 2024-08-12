@@ -48,6 +48,8 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
     const [rawTireSize, setRawTireSize] = useState('');
     const [formattedTireSize, setFormattedTireSize] = useState('');
 
+    const [isSuccess, setIsSuccess] = useState(false);
+
     const [serviceNotes, setServiceNotes] = useState({
         warningLights: '',
         exteriorLights: '',
@@ -158,8 +160,12 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
             if (Array.isArray(content)) {
                 const joinedNotes = content.join(' ');
                 await navigator.clipboard.writeText(joinedNotes);
+                handleIsSuccess();
             } else if (typeof content === 'string') {
                 await navigator.clipboard.writeText(content);
+                handleIsSuccess();
+            } else if (typeof content === 'object') {
+                alert('Failed to copy no or invalid data')
             } else {
                 alert(`Incorrect data type: ${typeof content}. `);
             }
@@ -167,6 +173,14 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
             alert(`Failed to copy content: ${err.message}`)
         }
     };
+
+    const handleIsSuccess = () => {
+        setIsSuccess(true)
+        setTimeout(() => {
+            setIsSuccess(false)
+        }, 3000)
+        
+    }
 
     // Set order of inspection
     const steps = [
@@ -217,6 +231,7 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
                 ))}
                 </ul>
             </div>
+            {isSuccess && <p>Copied to clipboard!</p>}
                 <button type='button' onClick={handleConcerns}>Test</button>
                 <button type='button' onClick={() => copyToClipboard(serviceNotes)}>Copy advisor notes</button>
                 <button type='button' onClick={() => copyToClipboard(rawTireSize)}>Copy raw tire size</button>
