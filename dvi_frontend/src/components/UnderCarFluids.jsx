@@ -40,7 +40,9 @@ export const UnderCarFluids = ({ sortConcerns, driveType }) => {
         },
     ];
 
-    const relevantFluids = fluids.filter(item => item.drive.includes(driveType))
+    const relevantFluids = useMemo(() => {
+        return fluids.filter(item => item.drive.includes(driveType))
+    }, [])
    
     const handleResults = () => {
         const statusIcon = {
@@ -63,6 +65,10 @@ export const UnderCarFluids = ({ sortConcerns, driveType }) => {
         });
         }      
     };
+
+    useEffect(() => {
+        handleResults()
+    }, []);
 
     return (
         <fieldset>

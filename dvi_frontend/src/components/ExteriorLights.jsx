@@ -76,6 +76,10 @@ export const ExteriorLights = ({ sortConcerns }) => {
            })
         }
     };
+
+    useEffect(() => {
+        handleResults()
+    }, [headlight, taillight]);
    
     return (
         <fieldset>

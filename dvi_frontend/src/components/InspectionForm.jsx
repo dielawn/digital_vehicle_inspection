@@ -33,9 +33,7 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
 
     const [warningLights, setWarningLights] = useState({ 1: [], 2: [], 3: [], });
     const [exteriorLights, setExteriorLights] = useState({ 1: [], 2: [], 3: [], });
-
     const [underHood, setUnderHood] = useState({ 1: [], 2: [], 3: [], }); 
-
     const [tires, setTires] = useState({ 1: [], 2: [], 3: [], });
     const [suspension, setSuspension] = useState({ 1: [], 2: [], 3: [], });
     const [steering, setSteering] = useState({ 1: [], 2: [], 3: [], });
@@ -50,13 +48,7 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
 
     const [isSuccess, setIsSuccess] = useState(false);
 
-    const [serviceNotes, setServiceNotes] = useState({
-        warningLights: '',
-        exteriorLights: '',
-
-        tires: '',
-
-    });
+    const [serviceNotes, setServiceNotes] = useState([]);
 
     const sections = [ 
         warningLights,
@@ -89,10 +81,13 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
     const sortConcerns = (section, level, note) => {
         const setState = sectionStateSetters[section];
         if (setState) {
-            setState(prevData => ({
-                ...prevData,
-                [level]: [...prevData[level], note]
-            }));
+            setState(prevData => {
+                const uniqueNotes = new Set([...prevData[level], note]);
+                return {
+                    ...prevData,
+                    [level]: [...uniqueNotes]  // Convert the Set back to an array
+                };
+            });
         }
     };
 
@@ -107,20 +102,26 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
     }, [tireSize])
 
     const addToConcerns = (level, note) => {
+        let uniqueNotes;
         switch (level) {
             case 1:
-                setLowConcern(prevLowConcern => [...prevLowConcern, note]);
+                uniqueNotes = new Set([...lowConcern, note]);
+                setLowConcern([...uniqueNotes]);
                 break;
             case 2:
-                setSomeConcern(prevSomeConcern => [...prevSomeConcern, note]);
+                uniqueNotes = new Set([...someConcern, note]);
+                setSomeConcern([...uniqueNotes]);
                 break;
             case 3:
-                setSafetyConcern(prevSafetyConcern => [...prevSafetyConcern, note]);
+                uniqueNotes = new Set([...safetyConcern, note]);
+                setSafetyConcern([...uniqueNotes]);
                 break;
             default:
-                setLowConcern(prevLowConcern => [...prevLowConcern, note]);
+                uniqueNotes = new Set([...lowConcern, note]);
+                setLowConcern([...uniqueNotes]);
         }
     };
+    
 
     const handleConcerns = () => {
         sections.forEach(section => {
@@ -203,6 +204,20 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
     const scrollBack = () => setCurrentStep((prevStep) => Math.max(prevStep - 1, 0));
     const scrollNext = () => setCurrentStep((prevStep) => Math.min(prevStep + 1, steps.length - 1));
 
+    useEffect(() => {
+        handleConcerns()
+    }, [warningLights,
+        exteriorLights,
+        underHood,
+        tires,
+        suspension,
+        steering,
+        ballJoints,
+        wheelBearings,
+        brakes,
+        axles,
+        underCar])
+
     return (
         <div>
             
@@ -232,7 +247,6 @@ export const InspectionForm = ({ driveType, setDriveType, tireSize, setTireSize 
                 </ul>
             </div>
             {isSuccess && <p>Copied to clipboard!</p>}
-                <button type='button' onClick={handleConcerns}>Test</button>
                 <button type='button' onClick={() => copyToClipboard(serviceNotes)}>Copy advisor notes</button>
                 <button type='button' onClick={() => copyToClipboard(rawTireSize)}>Copy raw tire size</button>
                 <button type='button' onClick={() => copyToClipboard(tireSize)}>Copy formatted tire size</button>
